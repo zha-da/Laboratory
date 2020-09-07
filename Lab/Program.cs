@@ -10,6 +10,29 @@ namespace Lab
     {
         static void Main(string[] args)
         {
+            Exam mathExam = new Exam("Математика", 50);
+            mathExam.DisplayInfo();
+
+            mathExam.TakeExam(28);
+            mathExam.DisplayInfo();
+
+            mathExam.TakeExam(48);
+            mathExam.DisplayInfo();
+
+            mathExam.TakeExam(50);
+            mathExam.DisplayInfo();
+
+            mathExam.TakeExam(43);
+            mathExam.DisplayInfo();
+
+            Exam bioEx = new Exam("Биология", 12);
+            bioEx.DisplayInfo();
+            for (int i = 0; i < 2; i++)
+            {
+                bioEx.TakeExam();
+                bioEx.DisplayInfo();
+            }
+            Console.ReadKey();
         }
     }
 }

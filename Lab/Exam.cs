@@ -12,6 +12,7 @@ namespace Lab
     public class Exam
     {
         #region Fields
+        int take = 1;
         private int exTime;
         /// <summary>
         /// Длительность экзамена
@@ -21,7 +22,11 @@ namespace Lab
             get { return exTime; }
             set
             {
-                if (value < 0) return;
+                if (value < 0)
+                {
+                    Console.WriteLine("Длительность экзамена не может быть меньше 0\n");
+                    return;
+                }
                 exTime = value;
             }
         }
@@ -43,23 +48,49 @@ namespace Lab
             get { return maxSc; }
             set
             {
-                if (value < 0) return;
+                if (value < 0)
+                {
+                    Console.WriteLine("Максимальная оценка не может быть ниже 0\n");
+                    return;
+                }
                 maxSc = value;
             }
         }
         private int quetsQuan;
         /// <summary>
-        /// Количество вопросов
+        /// Общее количество вопросов (не может быть ниже 0)
         /// </summary>
         public int QuestionsQuantity
         {
             get { return quetsQuan; }
-            set { quetsQuan = value; }
+            set
+            {
+                if (value < 0)
+                {
+                    Console.WriteLine($"Количество вопросов не может быть меньше 0\n");
+                    return;
+                }
+                quetsQuan = value;
+            }
         }
+        private int rightAns;
         /// <summary>
-        /// Вопросы к экзамену
+        /// Количество вопросов, на которые получен правильный ответ
         /// </summary>
-        public List<ExamQuestion> Questions { get; set; }
+        public int RightAnswers
+        {
+            get { return rightAns; }
+            private set
+            {
+                if (value < 0 || value > QuestionsQuantity)
+                {
+                    Console.WriteLine($"Недопустимое значение количества правильных ответов (от 0 до {quetsQuan})");
+                    rightAns = -1;
+                    return;
+                }
+                rightAns = value;
+            }
+        }
         #endregion
 
 
@@ -70,62 +101,83 @@ namespace Lab
         public Exam()
         {
             exTime = 45;
+            quetsQuan = 60;
             discip = "Не выбрано";
             maxSc = 5;
+            rightAns = 0;
         }
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
-        public Exam(string discipline)
-        {
-            exTime = 45;
-            this.discip = discipline;
-            maxSc = 5;
-        }
+        public Exam(string discipline) : this(discipline, 45, 60, 5) { }
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
-        /// <param name="maximumScore">Максимальная отметка за экзамен</param>
         /// <param name="discipline">Название дисциплины</param>
         /// <param name="examTime">Длительность экзамена</param>
-        public Exam(int maximumScore, string discipline, int examTime)
+        /// <param name="questionsQuantity">Общее количество вопросов</param>
+        /// <param name="maxScore">Максимальная оценка за экзамен</param>
+        public Exam(string discipline, int questionsQuantity ,int examTime, int maxScore)
         {
-            maxSc = maximumScore;
             discip = discipline;
             exTime = examTime;
+            quetsQuan = questionsQuantity;
+            maxSc = maxScore;
+            rightAns = 0;
         }
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Название дисциплины</param>
+        /// <param name="questionsQuantity">Общее количество вопросов</param>
+        public Exam(string discipline, int questionsQuantity) 
+            : this(discipline, 45, questionsQuantity, 5) { }
         #endregion
 
 
         #region Methods
         /// <summary>
-        /// Выводит всю информацию об экзамене
+        /// Выводит информацию об экзамене
         /// </summary>
         public void DisplayInfo()
         {
-
-        }
-        /// <summary>
-        /// Проводит экзамен у группы учеников
-        /// </summary>
-        public void TakeAnExam( )
-        {
-
+            if (rightAns == -1) Console.WriteLine("Неудачная попытка пройти экзамен\n");
+            else Console.WriteLine($"Экзамен по дисциплине: {discip}\n" +
+                $"Попытка номер {take}\n" +
+                $"Общее количество вопросов: {quetsQuan}\n" +
+                $"Из них правильно: {RightAnswers}\n" +
+                $"Итоговая оценка: {Math.Round(CalculateMark() * MaximumScore)}\n");
         }
         /// <summary>
         /// Определяет итоговую оценку
         /// </summary>
-        public double CalculateMark()
+        public double CalculateMark() => (double)RightAnswers / QuestionsQuantity;
+        /// <summary>
+        /// Проводит экзамен у одного человека
+        /// </summary>
+        /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
+        public void TakeExam(int rightAnswers)
         {
-            double res = 0;
-            foreach (ExamQuestion q in Questions)
-            {
-                if (q.AnsweredCorrectly) res++;
-            }
-            return res / quetsQuan;
+            RightAnswers = rightAnswers;
+            if (rightAns == -1) return;
+            take++;
+        }
+        /// <summary>
+        /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
+        /// </summary>
+        public void TakeExam()
+        {
+            take++;
+            TakeExamRnd();
+        }
+        void TakeExamRnd()
+        {
+            Random rnd = new Random();
+            RightAnswers = rnd.Next(0, quetsQuan);
         }
         #endregion
+
 
         #region Operators
         /// <summary>
