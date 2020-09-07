@@ -29,7 +29,7 @@ namespace Lab
             bioEx.DisplayInfo();
             for (int i = 0; i < 2; i++)
             {
-                bioEx.TakeExam();
+                bioEx.TakeExamRnd();
                 bioEx.DisplayInfo();
             }
             Console.ReadKey();

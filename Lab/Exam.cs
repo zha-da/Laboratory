@@ -13,23 +13,6 @@ namespace Lab
     {
         #region Fields
         int take = 1;
-        private int exTime;
-        /// <summary>
-        /// Длительность экзамена
-        /// </summary>
-        public int ExamTime
-        {
-            get { return exTime; }
-            set
-            {
-                if (value < 0)
-                {
-                    Console.WriteLine("Длительность экзамена не может быть меньше 0\n");
-                    return;
-                }
-                exTime = value;
-            }
-        }
         private string discip;
         /// <summary>
         /// Название дисциплины
@@ -91,6 +74,18 @@ namespace Lab
                 rightAns = value;
             }
         }
+        /// <summary>
+        /// Оценка за экзамен на текущий момент
+        /// </summary>
+        public int CurrentMark { get; set; }
+        /// <summary>
+        /// Сдан ли экзамен
+        /// </summary>
+        public bool IsPassed { get; set; }
+        /// <summary>
+        /// Проходной балл (по умолчанию 60% от максимума с округлением до ближайшего целого числа)
+        /// </summary>
+        public int PassingScore { get; set; }
         #endregion
 
 
@@ -100,7 +95,7 @@ namespace Lab
         /// </summary>
         public Exam()
         {
-            exTime = 45;
+            PassingScore = (int)Math.Round(maxSc * 0.6);
             quetsQuan = 60;
             discip = "Не выбрано";
             maxSc = 5;
@@ -115,13 +110,13 @@ namespace Lab
         /// Создает экземпляр класса
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
-        /// <param name="examTime">Длительность экзамена</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
         /// <param name="maxScore">Максимальная оценка за экзамен</param>
-        public Exam(string discipline, int questionsQuantity ,int examTime, int maxScore)
+        /// <param name="passingScore">Проходной балл</param>
+        public Exam(string discipline, int questionsQuantity ,int maxScore, int passingScore)
         {
             discip = discipline;
-            exTime = examTime;
+            PassingScore = passingScore;
             quetsQuan = questionsQuantity;
             maxSc = maxScore;
             rightAns = 0;
@@ -132,7 +127,7 @@ namespace Lab
         /// <param name="discipline">Название дисциплины</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
         public Exam(string discipline, int questionsQuantity) 
-            : this(discipline, 45, questionsQuantity, 5) { }
+            : this(discipline, questionsQuantity, 5, 3) { }
         #endregion
 
 
@@ -147,12 +142,19 @@ namespace Lab
                 $"Попытка номер {take}\n" +
                 $"Общее количество вопросов: {quetsQuan}\n" +
                 $"Из них правильно: {RightAnswers}\n" +
-                $"Итоговая оценка: {Math.Round(CalculateMark() * MaximumScore)}\n");
+                $"Итоговая оценка: {CurrentMark}\n" +
+                $"Экзамен сдан: {IsPassed}\n");
         }
         /// <summary>
         /// Определяет итоговую оценку
         /// </summary>
-        public double CalculateMark() => (double)RightAnswers / QuestionsQuantity;
+        public void CalculateMark()
+        {
+            double ratio = (double)RightAnswers / QuestionsQuantity;
+            CurrentMark = (int)Math.Round(ratio * MaximumScore);
+            IsPassed = CurrentMark >= PassingScore;
+        }
+
         /// <summary>
         /// Проводит экзамен у одного человека
         /// </summary>
@@ -162,43 +164,60 @@ namespace Lab
             RightAnswers = rightAnswers;
             if (rightAns == -1) return;
             take++;
+            CalculateMark();
         }
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>
-        public void TakeExam()
+        private void TakeExam()
         {
             take++;
             TakeExamRnd();
         }
-        void TakeExamRnd()
+        /// <summary>
+        /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
+        /// </summary>
+        public void TakeExamRnd()
         {
             Random rnd = new Random();
             RightAnswers = rnd.Next(0, quetsQuan);
+            if (rightAns == -1) return;
+            take++;
+            CalculateMark();
         }
         #endregion
 
 
         #region Operators
         /// <summary>
-        /// Сравнивает 2 экзамена по количеству вопросов
+        /// Сравнивает 2 экзамена по текущим оценкам
         /// </summary>
         /// <param name="e1">Экзамен 1</param>
         /// <param name="e2">Экзамен 2</param>
-        /// <returns>Результат сравнения по количеству вопросов</returns>
+        /// <returns>Результат сравнения по оценкам</returns>
         public static bool operator > (Exam e1, Exam e2)
         {
-            return e1.quetsQuan > e2.quetsQuan;
+            return e1.CurrentMark > e2.CurrentMark;
         }
         /// <summary>
-        /// Сравнивает 2 экзамена по количеству вопросов
+        /// Сравнивает 2 экзамена по текущим оценкам
         /// </summary>
         /// <param name="e1">Экзамен 1</param>
         /// <param name="e2">Экзамен 2</param>
-        /// <returns>Результат сравнения по количеству вопросов</returns>
+        /// <returns>Результат сравнения по оценкам</returns>
         public static bool operator < (Exam e1, Exam e2)
         {
-            return e1.quetsQuan < e2.quetsQuan;
+            return e1.CurrentMark < e2.CurrentMark;
+        }
+        /// <summary>
+        /// Складывает результаты 2х экзаменов
+        /// </summary>
+        /// <param name="e1">Экзамен 1</param>
+        /// <param name="e2">Экзамен 2</param>
+        /// <returns>Среднее арифметическое результатов за 2 экзамена</returns>
+        public static double operator + (Exam e1, Exam e2)
+        {
+            return (double)(e1.CurrentMark + e2.CurrentMark) / 2;
         }
         #endregion
     }
