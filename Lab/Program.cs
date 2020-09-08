@@ -10,7 +10,7 @@ namespace Lab
     {
         static void Main(string[] args)
         {
-            Exam mathExam = new Exam("Математика", 50);
+            Exam mathExam = new Test("Математика", 50);
             mathExam.DisplayInfo();
 
             mathExam.TakeExam(28);
@@ -25,11 +25,11 @@ namespace Lab
             mathExam.TakeExam(43);
             mathExam.DisplayInfo();
 
-            Exam bioEx = new Exam("Биология", 12);
+            Exam bioEx = new Test("Биология", 12);
             bioEx.DisplayInfo();
             for (int i = 0; i < 2; i++)
             {
-                bioEx.TakeExamRnd();
+                bioEx.TakeExam();
                 bioEx.DisplayInfo();
             }
             Console.ReadKey();

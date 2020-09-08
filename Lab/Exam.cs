@@ -9,7 +9,7 @@ namespace Lab
     /// <summary>
     /// Класс экзамена
     /// </summary>
-    public class Exam
+    public abstract class Exam
     {
         #region Fields
         int take = 1;
@@ -63,7 +63,7 @@ namespace Lab
         public int RightAnswers
         {
             get { return rightAns; }
-            private set
+            protected set
             {
                 if (value < 0 || value > QuestionsQuantity)
                 {
@@ -77,15 +77,15 @@ namespace Lab
         /// <summary>
         /// Оценка за экзамен на текущий момент
         /// </summary>
-        public int CurrentMark { get; set; }
+        public int CurrentMark { get; protected set; }
         /// <summary>
         /// Сдан ли экзамен
         /// </summary>
-        public bool IsPassed { get; set; }
+        public bool IsPassed { get; protected set; }
         /// <summary>
         /// Проходной балл (по умолчанию 60% от максимума с округлением до ближайшего целого числа)
         /// </summary>
-        public int PassingScore { get; set; }
+        public int PassingScore { get; protected set; }
         #endregion
 
 
@@ -102,12 +102,12 @@ namespace Lab
             rightAns = 0;
         }
         /// <summary>
-        /// Создает экземпляр класса
+        /// Создает экземпляр класса экзамен
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
         public Exam(string discipline) : this(discipline, 45, 60, 5) { }
         /// <summary>
-        /// Создает экземпляр класса
+        /// Создает экземпляр класса экзамен
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
@@ -122,7 +122,7 @@ namespace Lab
             rightAns = 0;
         }
         /// <summary>
-        /// Создает экземпляр класса
+        /// Создает экземпляр класса экзамен
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
@@ -135,20 +135,11 @@ namespace Lab
         /// <summary>
         /// Выводит информацию об экзамене
         /// </summary>
-        public void DisplayInfo()
-        {
-            if (rightAns == -1) Console.WriteLine("Неудачная попытка пройти экзамен\n");
-            else Console.WriteLine($"Экзамен по дисциплине: {discip}\n" +
-                $"Попытка номер {take}\n" +
-                $"Общее количество вопросов: {quetsQuan}\n" +
-                $"Из них правильно: {RightAnswers}\n" +
-                $"Итоговая оценка: {CurrentMark}\n" +
-                $"Экзамен сдан: {IsPassed}\n");
-        }
+        public abstract void DisplayInfo();
         /// <summary>
         /// Определяет итоговую оценку
         /// </summary>
-        public void CalculateMark()
+        public virtual void CalculateMark()
         {
             double ratio = (double)RightAnswers / QuestionsQuantity;
             CurrentMark = (int)Math.Round(ratio * MaximumScore);
@@ -159,7 +150,7 @@ namespace Lab
         /// Проводит экзамен у одного человека
         /// </summary>
         /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
-        public void TakeExam(int rightAnswers)
+        public virtual void TakeExam(int rightAnswers)
         {
             RightAnswers = rightAnswers;
             if (rightAns == -1) return;
@@ -169,15 +160,7 @@ namespace Lab
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>
-        private void TakeExam()
-        {
-            take++;
-            TakeExamRnd();
-        }
-        /// <summary>
-        /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
-        /// </summary>
-        public void TakeExamRnd()
+        public virtual void TakeExam()
         {
             Random rnd = new Random();
             RightAnswers = rnd.Next(0, quetsQuan);
