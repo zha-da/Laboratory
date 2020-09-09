@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab
+namespace Laboratory.Exams
 {
     /// <summary>
     /// Класс экзамена
@@ -12,7 +12,7 @@ namespace Lab
     public class Exam
     {
         #region Fields
-        int take = 1;
+        internal int take = 0;
         private string discip;
         /// <summary>
         /// Название дисциплины
