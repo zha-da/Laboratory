@@ -56,6 +56,7 @@ namespace Laboratory.Exams
                 quetsQuan = value;
             }
         }
+
         private int rightAns;
         /// <summary>
         /// Количество вопросов, на которые получен правильный ответ
@@ -74,10 +75,20 @@ namespace Laboratory.Exams
                 rightAns = value;
             }
         }
+
+        private int _currentMark;
         /// <summary>
         /// Оценка за экзамен на текущий момент
         /// </summary>
-        public int CurrentMark { get; set; }
+        public int CurrentMark
+        {
+            get => _currentMark;
+            set
+            {
+                if (value <= 0) _currentMark = 1;
+                else _currentMark = value;
+            }
+        }
         /// <summary>
         /// Сдан ли экзамен
         /// </summary>
@@ -113,7 +124,7 @@ namespace Laboratory.Exams
         /// <param name="questionsQuantity">Общее количество вопросов</param>
         /// <param name="maxScore">Максимальная оценка за экзамен</param>
         /// <param name="passingScore">Проходной балл</param>
-        public Exam(string discipline, int questionsQuantity ,int maxScore, int passingScore)
+        public Exam(string discipline, int questionsQuantity, int maxScore, int passingScore)
         {
             discip = discipline;
             PassingScore = passingScore;
@@ -126,7 +137,7 @@ namespace Laboratory.Exams
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
-        public Exam(string discipline, int questionsQuantity) 
+        public Exam(string discipline, int questionsQuantity)
             : this(discipline, questionsQuantity, 5, 3) { }
         #endregion
 
@@ -195,7 +206,7 @@ namespace Laboratory.Exams
         /// <param name="e1">Экзамен 1</param>
         /// <param name="e2">Экзамен 2</param>
         /// <returns>Результат сравнения по оценкам</returns>
-        public static bool operator > (Exam e1, Exam e2)
+        public static bool operator >(Exam e1, Exam e2)
         {
             return e1.CurrentMark > e2.CurrentMark;
         }
@@ -205,7 +216,7 @@ namespace Laboratory.Exams
         /// <param name="e1">Экзамен 1</param>
         /// <param name="e2">Экзамен 2</param>
         /// <returns>Результат сравнения по оценкам</returns>
-        public static bool operator < (Exam e1, Exam e2)
+        public static bool operator <(Exam e1, Exam e2)
         {
             return e1.CurrentMark < e2.CurrentMark;
         }
@@ -215,7 +226,7 @@ namespace Laboratory.Exams
         /// <param name="e1">Экзамен 1</param>
         /// <param name="e2">Экзамен 2</param>
         /// <returns>Среднее арифметическое результатов за 2 экзамена</returns>
-        public static double operator + (Exam e1, Exam e2)
+        public static double operator +(Exam e1, Exam e2)
         {
             return (double)(e1.CurrentMark + e2.CurrentMark) / 2;
         }

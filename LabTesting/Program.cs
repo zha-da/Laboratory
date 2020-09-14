@@ -31,6 +31,9 @@ namespace Laboratory
                 bioEx.TakeExamRnd();
                 bioEx.DisplayInfo();
             }
+
+            double res = mathExam + bioEx;
+            Console.WriteLine($"Общий результат за оба экзамена: {res}");
             Console.ReadKey();
         }
     }
