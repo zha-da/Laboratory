@@ -12,7 +12,10 @@ namespace Lab
     public abstract class Exam
     {
         #region Fields
-        int take = 1;
+        /// <summary>
+        /// Номер попытки
+        /// </summary>
+        protected int take = 1;
         private string discip;
         /// <summary>
         /// Название дисциплины
@@ -135,7 +138,16 @@ namespace Lab
         /// <summary>
         /// Выводит информацию об экзамене
         /// </summary>
-        public abstract void DisplayInfo();
+        public virtual void DisplayInfo()
+        {
+            if (RightAnswers == -1) Console.WriteLine("Неудачная попытка");
+            else Console.WriteLine($"Экзамен по дисциплине: {Discipline}\n" +
+                $"Общее количество вопросов: {QuestionsQuantity}\n" +
+                $"Из них правильно: {RightAnswers}\n" +
+                $"Попытка №{take}\n" +
+                $"Итоговая оценка: {CurrentMark}\n" +
+                $"Тест сдан: {IsPassed}\n");
+        }
         /// <summary>
         /// Определяет итоговую оценку
         /// </summary>
@@ -150,13 +162,7 @@ namespace Lab
         /// Проводит экзамен у одного человека
         /// </summary>
         /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
-        public virtual void TakeExam(int rightAnswers)
-        {
-            RightAnswers = rightAnswers;
-            if (rightAns == -1) return;
-            take++;
-            CalculateMark();
-        }
+        public abstract void TakeExam(int rightAnswers);
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>

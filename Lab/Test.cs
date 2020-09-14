@@ -12,7 +12,16 @@ namespace Lab
     public class Test : Exam
     {
         #region Fields
-        int take = 1;
+        private string _testTopic;
+        /// <summary>
+        /// Тема теста
+        /// </summary>
+        public string TestTopic
+        {
+            get { return _testTopic; }
+            set { _testTopic = value; }
+        }
+
         #endregion
 
 
@@ -20,27 +29,42 @@ namespace Lab
         /// <summary>
         /// Создает экземпляр теста с параметрами по умолчанию
         /// </summary>
-        public Test() : base() { }
+        public Test() : base()
+        {
+            _testTopic = "Не задано";
+        }
         /// <summary>
         /// Создает экземпляр класса тест
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
-        public Test(string discipline) : base(discipline) { }
+        /// <param name="testTopic">Тема теста</param>
+        public Test(string discipline, string testTopic) : base(discipline)
+        {
+            _testTopic = TestTopic;
+        }
         /// <summary>
         /// Создает экземпляр класса тест
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
+        /// <param name="testTopic">Тема теста</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
-        public Test(string discipline, int questionsQuantity) : base(discipline, questionsQuantity) { }
+        public Test(string discipline, string testTopic, int questionsQuantity) : base(discipline, questionsQuantity)
+        {
+            _testTopic = testTopic;
+        }
         /// <summary>
         /// Создает экземпляр класса тест
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
+        /// <param name="testTopic">Тема теста</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
         /// <param name="maxScore">Максимальная оценка</param>
         /// <param name="passingScore">Проходной балл</param>
-        public Test(string discipline, int questionsQuantity, int maxScore, int passingScore)
-            : base(discipline, questionsQuantity, maxScore, passingScore) { }
+        public Test(string discipline, string testTopic, int questionsQuantity, int maxScore, int passingScore)
+            : base(discipline, questionsQuantity, maxScore, passingScore)
+        {
+            _testTopic = testTopic;
+        }
         #endregion
 
 
