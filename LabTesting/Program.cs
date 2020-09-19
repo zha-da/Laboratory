@@ -11,7 +11,7 @@ namespace Laboratory
     {
         static void Main(string[] args)
         {
-            Exam mathExam = new Exam("Математика", 45);
+            Exam mathExam = new Test("Математика", "Арифметические операции", 45);
 
             mathExam.TakeExam(28);
             mathExam.DisplayInfo();
@@ -25,7 +25,7 @@ namespace Laboratory
             mathExam.TakeExam(43);
             mathExam.DisplayInfo();
 
-            Exam bioEx = new Exam("Биология", 12);
+            Exam bioEx = new Test("Биология", "Царство Растения", 12);
             for (int i = 0; i < 2; i++)
             {
                 bioEx.TakeExamRnd();

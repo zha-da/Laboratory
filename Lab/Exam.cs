@@ -9,11 +9,12 @@ namespace Laboratory.Exams
     /// <summary>
     /// Класс экзамена
     /// </summary>
-    public class Exam
+    public abstract class Exam
     {
         #region Fields
         internal int take = 0;
-        private string discip;
+
+        internal string discip;
         /// <summary>
         /// Название дисциплины
         /// </summary>
@@ -22,7 +23,8 @@ namespace Laboratory.Exams
             get { return discip; }
             set { discip = value; }
         }
-        private int maxSc;
+
+        internal int maxSc;
         /// <summary>
         /// Максимальная отметка (не может быть ниже 0).
         /// </summary>
@@ -39,7 +41,8 @@ namespace Laboratory.Exams
                 maxSc = value;
             }
         }
-        private int quetsQuan;
+
+        internal int quetsQuan;
         /// <summary>
         /// Общее количество вопросов (не может быть ниже 0)
         /// </summary>
@@ -57,14 +60,14 @@ namespace Laboratory.Exams
             }
         }
 
-        private int rightAns;
+        internal int rightAns;
         /// <summary>
         /// Количество вопросов, на которые получен правильный ответ
         /// </summary>
         public int RightAnswers
         {
             get { return rightAns; }
-            private set
+            protected set
             {
                 if (value < 0 || value > QuestionsQuantity)
                 {
@@ -76,7 +79,7 @@ namespace Laboratory.Exams
             }
         }
 
-        private int _currentMark;
+        internal int _currentMark;
         /// <summary>
         /// Оценка за экзамен на текущий момент
         /// </summary>
@@ -146,7 +149,7 @@ namespace Laboratory.Exams
         /// <summary>
         /// Выводит информацию об экзамене
         /// </summary>
-        public void DisplayInfo()
+        public virtual void DisplayInfo()
         {
             if (rightAns == -1) Console.WriteLine("Неудачная попытка пройти экзамен\n");
             else Console.WriteLine($"Экзамен по дисциплине: {discip}\n" +
@@ -159,18 +162,13 @@ namespace Laboratory.Exams
         /// <summary>
         /// Определяет итоговую оценку
         /// </summary>
-        public void CalculateMark()
-        {
-            double ratio = (double)RightAnswers / QuestionsQuantity;
-            CurrentMark = (int)Math.Round(ratio * MaximumScore);
-            IsPassed = CurrentMark >= PassingScore;
-        }
+        public abstract void CalculateMark();
 
         /// <summary>
         /// Проводит экзамен у одного человека
         /// </summary>
         /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
-        public void TakeExam(int rightAnswers)
+        public virtual void TakeExam(int rightAnswers)
         {
             RightAnswers = rightAnswers;
             if (rightAns == -1) return;
@@ -180,15 +178,11 @@ namespace Laboratory.Exams
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>
-        private void TakeExam()
-        {
-            take++;
-            TakeExamRnd();
-        }
+        public abstract void TakeExam();
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>
-        public void TakeExamRnd()
+        public virtual void TakeExamRnd()
         {
             Random rnd = new Random();
             RightAnswers = rnd.Next(0, quetsQuan);

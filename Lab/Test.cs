@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab
+namespace Laboratory.Exams
 {
     /// <summary>
     /// Класс теста
@@ -12,7 +12,7 @@ namespace Lab
     public class Test : Exam
     {
         #region Fields
-        private string _testTopic;
+        internal string _testTopic;
         /// <summary>
         /// Тема теста
         /// </summary>
@@ -74,12 +74,13 @@ namespace Lab
         /// </summary>
         public override void DisplayInfo()
         {
-            if (RightAnswers == -1) Console.WriteLine("Неудачная попытка");
-            else Console.WriteLine($"Тест по дисциплине: {Discipline}\n" +
-                $"Общее количество вопросов: {QuestionsQuantity}\n" +
-                $"Из них правильно: {RightAnswers}\n" +
+            if (RightAnswers == -1) Console.WriteLine("Неудачная попытка\n");
+            else Console.WriteLine($"Тест по дисциплине: {discip}\n" +
+                $"Тема теста: {_testTopic}\n" +
+                $"Общее количество вопросов: {quetsQuan}\n" +
+                $"Из них правильно: {rightAns}\n" +
                 $"Попытка №{take}\n" +
-                $"Итоговая оценка: {CurrentMark}\n" +
+                $"Итоговая оценка: {_currentMark}\n" +
                 $"Тест сдан: {IsPassed}\n");
         }
         /// <summary>
@@ -109,7 +110,9 @@ namespace Lab
         /// </summary>
         public override void CalculateMark()
         {
-            base.CalculateMark();
+            double ratio = (double)RightAnswers / QuestionsQuantity;
+            CurrentMark = (int)Math.Round(ratio * MaximumScore);
+            IsPassed = CurrentMark >= PassingScore;
         }
         #endregion
     }
