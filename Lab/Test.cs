@@ -21,6 +21,24 @@ namespace Laboratory.Exams
             get { return _testTopic; }
             set { _testTopic = value; }
         }
+        private int succTakes;
+        /// <summary>
+        /// Количество успешных попыток
+        /// </summary>
+        public int SuccessfulTakes
+        {
+            get { return succTakes; }
+            protected set { succTakes = value; }
+        }
+        private int maxMark;
+        /// <summary>
+        /// Максимальная полученная отметка
+        /// </summary>
+        public int MaxMark
+        {
+            get { return maxMark; }
+            protected set { maxMark = value; }
+        }
 
         #endregion
 
@@ -32,6 +50,8 @@ namespace Laboratory.Exams
         public Test() : base()
         {
             _testTopic = "Не задано";
+            maxMark = 0;
+            succTakes = 0;
         }
         /// <summary>
         /// Создает экземпляр класса тест
@@ -41,6 +61,8 @@ namespace Laboratory.Exams
         public Test(string discipline, string testTopic) : base(discipline)
         {
             _testTopic = TestTopic;
+            maxMark = 0;
+            succTakes = 0;
         }
         /// <summary>
         /// Создает экземпляр класса тест
@@ -51,6 +73,8 @@ namespace Laboratory.Exams
         public Test(string discipline, string testTopic, int questionsQuantity) : base(discipline, questionsQuantity)
         {
             _testTopic = testTopic;
+            maxMark = 0;
+            succTakes = 0;
         }
         /// <summary>
         /// Создает экземпляр класса тест
@@ -64,6 +88,8 @@ namespace Laboratory.Exams
             : base(discipline, questionsQuantity, maxScore, passingScore)
         {
             _testTopic = testTopic;
+            maxMark = 0;
+            succTakes = 0;
         }
         #endregion
 
@@ -74,15 +100,60 @@ namespace Laboratory.Exams
         /// </summary>
         public override void DisplayInfo()
         {
-            if (RightAnswers == -1) Console.WriteLine("Неудачная попытка\n");
-            else Console.WriteLine($"Тест по дисциплине: {discip}\n" +
-                $"Тема теста: {_testTopic}\n" +
-                $"Общее количество вопросов: {quetsQuan}\n" +
-                $"Из них правильно: {rightAns}\n" +
-                $"Попытка №{take}\n" +
-                $"Итоговая оценка: {_currentMark}\n" +
-                $"Тест сдан: {IsPassed}\n");
+            if (RightAnswers == -1) Print_UnsuccessfulAttemt();
+            else
+            {
+                Print_Discipline();
+                Print_Topic();
+                Print_Take();
+                Print_Questions();
+                Print_RightAns();
+                Print_PassingSc();
+                Print_IsPassed();
+                Print_SuccessfulTakes();
+                Print_MaxMark();
+
+                Console.WriteLine();
+            }
         }
+        #region Print methods
+        /// <summary>
+        /// Выводит сообщение о лучшем результате
+        /// </summary>
+        protected virtual void Print_MaxMark()
+        {
+            Console.WriteLine($"Лучший результат: {maxMark}");
+        }
+        /// <summary>
+        /// Выводит сообщение об удачных попытках
+        /// </summary>
+        protected virtual void Print_SuccessfulTakes()
+        {
+            Console.WriteLine($"Количество удачных попыток: {succTakes}");
+        }
+        /// <summary>
+        /// Выводит сообщение о названии дисциплины
+        /// </summary>
+        protected override void Print_Discipline()
+        {
+            Console.WriteLine($"Тест по дисциплине: {discip}");
+        }
+        /// <summary>
+        /// Выводит сообщение о теме теста
+        /// </summary>
+        protected virtual void Print_Topic()
+        {
+            Console.WriteLine($"Тема теста: {_testTopic}");
+        }
+        /// <summary>
+        /// Выводит сообщение о том, пройден ли экзамен
+        /// </summary>
+        protected override void Print_IsPassed()
+        {
+            Console.WriteLine($"Тест сдан: {IsPassed}");
+        }
+        #endregion
+
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>
@@ -113,6 +184,14 @@ namespace Laboratory.Exams
             double ratio = (double)RightAnswers / QuestionsQuantity;
             CurrentMark = (int)Math.Round(ratio * MaximumScore);
             IsPassed = CurrentMark >= PassingScore;
+            if (IsPassed)
+            {
+                succTakes++;
+            }
+            if (_currentMark > maxMark)
+            {
+                maxMark = _currentMark;
+            }
         }
         #endregion
     }

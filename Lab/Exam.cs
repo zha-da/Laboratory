@@ -42,13 +42,13 @@ namespace Laboratory.Exams
             }
         }
 
-        internal int quetsQuan;
+        internal int questQuan;
         /// <summary>
         /// Общее количество вопросов (не может быть ниже 0)
         /// </summary>
         public int QuestionsQuantity
         {
-            get { return quetsQuan; }
+            get { return questQuan; }
             set
             {
                 if (value < 0)
@@ -56,7 +56,7 @@ namespace Laboratory.Exams
                     Console.WriteLine($"Количество вопросов не может быть меньше 0\n");
                     return;
                 }
-                quetsQuan = value;
+                questQuan = value;
             }
         }
 
@@ -71,14 +71,13 @@ namespace Laboratory.Exams
             {
                 if (value < 0 || value > QuestionsQuantity)
                 {
-                    Console.WriteLine($"Недопустимое значение количества правильных ответов (от 0 до {quetsQuan})");
+                    Console.WriteLine($"Недопустимое значение количества правильных ответов (от 0 до {questQuan})");
                     rightAns = -1;
                     return;
                 }
                 rightAns = value;
             }
         }
-
         internal int _currentMark;
         /// <summary>
         /// Оценка за экзамен на текущий момент
@@ -110,16 +109,16 @@ namespace Laboratory.Exams
         public Exam()
         {
             PassingScore = (int)Math.Round(maxSc * 0.6);
-            quetsQuan = 60;
+            questQuan = 60;
             discip = "Не выбрано";
-            maxSc = 5;
+            maxSc = 60;
             rightAns = 0;
         }
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
-        public Exam(string discipline) : this(discipline, 45, 60, 5) { }
+        public Exam(string discipline) : this(discipline, 60, 60, 36) { }
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
@@ -131,7 +130,7 @@ namespace Laboratory.Exams
         {
             discip = discipline;
             PassingScore = passingScore;
-            quetsQuan = questionsQuantity;
+            questQuan = questionsQuantity;
             maxSc = maxScore;
             rightAns = 0;
         }
@@ -141,7 +140,10 @@ namespace Laboratory.Exams
         /// <param name="discipline">Название дисциплины</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
         public Exam(string discipline, int questionsQuantity)
-            : this(discipline, questionsQuantity, 5, 3) { }
+            : this(discipline, questionsQuantity, questionsQuantity, 0) 
+        {
+            PassingScore = (int)Math.Round(maxSc * 0.6);
+        }
         #endregion
 
 
@@ -151,14 +153,49 @@ namespace Laboratory.Exams
         /// </summary>
         public virtual void DisplayInfo()
         {
-            if (rightAns == -1) Console.WriteLine("Неудачная попытка пройти экзамен\n");
-            else Console.WriteLine($"Экзамен по дисциплине: {discip}\n" +
-                $"Попытка номер {take}\n" +
-                $"Общее количество вопросов: {quetsQuan}\n" +
-                $"Из них правильно: {RightAnswers}\n" +
-                $"Итоговая оценка: {CurrentMark}\n" +
-                $"Экзамен сдан: {IsPassed}\n");
+            if (rightAns == -1) Print_UnsuccessfulAttemt();
+            else
+            {
+                Print_Discipline();
+                Print_Take();
+                Print_Questions();
+                Print_RightAns();
+                Print_IsPassed();
+                Console.WriteLine();
+            }
         }
+
+        #region Print methods
+        /// <summary>
+        /// Выводит сообщение о неудачной попытке
+        /// </summary>
+        protected virtual void Print_UnsuccessfulAttemt() => Console.WriteLine("Неудачная попытка пройти экзамен\n");
+        /// <summary>
+        /// Выводит сообщение о названии дисциплины
+        /// </summary>
+        protected virtual void Print_Discipline() => Console.WriteLine($"Экзамен по дисциплине: {discip}");
+        /// <summary>
+        /// Выводит сообщение о номере попытки
+        /// </summary>
+        protected virtual void Print_Take() => Console.WriteLine($"Попытка номер {take}");
+        /// <summary>
+        /// Выводит сообщение об общем количестве вопросов
+        /// </summary>
+        protected virtual void Print_Questions() => Console.WriteLine($"Общее количество вопросов: {QuestionsQuantity}");
+        /// <summary>
+        /// Выводит сообщение о количестве правильных ответов
+        /// </summary>
+        protected virtual void Print_RightAns() => Console.WriteLine($"Из них правильно: {RightAnswers}");
+        /// <summary>
+        /// Выводит сообщение о проходном балле
+        /// </summary>
+        protected virtual void Print_PassingSc() => Console.WriteLine($"Проходной балл: {PassingScore}");
+        /// <summary>
+        /// Выводит сообщение о том, пройден ли экзамен
+        /// </summary>
+        protected virtual void Print_IsPassed() => Console.WriteLine($"Экзамен сдан: {IsPassed}");
+        #endregion
+
         /// <summary>
         /// Определяет итоговую оценку
         /// </summary>
@@ -185,7 +222,7 @@ namespace Laboratory.Exams
         public virtual void TakeExamRnd()
         {
             Random rnd = new Random();
-            RightAnswers = rnd.Next(0, quetsQuan);
+            RightAnswers = rnd.Next(0, questQuan);
             if (rightAns == -1) return;
             take++;
             CalculateMark();
