@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A11B9575-E62A-4B5E-9DC6-338C750B8E64}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Laboratory</RootNamespace>
+    <RootNamespace>Laboratory.Exams</RootNamespace>
     <AssemblyName>Laboratory</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exam.cs" />
+    <Compile Include="FinalExam.cs" />
+    <Compile Include="FinalTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test.cs" />
   </ItemGroup>

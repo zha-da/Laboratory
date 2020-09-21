@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Laboratory.Exams
 {
     /// <summary>
-    /// Класс теста
+    /// Класс контрольной
     /// </summary>
     public class Test : Exam
     {

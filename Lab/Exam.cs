@@ -14,7 +14,7 @@ namespace Laboratory.Exams
         #region Fields
         internal int take = 0;
 
-        internal string discip;
+        internal string discip = "Не указано";
         /// <summary>
         /// Название дисциплины
         /// </summary>
