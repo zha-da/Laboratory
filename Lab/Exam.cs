@@ -14,7 +14,7 @@ namespace Laboratory.Exams
         #region Fields
         internal int take = 0;
 
-        internal string discip = "Не указано";
+        internal string discip = "Не выбрано";
         /// <summary>
         /// Название дисциплины
         /// </summary>
@@ -24,25 +24,25 @@ namespace Laboratory.Exams
             set { discip = value; }
         }
 
-        internal int maxSc;
+        private int _grdScale = 5;
         /// <summary>
         /// Максимальная отметка (не может быть ниже 0).
         /// </summary>
-        public int MaximumScore
+        public virtual int GradingScale
         {
-            get { return maxSc; }
+            get { return _grdScale; }
             set
             {
-                if (value < 0)
+                if (value < 1)
                 {
-                    Console.WriteLine("Максимальная оценка не может быть ниже 0\n");
+                    Console.WriteLine("Максимальная оценка не может быть ниже 1\n");
                     return;
                 }
-                maxSc = value;
+                _grdScale = value;
             }
         }
 
-        internal int questQuan;
+        internal int questQuan = 30;
         /// <summary>
         /// Общее количество вопросов (не может быть ниже 0)
         /// </summary>
@@ -60,11 +60,11 @@ namespace Laboratory.Exams
             }
         }
 
-        internal int rightAns;
+        internal int rightAns = 0;
         /// <summary>
         /// Количество вопросов, на которые получен правильный ответ
         /// </summary>
-        public int RightAnswers
+        public virtual int RightAnswers
         {
             get { return rightAns; }
             protected set
@@ -96,9 +96,9 @@ namespace Laboratory.Exams
         /// </summary>
         public bool IsPassed { get; set; }
         /// <summary>
-        /// Проходной балл (по умолчанию 60% от максимума с округлением до ближайшего целого числа)
+        /// Проходной балл (по умолчанию 60% от общего количества вопросов с округлением до ближайшего целого числа)
         /// </summary>
-        public int PassingScore { get; set; }
+        public virtual int PassingScore { get; set; }
         #endregion
 
 
@@ -108,10 +108,10 @@ namespace Laboratory.Exams
         /// </summary>
         public Exam()
         {
-            PassingScore = (int)Math.Round(maxSc * 0.6);
+            PassingScore = (int)Math.Round(_grdScale * 0.6);
             questQuan = 60;
             discip = "Не выбрано";
-            maxSc = 60;
+            _grdScale = 60;
             rightAns = 0;
         }
         /// <summary>
@@ -124,14 +124,15 @@ namespace Laboratory.Exams
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
         /// <param name="questionsQuantity">Общее количество вопросов</param>
-        /// <param name="maxScore">Максимальная оценка за экзамен</param>
+        /// <param name="gradeScale">Максимальная оценка за экзамен</param>
         /// <param name="passingScore">Проходной балл</param>
-        public Exam(string discipline, int questionsQuantity, int maxScore, int passingScore)
+        public Exam(string discipline, int questionsQuantity, 
+            int gradeScale, int passingScore)
         {
             discip = discipline;
             PassingScore = passingScore;
             questQuan = questionsQuantity;
-            maxSc = maxScore;
+            _grdScale = gradeScale;
             rightAns = 0;
         }
         /// <summary>
@@ -142,7 +143,7 @@ namespace Laboratory.Exams
         public Exam(string discipline, int questionsQuantity)
             : this(discipline, questionsQuantity, questionsQuantity, 0) 
         {
-            PassingScore = (int)Math.Round(maxSc * 0.6);
+            PassingScore = (int)Math.Round(_grdScale * 0.6);
         }
         #endregion
 
@@ -193,7 +194,12 @@ namespace Laboratory.Exams
         /// <summary>
         /// Выводит сообщение о том, пройден ли экзамен
         /// </summary>
-        protected virtual void Print_IsPassed() => Console.WriteLine($"Экзамен сдан: {IsPassed}");
+        protected virtual void Print_IsPassed()
+        {
+            Console.Write("Экзамен сдан: ");
+            if (IsPassed) Console.WriteLine("Да");
+            else Console.WriteLine("Нет");
+        }
         #endregion
 
         /// <summary>

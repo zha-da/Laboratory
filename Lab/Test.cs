@@ -12,7 +12,7 @@ namespace Laboratory.Exams
     public class Test : Exam
     {
         #region Fields
-        internal string _testTopic;
+        private string _testTopic = "Не задано";
         /// <summary>
         /// Тема теста
         /// </summary>
@@ -21,7 +21,7 @@ namespace Laboratory.Exams
             get { return _testTopic; }
             set { _testTopic = value; }
         }
-        private int succTakes;
+        private int succTakes = 0;
         /// <summary>
         /// Количество успешных попыток
         /// </summary>
@@ -37,60 +37,47 @@ namespace Laboratory.Exams
         public int MaxMark
         {
             get { return maxMark; }
-            protected set { maxMark = value; }
+            protected set
+            {
+                if (maxMark < value)
+                {
+                    maxMark = value;
+                }
+            }
         }
 
         #endregion
 
 
         #region Constructors
-        /// <summary>
-        /// Создает экземпляр теста с параметрами по умолчанию
-        /// </summary>
-        public Test() : base()
+        public Test(string discipline, string testTopic, 
+            int questionsQuantity, int passingScore, int gradingScale)
         {
-            _testTopic = "Не задано";
-            maxMark = 0;
-            succTakes = 0;
+            Discipline = discipline;
+            TestTopic = testTopic;
+            QuestionsQuantity = questionsQuantity;
+            PassingScore = passingScore;
+            GradingScale = gradingScale;
         }
-        /// <summary>
-        /// Создает экземпляр класса тест
-        /// </summary>
-        /// <param name="discipline">Название дисциплины</param>
-        /// <param name="testTopic">Тема теста</param>
-        public Test(string discipline, string testTopic) : base(discipline)
+
+        public Test(string discipline, string testTopic,
+            int questionsQuantity, int passingScore)
+            : this (discipline, testTopic, questionsQuantity, passingScore, 0)
         {
-            _testTopic = TestTopic;
-            maxMark = 0;
-            succTakes = 0;
+            GradingScale = 100;
         }
-        /// <summary>
-        /// Создает экземпляр класса тест
-        /// </summary>
-        /// <param name="discipline">Название дисциплины</param>
-        /// <param name="testTopic">Тема теста</param>
-        /// <param name="questionsQuantity">Общее количество вопросов</param>
-        public Test(string discipline, string testTopic, int questionsQuantity) : base(discipline, questionsQuantity)
+
+        public Test(string discipline, string testTopic,
+            int questionsQuantity)
+            : this(discipline, testTopic, questionsQuantity, 0)
         {
-            _testTopic = testTopic;
-            maxMark = 0;
-            succTakes = 0;
+            PassingScore = (int)Math.Round(QuestionsQuantity * 0.6);
         }
-        /// <summary>
-        /// Создает экземпляр класса тест
-        /// </summary>
-        /// <param name="discipline">Название дисциплины</param>
-        /// <param name="testTopic">Тема теста</param>
-        /// <param name="questionsQuantity">Общее количество вопросов</param>
-        /// <param name="maxScore">Максимальная оценка</param>
-        /// <param name="passingScore">Проходной балл</param>
-        public Test(string discipline, string testTopic, int questionsQuantity, int maxScore, int passingScore)
-            : base(discipline, questionsQuantity, maxScore, passingScore)
-        {
-            _testTopic = testTopic;
-            maxMark = 0;
-            succTakes = 0;
-        }
+
+        public Test(string discipline, string testTopic)
+            : this(discipline, testTopic, 30, 18, 30) { }
+
+        public Test() { }
         #endregion
 
 
@@ -100,20 +87,21 @@ namespace Laboratory.Exams
         /// </summary>
         public override void DisplayInfo()
         {
-            if (RightAnswers == -1) Print_UnsuccessfulAttemt();
+            if (RightAnswers == -1)
+            {
+                Console.WriteLine("Неудачная попытка пройти тест." +
+                    "Проверьте правильность данных\n");
+                return;
+            }
             else
             {
-                Print_Discipline();
-                Print_Topic();
-                Print_Take();
-                Print_Questions();
-                Print_RightAns();
-                Print_PassingSc();
-                Print_IsPassed();
-                Print_SuccessfulTakes();
-                Print_MaxMark();
-
-                Console.WriteLine();
+                Console.WriteLine($"Тест по дисциплине: {Discipline}\n" +
+                    $"Тема теста: {TestTopic}\n" +
+                    $"Общее количество вопросов: {QuestionsQuantity}\n" +
+                    $"Из них правильно: {RightAnswers}\n" +
+                    $"Текущая оценка: {CurrentMark} \\ {GradingScale}\n" +
+                    $"Высшая оценка: {MaxMark} \\ {GradingScale}\n" +
+                    $"Количество успешных попыток: {SuccessfulTakes}\n");
             }
         }
         #region Print methods
@@ -182,16 +170,13 @@ namespace Laboratory.Exams
         public override void CalculateMark()
         {
             double ratio = (double)RightAnswers / QuestionsQuantity;
-            CurrentMark = (int)Math.Round(ratio * MaximumScore);
+            CurrentMark = (int)Math.Round(ratio * GradingScale);
             IsPassed = CurrentMark >= PassingScore;
             if (IsPassed)
             {
                 succTakes++;
             }
-            if (_currentMark > maxMark)
-            {
-                maxMark = _currentMark;
-            }
+            MaxMark = CurrentMark;
         }
         #endregion
     }
