@@ -109,10 +109,10 @@ namespace Laboratory.Exams
         public Exam()
         {
             PassingScore = (int)Math.Round(_grdScale * 0.6);
-            questQuan = 60;
-            discip = "Не выбрано";
-            _grdScale = 60;
-            rightAns = 0;
+            QuestionsQuantity = 60;
+            Discipline = "Не выбрано";
+            GradingScale = 60;
+            RightAnswers = 0;
         }
         /// <summary>
         /// Создает экземпляр класса
@@ -129,11 +129,11 @@ namespace Laboratory.Exams
         public Exam(string discipline, int questionsQuantity, 
             int gradeScale, int passingScore)
         {
-            discip = discipline;
+            Discipline = discipline;
             PassingScore = passingScore;
-            questQuan = questionsQuantity;
-            _grdScale = gradeScale;
-            rightAns = 0;
+            QuestionsQuantity = questionsQuantity;
+            GradingScale = gradeScale;
+            RightAnswers = 0;
         }
         /// <summary>
         /// Создает экземпляр класса
