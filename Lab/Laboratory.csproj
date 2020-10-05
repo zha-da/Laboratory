@@ -47,15 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\AlreadyPassedException.cs" />
     <Compile Include="Exam.cs" />
     <Compile Include="Control.cs" />
+    <Compile Include="Exceptions\ExpelledException.cs" />
     <Compile Include="FailPassExam.cs" />
     <Compile Include="FinalExam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="Exceptions\UnsuccessfulAttemtException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -94,7 +94,6 @@ namespace Laboratory
                 alg.DisplayInfo();
             }
 
-            Console.ReadKey();
         }
 
     }

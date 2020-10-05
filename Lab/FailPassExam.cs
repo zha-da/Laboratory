@@ -26,8 +26,7 @@ namespace Laboratory.Exams
             {
                 if (value < 1)
                 {
-                    Console.WriteLine("Проходной балл не может быть ниже 1\n");
-                    return;
+                    throw new ArgumentOutOfRangeException("Проходной балл не может быть ниже 1");
                 }
                 _passSc = value;
             }
@@ -42,8 +41,7 @@ namespace Laboratory.Exams
             {
                 if (value < 1)
                 {
-                    Console.WriteLine("Количество попыток не может быть ниже 1\n");
-                    return;
+                    throw new ArgumentOutOfRangeException("Количество попыток не может быть ниже 1");
                 }
                 _mTakes = value;
             }
@@ -85,40 +83,75 @@ namespace Laboratory.Exams
         #region Methods
         public override void TakeExam()
         {
-            if (IsPassed)
+            try
             {
-                isPassedAlready = true;
-                return;
+                if (IsPassed)
+                {
+                    isPassedAlready = true;
+                    throw new AlreadyPassedException("Зачет уже сдан");
+                }
+                Random rnd = new Random();
+                RightAnswers = rnd.Next(0, QuestionsQuantity);
+                if (take++ > MaxTakes)
+                {
+                    throw new ExpelledException("Чел, ты отчислен");
+                }
+                CalculateMark();
             }
-            Random rnd = new Random();
-            RightAnswers = rnd.Next(0, QuestionsQuantity);
-            if (RightAnswers == -1) return;
-            if (take++ > MaxTakes)
+            catch (ExpelledException eex)
             {
-                Console.WriteLine("Количество попыток исчерпано. Незачет\n");
-                return;
+                Console.WriteLine(eex.Message);
+                Console.ReadKey();
             }
-            CalculateMark();
+            catch (ArgumentOutOfRangeException aex)
+            {
+                Console.WriteLine(aex.Message);
+                Console.ReadKey();
+            }
+            catch (AlreadyPassedException apex)
+            {
+                Console.WriteLine(apex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
         public override void DisplayInfo()
         {
-            if (isPassedAlready)
+            try
             {
-                Console.WriteLine("Зачет уже сдан\n");
-                return;
+                if (isPassedAlready)
+                {
+                    throw new AlreadyPassedException("Зачет уже сдан");
+                }
+                if (RightAnswers == -1)
+                {
+                    throw new UnsuccessfulAttemtException("Неудачная попытка пройти экзамен. Проверьте правильность данных");
+                }
+                Console.WriteLine($"Зачет по дисциплине: {Discipline}\n" +
+                    $"Общее количество вопросов: {QuestionsQuantity}\n" +
+                    $"Из них правильно: {RightAnswers}\n" +
+                    $"Зачет сдан: {IsPassed}\n" +
+                    $"Осталось попыток: {MaxTakes - take}\n");
             }
-            if (RightAnswers == -1)
+            catch (UnsuccessfulAttemtException uex)
             {
-                Console.WriteLine("Неудачная попытка сдать зачет. " +
-                    "Проверьте правильность данных\n");
-                return;
+                Console.WriteLine(uex.Message);
+                Console.ReadKey();
             }
-            Console.WriteLine($"Зачет по дисциплине: {Discipline}\n" +
-                $"Общее количество вопросов: {QuestionsQuantity}\n" +
-                $"Из них правильно: {RightAnswers}\n" +
-                $"Зачет сдан: {IsPassed}\n" +
-                $"Осталось попыток: {MaxTakes - take}\n");
-
+            catch (AlreadyPassedException apex)
+            {
+                Console.WriteLine(apex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
         public override void CalculateMark()
         {

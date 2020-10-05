@@ -87,14 +87,13 @@ namespace Laboratory.Exams
         /// </summary>
         public override void DisplayInfo()
         {
-            if (RightAnswers == -1)
+            try
             {
-                Console.WriteLine("Неудачная попытка пройти тест." +
-                    "Проверьте правильность данных\n");
-                return;
-            }
-            else
-            {
+                if (RightAnswers == -1)
+                {
+                    throw new UnsuccessfulAttemtException("Неудачная попытка пройти тест." +
+                        "Проверьте правильность данных");
+                }
                 Console.WriteLine($"Тест по дисциплине: {Discipline}\n" +
                     $"Тема теста: {TestTopic}\n" +
                     $"Общее количество вопросов: {QuestionsQuantity}\n" +
@@ -102,6 +101,16 @@ namespace Laboratory.Exams
                     $"Текущая оценка: {CurrentMark} \\ {GradingScale}\n" +
                     $"Высшая оценка: {MaxMark} \\ {GradingScale}\n" +
                     $"Количество успешных попыток: {SuccessfulTakes}\n");
+            }
+            catch (UnsuccessfulAttemtException uex)
+            {
+                Console.WriteLine(uex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
             }
         }
         #region Print methods
@@ -147,11 +156,23 @@ namespace Laboratory.Exams
         /// </summary>
         public override void TakeExam()
         {
-            Random rnd = new Random();
-            RightAnswers = rnd.Next(0, QuestionsQuantity);
-            if (RightAnswers == -1) return;
-            take++;
-            CalculateMark();
+            try
+            {
+                Random rnd = new Random();
+                RightAnswers = rnd.Next(0, QuestionsQuantity);
+                take++;
+                CalculateMark();
+            }
+            catch (ArgumentOutOfRangeException aex)
+            {
+                Console.WriteLine(aex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
         /// <summary>
         /// Проводит экзамен у одного человека
@@ -159,10 +180,22 @@ namespace Laboratory.Exams
         /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
         public override void TakeExam(int rightAnswers)
         {
-            RightAnswers = rightAnswers;
-            if (RightAnswers == -1) return;
-            take++;
-            CalculateMark();
+            try
+            {
+                RightAnswers = rightAnswers;
+                take++;
+                CalculateMark();
+            }
+            catch (ArgumentOutOfRangeException aex)
+            {
+                Console.WriteLine(aex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
         /// <summary>
         /// Определяет итоговую оценку

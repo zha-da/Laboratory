@@ -17,9 +17,8 @@ namespace Laboratory.Exams
             {
                 if (value < 0 || value > 5)
                 {
-                    Console.WriteLine("Недопустимое значение. Перепроверьте данные\n");
                     rightAns = -1;
-                    return;
+                    throw new ArgumentOutOfRangeException("Недопустимое значение (меньше 0 или больше 5). Перепроверьте данные");
                 }
                 _rightAns = value;
             }
@@ -34,8 +33,7 @@ namespace Laboratory.Exams
             {
                 if (value < 1)
                 {
-                    Console.WriteLine("Количество попыток не может быть меньше 1\n");
-                    return;
+                    throw new ArgumentOutOfRangeException("Максимальное количество попыток не может быть меньше 0");
                 }
                 _maxTakes = value;
             }
@@ -53,9 +51,8 @@ namespace Laboratory.Exams
                 {
                     if ( val < 1 || val > GradingScale)
                     {
-                        Console.WriteLine("Оценка по критерию не может быть ниже 1 " +
+                        throw new ArgumentOutOfRangeException("Оценка по критерию не может быть ниже 1 " +
                             "или больше максимальной оценки по шкале");
-                        return;
                     }
                 }
                 _crits = value;
@@ -73,36 +70,58 @@ namespace Laboratory.Exams
         #region Methods
         public override void TakeExam()
         {
-            if (IsPassed)
+            try
             {
-                isPassedAlready = true;
-                return;
-            }
-            Random rnd = new Random();
-            for (int i = 0; i < _crits.Length; i++)
-            {
-                _crits[i] = 0;
-            }
-            for (int i = 0; i < QuestionsQuantity; i++)
-            {
-                for (int j = 0; j < 5; j++)
+                if (IsPassed)
                 {
-                    _crits[j] += rnd.Next(2, GradingScale);
+                    isPassedAlready = true;
+                    throw new AlreadyPassedException("Экзамен уже сдан");
                 }
-            }
+                Random rnd = new Random();
+                for (int i = 0; i < _crits.Length; i++)
+                {
+                    _crits[i] = 0;
+                }
+                for (int i = 0; i < QuestionsQuantity; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        _crits[j] += rnd.Next(2, GradingScale);
+                    }
+                }
 
-            for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
+                {
+                    _crits[i] = (int)Math.Round((double)_crits[i] / QuestionsQuantity);
+                }
+
+                if (take++ > MaxTakes)
+                {
+                    throw new ExpelledException("Ты отчислен");
+                }
+
+                CalculateMark();
+            }
+            catch (ExpelledException eex)
             {
-                _crits[i] = (int)Math.Round((double)_crits[i] / QuestionsQuantity);
+                Console.WriteLine(eex.Message);
+                Console.ReadKey();
             }
-
-            if(take++ > MaxTakes)
+            catch (ArgumentOutOfRangeException aex)
             {
-                Console.WriteLine("Количество попыток исчерпано. Незачет\n");
-                return;
+                Console.WriteLine(aex.Message);
+                Console.ReadKey();
             }
-
-            CalculateMark();
+            catch (AlreadyPassedException apex)
+            {
+                Console.WriteLine(apex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
 
         public override void CalculateMark()
@@ -123,23 +142,39 @@ namespace Laboratory.Exams
 
         public override void DisplayInfo()
         {
-            if (isPassedAlready)
+            try
             {
-                Console.WriteLine("Экзамен уже сдан\n");
-                return;
+                if (isPassedAlready)
+                {
+                    throw new AlreadyPassedException("Экзамен уже сдан");
+                }
+                if (RightAnswers == -1)
+                {
+                    throw new UnsuccessfulAttemtException("Неудачная попытка сдать зачет. " +
+                        "Проверьте правильность данных");
+                }
+                Console.WriteLine($"Итоговый экзамен по предмету: {Discipline}\n" +
+                    $"Общее количество вопросов: {QuestionsQuantity}\n" +
+                    $"Текущая оценка: {CurrentMark}\n" +
+                    $"Максимальная оценка: {MaxMark}\n" +
+                    $"Экзамен сдан: {IsPassed}\n" +
+                    $"Осталось попыток: {MaxTakes - take}\n");
             }
-            if (RightAnswers == -1)
+            catch (UnsuccessfulAttemtException uex)
             {
-                Console.WriteLine("Неудачная попытка сдать зачет. " +
-                    "Проверьте правильность данных\n");
-                return;
+                Console.WriteLine(uex.Message);
+                Console.ReadKey();
             }
-            Console.WriteLine($"Итоговый экзамен по предмету: {Discipline}\n" +
-                $"Общее количество вопросов: {QuestionsQuantity}\n" +
-                $"Текущая оценка: {CurrentMark}\n" +
-                $"Максимальная оценка: {MaxMark}\n" +
-                $"Экзамен сдан: {IsPassed}\n" +
-                $"Осталось попыток: {MaxTakes - take}\n");
+            catch (AlreadyPassedException apex)
+            {
+                Console.WriteLine(apex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
         #endregion
 

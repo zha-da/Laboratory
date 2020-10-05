@@ -42,8 +42,7 @@ namespace Laboratory.Exams
             {
                 if (value < 1)
                 {
-                    Console.WriteLine("Проходной балл не может быть ниже 1\n");
-                    return;
+                    throw new ArgumentOutOfRangeException("Проходной балл не может быть ниже 1");
                 }
                 _passSc = value;
             }
@@ -74,18 +73,30 @@ namespace Laboratory.Exams
         /// </summary>
         public override void DisplayInfo()
         {
-            if (RightAnswers == -1)
+            try
             {
-                Console.WriteLine("Неудачная попытка сдать зачет. " +
-                    "Проверьте правильность данных\n");
-                return;
+                if (RightAnswers == -1)
+                {
+                    throw new UnsuccessfulAttemtException("Неудачная попытка сдать контрольную работу. " +
+                        "Проверьте правильность данных");
+                }
+                Console.WriteLine($"Контрольная работа по предмету: {Discipline}\n" +
+                    $"Общее количество вопросов: {QuestionsQuantity}\n" +
+                    $"Из них правильно: {RightAnswers}\n" +
+                    $"Текущая оценка: {CurrentMark}\n" +
+                    $"Максимальная оценка: {MaxMark}\n" +
+                    $"Контрольная работа сдана: {IsPassed}\n");
             }
-            Console.WriteLine($"Контрольная работа по предмету: {Discipline}\n" +
-                $"Общее количество вопросов: {QuestionsQuantity}\n" +
-                $"Из них правильно: {RightAnswers}\n" +
-                $"Текущая оценка: {CurrentMark}\n" +
-                $"Максимальная оценка: {MaxMark}\n" +
-                $"Контрольная работа сдана: {IsPassed}\n");
+            catch (UnsuccessfulAttemtException uex)
+            {
+                Console.WriteLine(uex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
 
         /// <summary>
@@ -104,10 +115,22 @@ namespace Laboratory.Exams
         /// </summary>
         public override void TakeExam()
         {
-            Random rnd = new Random();
-            RightAnswers = rnd.Next(0, QuestionsQuantity);
-            if (RightAnswers == -1) return;
-            CalculateMark();
+            try
+            {
+                Random rnd = new Random();
+                RightAnswers = rnd.Next(0, QuestionsQuantity);
+                CalculateMark();
+            }
+            catch (ArgumentOutOfRangeException aex)
+            {
+                Console.WriteLine(aex.Message);
+                Console.ReadKey();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка, аварийное завершение работы программы");
+                Console.ReadKey();
+            }
         }
         #endregion
 

@@ -26,7 +26,7 @@ namespace Laboratory.Exams
 
         private int _grdScale = 5;
         /// <summary>
-        /// Максимальная отметка (не может быть ниже 0).
+        /// Шкала оценивания
         /// </summary>
         public virtual int GradingScale
         {
@@ -35,8 +35,7 @@ namespace Laboratory.Exams
             {
                 if (value < 1)
                 {
-                    Console.WriteLine("Максимальная оценка не может быть ниже 1\n");
-                    return;
+                    throw new ArgumentOutOfRangeException("Максимальная оценка по шкале не может быть ниже 1");
                 }
                 _grdScale = value;
             }
@@ -44,7 +43,7 @@ namespace Laboratory.Exams
 
         internal int questQuan = 30;
         /// <summary>
-        /// Общее количество вопросов (не может быть ниже 0)
+        /// Общее количество вопросов (не ниже 0)
         /// </summary>
         public int QuestionsQuantity
         {
@@ -53,8 +52,7 @@ namespace Laboratory.Exams
             {
                 if (value < 0)
                 {
-                    Console.WriteLine($"Количество вопросов не может быть меньше 0\n");
-                    return;
+                    throw new ArgumentOutOfRangeException($"Количество вопросов не может быть меньше 0");
                 }
                 questQuan = value;
             }
@@ -71,9 +69,8 @@ namespace Laboratory.Exams
             {
                 if (value < 0 || value > QuestionsQuantity)
                 {
-                    Console.WriteLine($"Недопустимое значение количества правильных ответов (от 0 до {questQuan})");
                     rightAns = -1;
-                    return;
+                    throw new ArgumentOutOfRangeException($"Недопустимое значение количества правильных ответов (от 0 до {questQuan})");
                 }
                 rightAns = value;
             }
@@ -109,10 +106,10 @@ namespace Laboratory.Exams
         public Exam()
         {
             PassingScore = (int)Math.Round(_grdScale * 0.6);
-            questQuan = 60;
-            discip = "Не выбрано";
-            _grdScale = 60;
-            rightAns = 0;
+            QuestionsQuantity = 60;
+            Discipline = "Не выбрано";
+            GradingScale = 60;
+            RightAnswers = 0;
         }
         /// <summary>
         /// Создает экземпляр класса
@@ -129,11 +126,11 @@ namespace Laboratory.Exams
         public Exam(string discipline, int questionsQuantity, 
             int gradeScale, int passingScore)
         {
-            discip = discipline;
+            Discipline = discipline;
             PassingScore = passingScore;
-            questQuan = questionsQuantity;
-            _grdScale = gradeScale;
-            rightAns = 0;
+            QuestionsQuantity = questionsQuantity;
+            GradingScale = gradeScale;
+            RightAnswers = 0;
         }
         /// <summary>
         /// Создает экземпляр класса
@@ -213,10 +210,16 @@ namespace Laboratory.Exams
         /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
         public virtual void TakeExam(int rightAnswers)
         {
-            RightAnswers = rightAnswers;
-            if (rightAns == -1) return;
-            take++;
-            CalculateMark();
+            try
+            {
+                RightAnswers = rightAnswers;
+                take++;
+                CalculateMark();
+            }
+            catch (ArgumentOutOfRangeException aex)
+            {
+                Console.WriteLine(aex.Message);
+            }
         }
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
@@ -227,11 +230,17 @@ namespace Laboratory.Exams
         /// </summary>
         public virtual void TakeExamRnd()
         {
-            Random rnd = new Random();
-            RightAnswers = rnd.Next(0, questQuan);
-            if (rightAns == -1) return;
-            take++;
-            CalculateMark();
+            try
+            {
+                Random rnd = new Random();
+                RightAnswers = rnd.Next(0, questQuan);
+                take++;
+                CalculateMark();
+            }
+            catch (ArgumentOutOfRangeException aex)
+            {
+                Console.WriteLine(aex.Message);
+            }
         }
         #endregion
 
