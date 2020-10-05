@@ -63,8 +63,15 @@ namespace Laboratory.Exams
         #endregion
 
         #region Constructors
+        public FinalExam(string discipline, int questionsQuantity, int passingScore, int maxTakes)
+            :base (discipline, questionsQuantity, passingScore)
+        {
+            MaxTakes = maxTakes;
+        }
         public FinalExam(string discipline, int questionsQuantity)
             : base(discipline, questionsQuantity) { }
+        public FinalExam(string discipline)
+            : this(discipline, 2) { }
         #endregion
 
         #region Methods

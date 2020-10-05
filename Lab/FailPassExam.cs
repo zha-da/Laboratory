@@ -53,9 +53,8 @@ namespace Laboratory.Exams
         #region Constructors
         public FailPassExam(string discipline, int questionsQuantity,
             int passingScore, int maxTakes)
+            : base(discipline, questionsQuantity)
         {
-            Discipline = discipline;
-            QuestionsQuantity = questionsQuantity;
             PassingScore = passingScore;
             MaxTakes = maxTakes;
         }
@@ -73,7 +72,7 @@ namespace Laboratory.Exams
         public FailPassExam(string discipline)
             : this(discipline, 30, 18, 3) { }
 
-        public FailPassExam() 
+        public FailPassExam()
         {
             QuestionsQuantity = 30;
             PassingScore = 18;
