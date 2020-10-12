@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Additional Classes\Logger.cs" />
     <Compile Include="Exceptions\AlreadyPassedException.cs" />
     <Compile Include="Exam.cs" />
     <Compile Include="Control.cs" />

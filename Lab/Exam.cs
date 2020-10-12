@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
 {
@@ -105,9 +104,9 @@ namespace Laboratory.Exams
         /// </summary>
         public Exam()
         {
-            PassingScore = (int)Math.Round(_grdScale * 0.6);
-            QuestionsQuantity = 60;
             Discipline = "Не выбрано";
+            PassingScore = 36;
+            QuestionsQuantity = 60;
             GradingScale = 60;
             RightAnswers = 0;
         }
@@ -126,11 +125,26 @@ namespace Laboratory.Exams
         public Exam(string discipline, int questionsQuantity, 
             int gradeScale, int passingScore)
         {
-            Discipline = discipline;
-            PassingScore = passingScore;
-            QuestionsQuantity = questionsQuantity;
-            GradingScale = gradeScale;
-            RightAnswers = 0;
+            try
+            {
+                Discipline = discipline;
+                PassingScore = passingScore;
+                QuestionsQuantity = questionsQuantity;
+                GradingScale = gradeScale;
+                RightAnswers = 0;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                string message = $"Введены неверные данные для создания экземпляра класса " +
+                                $"экзамена по дисциплине {Discipline}\n" +
+                                $"Экземпляр создается со значениями по умолчанию\n";
+                Logger.NewLog(message);
+                Discipline = discipline;                
+                PassingScore = 36;
+                QuestionsQuantity = 60;
+                GradingScale = 60;
+                RightAnswers = 0;
+            }
         }
         /// <summary>
         /// Создает экземпляр класса
@@ -140,7 +154,7 @@ namespace Laboratory.Exams
         public Exam(string discipline, int questionsQuantity)
             : this(discipline, questionsQuantity, questionsQuantity, 0) 
         {
-            PassingScore = (int)Math.Round(_grdScale * 0.6);
+            PassingScore = (int)Math.Round(GradingScale * 0.6);
         }
         #endregion
 

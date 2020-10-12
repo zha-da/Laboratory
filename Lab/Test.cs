@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
 {
@@ -50,33 +52,72 @@ namespace Laboratory.Exams
 
 
         #region Constructors
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="testTopic">Тема теста</param>
+        /// <param name="questionsQuantity">Количество вопросов</param>
+        /// <param name="passingScore">Проходной балл</param>
+        /// <param name="gradingScale">Шкала оценивания</param>
         public Test(string discipline, string testTopic, 
             int questionsQuantity, int passingScore, int gradingScale)
         {
-            Discipline = discipline;
-            TestTopic = testTopic;
-            QuestionsQuantity = questionsQuantity;
-            PassingScore = passingScore;
-            GradingScale = gradingScale;
+            try
+            {
+                Discipline = discipline;
+                TestTopic = testTopic;
+                QuestionsQuantity = questionsQuantity;
+                PassingScore = passingScore;
+                GradingScale = gradingScale;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                string message = $"Введены неверные данные для создания экземпляра класса " +
+                                $"теста по дисциплине {Discipline}\n" +
+                                $"Экземпляр создается со значениями по умолчанию\n";
+                Logger.NewLog(message);
+                QuestionsQuantity = 30;
+                PassingScore = 18;
+                GradingScale = 100;
+            }
         }
-
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="testTopic">Тема теста</param>
+        /// <param name="questionsQuantity">Количество вопросов</param>
+        /// <param name="passingScore">Проходной балл</param>
         public Test(string discipline, string testTopic,
             int questionsQuantity, int passingScore)
             : this (discipline, testTopic, questionsQuantity, passingScore, 0)
         {
             GradingScale = 100;
         }
-
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="testTopic">Тема теста</param>
+        /// <param name="questionsQuantity">Количество вопросов</param>
         public Test(string discipline, string testTopic,
             int questionsQuantity)
             : this(discipline, testTopic, questionsQuantity, 0)
         {
             PassingScore = (int)Math.Round(QuestionsQuantity * 0.6);
         }
-
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="testTopic">Тема теста</param>
         public Test(string discipline, string testTopic)
-            : this(discipline, testTopic, 30, 18, 30) { }
+            : this(discipline, testTopic, 30, 18, 100) { }
 
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
         public Test() { }
         #endregion
 
@@ -91,8 +132,7 @@ namespace Laboratory.Exams
             {
                 if (RightAnswers == -1)
                 {
-                    throw new UnsuccessfulAttemtException("Неудачная попытка пройти тест." +
-                        "Проверьте правильность данных");
+                    throw new UnsuccessfulAttemtException("Неверные данные. Неудачная попытка пройти тест\n");
                 }
                 Console.WriteLine($"Тест по дисциплине: {Discipline}\n" +
                     $"Тема теста: {TestTopic}\n" +
@@ -104,13 +144,14 @@ namespace Laboratory.Exams
             }
             catch (UnsuccessfulAttemtException uex)
             {
+                Logger.NewLog(uex.Message + "\n");
                 Console.WriteLine(uex.Message);
                 Console.ReadKey();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Ошибка, аварийное завершение работы программы");
-                Console.ReadKey();
+                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
+                Logger.NewLog(message);
             }
         }
         #region Print methods
@@ -163,15 +204,15 @@ namespace Laboratory.Exams
                 take++;
                 CalculateMark();
             }
-            catch (ArgumentOutOfRangeException aex)
+            //catch (ArgumentOutOfRangeException aex)
+            //{
+            //    Console.WriteLine(aex.Message);
+            //    Console.ReadKey();
+            //}
+            catch (Exception ex)
             {
-                Console.WriteLine(aex.Message);
-                Console.ReadKey();
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Ошибка, аварийное завершение работы программы");
-                Console.ReadKey();
+                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
+                Logger.NewLog(message);
             }
         }
         /// <summary>
@@ -191,10 +232,10 @@ namespace Laboratory.Exams
                 Console.WriteLine(aex.Message);
                 Console.ReadKey();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Ошибка, аварийное завершение работы программы");
-                Console.ReadKey();
+                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
+                Logger.NewLog(message);
             }
         }
         /// <summary>

@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
 {
+    /// <summary>
+    /// Класс итогового экзамена
+    /// </summary>
     public class FinalExam : Control
     {
         #region Fields
         int _rightAns = 0;
+        /// <summary>
+        /// Количество правильных ответов
+        /// </summary>
         public override int RightAnswers
         {
             get => _rightAns;
@@ -25,7 +33,9 @@ namespace Laboratory.Exams
         }
 
         private int _maxTakes = 3;
-
+        /// <summary>
+        /// Количество попыток
+        /// </summary>
         public int MaxTakes
         {
             get { return _maxTakes; }
@@ -40,7 +50,9 @@ namespace Laboratory.Exams
         }
 
         private int[] _crits = new int[] { 0, 0, 0, 0, 0 };
-
+        /// <summary>
+        /// Оценка по критериям
+        /// </summary>
         public int[] Criterias
         {
             get { return _crits; }
@@ -63,22 +75,56 @@ namespace Laboratory.Exams
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="questionsQuantity">Количество вопросов</param>
+        /// <param name="passingScore">Проходной балл</param>
+        /// <param name="maxTakes">Количество попыток</param>
         public FinalExam(string discipline, int questionsQuantity, int passingScore, int maxTakes)
             :base (discipline, questionsQuantity, passingScore)
         {
-            MaxTakes = maxTakes;
+            try
+            {
+                MaxTakes = maxTakes;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                string message = "Введены неверные данные для создания экземпляра класса " +
+                                $"итогового экзамена по дисциплине {Discipline}\n" +
+                                $"Экземпляр создается со значениями по умолчанию\n";
+                Logger.NewLog(message);
+                MaxTakes = 3;
+            }
         }
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="questionsQuantity">Количество вопросов</param>
         public FinalExam(string discipline, int questionsQuantity)
             : base(discipline, questionsQuantity) { }
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
         public FinalExam(string discipline)
             : this(discipline, 2) { }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Принимает итоговый экзамен
+        /// </summary>
         public override void TakeExam()
         {
             try
             {
+                if (take++ > MaxTakes)
+                {
+                    throw new ExpelledException("Попытки сдать экзамен исчерпаны");
+                }
                 if (IsPassed)
                 {
                     isPassedAlready = true;
@@ -101,36 +147,35 @@ namespace Laboratory.Exams
                 {
                     _crits[i] = (int)Math.Round((double)_crits[i] / QuestionsQuantity);
                 }
-
-                if (take++ > MaxTakes)
-                {
-                    throw new ExpelledException("Ты отчислен");
-                }
-
                 CalculateMark();
             }
             catch (ExpelledException eex)
             {
+                Logger.NewLog("Попытка сдать экзамен отчисленным учеником\n");
                 Console.WriteLine(eex.Message);
                 Console.ReadKey();
             }
             catch (ArgumentOutOfRangeException aex)
             {
+                Logger.NewLog(aex.Message + "\n");
                 Console.WriteLine(aex.Message);
                 Console.ReadKey();
             }
             catch (AlreadyPassedException apex)
             {
+                Logger.NewLog(apex.Message + "\n");
                 Console.WriteLine(apex.Message);
                 Console.ReadKey();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Ошибка, аварийное завершение работы программы");
-                Console.ReadKey();
+                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
+                Logger.NewLog(message);
             }
         }
-
+        /// <summary>
+        /// Рассчитывает оценку
+        /// </summary>
         public override void CalculateMark()
         {
             for (int i = 0; i < _crits.Length; i++)
@@ -146,41 +191,47 @@ namespace Laboratory.Exams
 
             IsPassed = MaxMark >= PassingScore;
         }
-
+        /// <summary>
+        /// Выводит информацию
+        /// </summary>
         public override void DisplayInfo()
         {
             try
             {
+                if (take > MaxTakes && !IsPassed)
+                {
+                    throw new ExpelledException("Вы исчерпали все попытки сдать экзамен и теперь отчислены");
+                }
                 if (isPassedAlready)
                 {
-                    throw new AlreadyPassedException("Экзамен уже сдан");
+                    return;
                 }
                 if (RightAnswers == -1)
                 {
-                    throw new UnsuccessfulAttemtException("Неудачная попытка сдать зачет. " +
-                        "Проверьте правильность данных");
+                    throw new UnsuccessfulAttemtException("Неверные данные. Неудачная попытка сдать экзамен");
                 }
-                Console.WriteLine($"Итоговый экзамен по предмету: {Discipline}\n" +
+                Console.WriteLine($"\nИтоговый экзамен по предмету: {Discipline}\n" +
                     $"Общее количество вопросов: {QuestionsQuantity}\n" +
                     $"Текущая оценка: {CurrentMark}\n" +
                     $"Максимальная оценка: {MaxMark}\n" +
                     $"Экзамен сдан: {IsPassed}\n" +
                     $"Осталось попыток: {MaxTakes - take}\n");
             }
+            catch (ExpelledException eex)
+            {
+                Console.WriteLine(eex.Message);
+                Console.ReadKey();
+            }
             catch (UnsuccessfulAttemtException uex)
             {
+                Logger.NewLog(uex.Message + "\n");
                 Console.WriteLine(uex.Message);
                 Console.ReadKey();
             }
-            catch (AlreadyPassedException apex)
+            catch (Exception ex)
             {
-                Console.WriteLine(apex.Message);
-                Console.ReadKey();
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Ошибка, аварийное завершение работы программы");
-                Console.ReadKey();
+                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
+                Logger.NewLog(message);
             }
         }
         #endregion

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
 {
@@ -14,13 +16,18 @@ namespace Laboratory.Exams
         #region Fields
         private int _grdScale = 5;
 
+        /// <summary>
+        /// Шкала оценивания
+        /// </summary>
         public override int GradingScale
         {
             get => _grdScale;
         }
 
         private int _maxMark = 0;
-
+        /// <summary>
+        /// Максимальная полученная оценка
+        /// </summary>
         public int MaxMark
         {
             get { return _maxMark; }
@@ -34,7 +41,9 @@ namespace Laboratory.Exams
         }
 
         private int _passSc = 3;
-
+        /// <summary>
+        /// Проходной балл
+        /// </summary>
         public override int PassingScore
         {
             get => _passSc;
@@ -50,20 +59,47 @@ namespace Laboratory.Exams
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="questionsQuantity">Количество вопросов</param>
+        /// <param name="passingScore">Проходной балл</param>
         public Control(string discipline, int questionsQuantity,
             int passingScore)
         {
-            Discipline = discipline;
-            QuestionsQuantity = questionsQuantity;
-            PassingScore = passingScore;
+            try
+            {
+                Discipline = discipline;
+                QuestionsQuantity = questionsQuantity;
+                PassingScore = passingScore;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                string message = "Введены неверные данные для создания экземпляра класса " +
+                                $"контрольной работы по дисциплине {Discipline}\n" +
+                                $"Экземпляр создается со значениями по умолчанию\n";
+                Logger.NewLog(message);
+                QuestionsQuantity = 30;
+                PassingScore = 18;
+            }
         }
-
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
+        /// <param name="questionsQuantity">Количество вопросов</param>
         public Control(string discipline, int questionsQuantity)
             : this(discipline, questionsQuantity, 3) { }
-
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="discipline">Дисциплина</param>
         public Control(string discipline)
             : this(discipline, 30, 3) { }
-
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
         public Control() { }
         #endregion
 
@@ -89,13 +125,14 @@ namespace Laboratory.Exams
             }
             catch (UnsuccessfulAttemtException uex)
             {
+                Logger.NewLog(uex.Message + "\n");
                 Console.WriteLine(uex.Message);
                 Console.ReadKey();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Ошибка, аварийное завершение работы программы");
-                Console.ReadKey();
+                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
+                Logger.NewLog(message);
             }
         }
 
@@ -121,15 +158,15 @@ namespace Laboratory.Exams
                 RightAnswers = rnd.Next(0, QuestionsQuantity);
                 CalculateMark();
             }
-            catch (ArgumentOutOfRangeException aex)
+            //catch (ArgumentOutOfRangeException aex)
+            //{
+            //    Console.WriteLine(aex.Message);
+            //    Console.ReadKey();
+            //}
+            catch (Exception ex)
             {
-                Console.WriteLine(aex.Message);
-                Console.ReadKey();
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Ошибка, аварийное завершение работы программы");
-                Console.ReadKey();
+                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
+                Logger.NewLog(message);
             }
         }
         #endregion
