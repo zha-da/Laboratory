@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
@@ -84,23 +79,6 @@ namespace Laboratory.Exams
                 PassingScore = 18;
             }
         }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        /// <param name="questionsQuantity">Количество вопросов</param>
-        public Control(string discipline, int questionsQuantity)
-            : this(discipline, questionsQuantity, 3) { }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        public Control(string discipline)
-            : this(discipline, 30, 3) { }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        public Control() { }
         #endregion
 
         #region Methods
@@ -169,10 +147,6 @@ namespace Laboratory.Exams
                 Logger.NewLog(message);
             }
         }
-        #endregion
-
-        #region Operators
-
         #endregion
     }
 }

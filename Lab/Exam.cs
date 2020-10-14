@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
@@ -100,22 +98,6 @@ namespace Laboratory.Exams
 
         #region Constructors
         /// <summary>
-        /// Создает экземпляр класса с параметрами по умолчанию
-        /// </summary>
-        public Exam()
-        {
-            Discipline = "Не выбрано";
-            PassingScore = 36;
-            QuestionsQuantity = 60;
-            GradingScale = 60;
-            RightAnswers = 0;
-        }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Название дисциплины</param>
-        public Exam(string discipline) : this(discipline, 60, 60, 36) { }
-        /// <summary>
         /// Создает экземпляр класса
         /// </summary>
         /// <param name="discipline">Название дисциплины</param>
@@ -147,15 +129,9 @@ namespace Laboratory.Exams
             }
         }
         /// <summary>
-        /// Создает экземпляр класса
+        /// Стандартный конструктор
         /// </summary>
-        /// <param name="discipline">Название дисциплины</param>
-        /// <param name="questionsQuantity">Общее количество вопросов</param>
-        public Exam(string discipline, int questionsQuantity)
-            : this(discipline, questionsQuantity, questionsQuantity, 0) 
-        {
-            PassingScore = (int)Math.Round(GradingScale * 0.6);
-        }
+        public Exam() { }
         #endregion
 
 
@@ -219,43 +195,9 @@ namespace Laboratory.Exams
         public abstract void CalculateMark();
 
         /// <summary>
-        /// Проводит экзамен у одного человека
-        /// </summary>
-        /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
-        public virtual void TakeExam(int rightAnswers)
-        {
-            try
-            {
-                RightAnswers = rightAnswers;
-                take++;
-                CalculateMark();
-            }
-            catch (ArgumentOutOfRangeException aex)
-            {
-                Console.WriteLine(aex.Message);
-            }
-        }
-        /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>
         public abstract void TakeExam();
-        /// <summary>
-        /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
-        /// </summary>
-        public virtual void TakeExamRnd()
-        {
-            try
-            {
-                Random rnd = new Random();
-                RightAnswers = rnd.Next(0, questQuan);
-                take++;
-                CalculateMark();
-            }
-            catch (ArgumentOutOfRangeException aex)
-            {
-                Console.WriteLine(aex.Message);
-            }
-        }
         #endregion
 
 

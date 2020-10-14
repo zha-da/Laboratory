@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
@@ -80,52 +75,14 @@ namespace Laboratory.Exams
             }
             catch (ArgumentOutOfRangeException)
             {
-                using (StreamWriter logger = new StreamWriter("logs.txt", true))
-                {
-                    logger.WriteLineAsync($"{DateTime.Now} : Введены неверные данные для создания экземпляра класса " +
+                string message = "Введены неверные данные для создания экземпляра класса " +
                                 $"зачета по дисциплине {Discipline}\n" +
-                                $"Экземпляр создается со значениями по умолчанию\n");
-                }
+                                $"Экземпляр создается со значениями по умолчанию\n";
+                Logger.NewLog(message);
                 QuestionsQuantity = 30;
                 PassingScore = 18;
                 MaxTakes = 3;
             }
-        }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        /// <param name="questionsQuantity">Количество вопросов</param>
-        /// <param name="passingScore">Проходной балл</param>
-        public FailPassExam(string discipline, int questionsQuantity,
-            int passingScore)
-            : this(discipline, questionsQuantity, passingScore, 3) { }
-
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        /// <param name="questionsQuantity">Количество вопросов</param>
-        public FailPassExam(string discipline, int questionsQuantity)
-            : this(discipline, questionsQuantity, 0, 3)
-        {
-            PassingScore = (int)Math.Round(questionsQuantity * 0.6);
-        }
-
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        public FailPassExam(string discipline)
-            : this(discipline, 30, 18, 3) { }
-
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        public FailPassExam()
-        {
-            QuestionsQuantity = 30;
-            PassingScore = 18;
         }
         #endregion
 

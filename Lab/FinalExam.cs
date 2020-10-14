@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
@@ -98,19 +93,6 @@ namespace Laboratory.Exams
                 MaxTakes = 3;
             }
         }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        /// <param name="questionsQuantity">Количество вопросов</param>
-        public FinalExam(string discipline, int questionsQuantity)
-            : base(discipline, questionsQuantity) { }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        public FinalExam(string discipline)
-            : this(discipline, 2) { }
         #endregion
 
         #region Methods
@@ -234,10 +216,6 @@ namespace Laboratory.Exams
                 Logger.NewLog(message);
             }
         }
-        #endregion
-
-        #region Operators
-
         #endregion
     }
 }

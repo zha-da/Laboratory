@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using Laboratory.AdditionalClasses;
 
 namespace Laboratory.Exams
@@ -82,43 +77,6 @@ namespace Laboratory.Exams
                 GradingScale = 100;
             }
         }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        /// <param name="testTopic">Тема теста</param>
-        /// <param name="questionsQuantity">Количество вопросов</param>
-        /// <param name="passingScore">Проходной балл</param>
-        public Test(string discipline, string testTopic,
-            int questionsQuantity, int passingScore)
-            : this (discipline, testTopic, questionsQuantity, passingScore, 0)
-        {
-            GradingScale = 100;
-        }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        /// <param name="testTopic">Тема теста</param>
-        /// <param name="questionsQuantity">Количество вопросов</param>
-        public Test(string discipline, string testTopic,
-            int questionsQuantity)
-            : this(discipline, testTopic, questionsQuantity, 0)
-        {
-            PassingScore = (int)Math.Round(QuestionsQuantity * 0.6);
-        }
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        /// <param name="discipline">Дисциплина</param>
-        /// <param name="testTopic">Тема теста</param>
-        public Test(string discipline, string testTopic)
-            : this(discipline, testTopic, 30, 18, 100) { }
-
-        /// <summary>
-        /// Создает экземпляр класса
-        /// </summary>
-        public Test() { }
         #endregion
 
 
@@ -209,29 +167,6 @@ namespace Laboratory.Exams
             //    Console.WriteLine(aex.Message);
             //    Console.ReadKey();
             //}
-            catch (Exception ex)
-            {
-                string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
-                Logger.NewLog(message);
-            }
-        }
-        /// <summary>
-        /// Проводит экзамен у одного человека
-        /// </summary>
-        /// <param name="rightAnswers">Количество вопросов, на которые получен правильный ответ</param>
-        public override void TakeExam(int rightAnswers)
-        {
-            try
-            {
-                RightAnswers = rightAnswers;
-                take++;
-                CalculateMark();
-            }
-            catch (ArgumentOutOfRangeException aex)
-            {
-                Console.WriteLine(aex.Message);
-                Console.ReadKey();
-            }
             catch (Exception ex)
             {
                 string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";
