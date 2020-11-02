@@ -6,10 +6,12 @@ namespace Laboratory.Exams
     /// <summary>
     /// Класс экзамена
     /// </summary>
-    public abstract class Exam
+    public abstract class Exam : IComparable<Exam>
     {
         #region Fields
         internal int take = 0;
+
+        internal DateTime ExamDate { get; set; } = new DateTime(2020, 10, 31);
 
         internal string discip = "Не выбрано";
         /// <summary>
@@ -129,6 +131,15 @@ namespace Laboratory.Exams
             }
         }
         /// <summary>
+        /// Конструктор с датой проведения экзамена
+        /// </summary>
+        /// <param name="date">Дата проведения экзамена</param>
+        protected Exam(DateTime date)
+        {
+            ExamDate = date;
+        }
+
+        /// <summary>
         /// Стандартный конструктор
         /// </summary>
         public Exam() { }
@@ -198,6 +209,11 @@ namespace Laboratory.Exams
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)
         /// </summary>
         public abstract void TakeExam();
+
+        int IComparable<Exam>.CompareTo(Exam other)
+        {
+            return ExamDate.CompareTo(other.ExamDate);
+        }
         #endregion
 
 

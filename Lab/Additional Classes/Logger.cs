@@ -6,7 +6,7 @@ namespace Laboratory.AdditionalClasses
     /// <summary>
     /// Класс логгера
     /// </summary>
-    public class Logger
+    public static class Logger
     {
         /// <summary>
         /// Создает новую запись в логе

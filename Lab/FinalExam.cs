@@ -9,6 +9,15 @@ namespace Laboratory.Exams
     public class FinalExam : Control
     {
         #region Fields
+        private bool finFail = false;
+        /// <summary>
+        /// Показывает, что экзамен провален, и попыток сдать его больше нет
+        /// </summary>
+        public bool ExamFailed
+        {
+            get { return finFail; }
+        }
+
         int _rightAns = 0;
         /// <summary>
         /// Количество правильных ответов
@@ -73,12 +82,13 @@ namespace Laboratory.Exams
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
+        /// <param name="date">Дата проведения итогового экзамена</param>
         /// <param name="discipline">Дисциплина</param>
         /// <param name="questionsQuantity">Количество вопросов</param>
         /// <param name="passingScore">Проходной балл</param>
         /// <param name="maxTakes">Количество попыток</param>
-        public FinalExam(string discipline, int questionsQuantity, int passingScore, int maxTakes)
-            :base (discipline, questionsQuantity, passingScore)
+        public FinalExam(DateTime date, string discipline, int questionsQuantity, int passingScore, int maxTakes)
+            :base (date, discipline, questionsQuantity, passingScore)
         {
             try
             {
@@ -105,6 +115,7 @@ namespace Laboratory.Exams
             {
                 if (take++ > MaxTakes)
                 {
+                    finFail = true;
                     throw new ExpelledException("Попытки сдать экзамен исчерпаны");
                 }
                 if (IsPassed)
@@ -169,9 +180,9 @@ namespace Laboratory.Exams
             }
 
             CurrentMark = RightAnswers;
-            MaxMark = CurrentMark;
+            HighestMark = CurrentMark;
 
-            IsPassed = MaxMark >= PassingScore;
+            IsPassed = HighestMark >= PassingScore;
         }
         /// <summary>
         /// Выводит информацию
@@ -195,7 +206,7 @@ namespace Laboratory.Exams
                 Console.WriteLine($"\nИтоговый экзамен по предмету: {Discipline}\n" +
                     $"Общее количество вопросов: {QuestionsQuantity}\n" +
                     $"Текущая оценка: {CurrentMark}\n" +
-                    $"Максимальная оценка: {MaxMark}\n" +
+                    $"Максимальная оценка: {HighestMark}\n" +
                     $"Экзамен сдан: {IsPassed}\n" +
                     $"Осталось попыток: {MaxTakes - take}\n");
             }

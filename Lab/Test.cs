@@ -50,13 +50,15 @@ namespace Laboratory.Exams
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
+        /// <param name="date">Дата проведения теста</param>
         /// <param name="discipline">Дисциплина</param>
         /// <param name="testTopic">Тема теста</param>
         /// <param name="questionsQuantity">Количество вопросов</param>
         /// <param name="passingScore">Проходной балл</param>
         /// <param name="gradingScale">Шкала оценивания</param>
-        public Test(string discipline, string testTopic, 
+        public Test(DateTime date, string discipline, string testTopic, 
             int questionsQuantity, int passingScore, int gradingScale)
+            : base(date)
         {
             try
             {

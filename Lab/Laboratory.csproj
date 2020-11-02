@@ -37,6 +37,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConsoleMenu">
+      <HintPath>..\..\lab6\lab6_17\ConsoleMenu\bin\Debug\ConsoleMenu.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,6 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Additional Classes\Logger.cs" />
+    <Compile Include="Comparers\ComparerByDiscipline.cs" />
+    <Compile Include="Comparers\ComparerByGrade.cs" />
+    <Compile Include="Comparers\ComparerByQuestions.cs" />
     <Compile Include="Exceptions\AlreadyPassedException.cs" />
     <Compile Include="Exam.cs" />
     <Compile Include="Control.cs" />
@@ -55,6 +61,7 @@
     <Compile Include="FailPassExam.cs" />
     <Compile Include="FinalExam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Semester.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Exceptions\UnsuccessfulAttemtException.cs" />
   </ItemGroup>

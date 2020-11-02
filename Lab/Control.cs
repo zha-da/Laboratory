@@ -1,5 +1,6 @@
 ﻿using System;
 using Laboratory.AdditionalClasses;
+using Laboratory.Exams.Comparers;
 
 namespace Laboratory.Exams
 {
@@ -23,7 +24,7 @@ namespace Laboratory.Exams
         /// <summary>
         /// Максимальная полученная оценка
         /// </summary>
-        public int MaxMark
+        public int HighestMark
         {
             get { return _maxMark; }
             set
@@ -57,11 +58,13 @@ namespace Laboratory.Exams
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
+        /// <param name="date">Дата проведения контрольной работы</param>
         /// <param name="discipline">Дисциплина</param>
         /// <param name="questionsQuantity">Количество вопросов</param>
         /// <param name="passingScore">Проходной балл</param>
-        public Control(string discipline, int questionsQuantity,
+        public Control(DateTime date, string discipline, int questionsQuantity,
             int passingScore)
+            : base(date)
         {
             try
             {
@@ -98,7 +101,7 @@ namespace Laboratory.Exams
                     $"Общее количество вопросов: {QuestionsQuantity}\n" +
                     $"Из них правильно: {RightAnswers}\n" +
                     $"Текущая оценка: {CurrentMark}\n" +
-                    $"Максимальная оценка: {MaxMark}\n" +
+                    $"Максимальная оценка: {HighestMark}\n" +
                     $"Контрольная работа сдана: {IsPassed}\n");
             }
             catch (UnsuccessfulAttemtException uex)
@@ -121,9 +124,10 @@ namespace Laboratory.Exams
         {
             double ratio = (double)RightAnswers / QuestionsQuantity;
             CurrentMark = (int)Math.Round(ratio * GradingScale);
-            MaxMark = CurrentMark;
+            HighestMark = CurrentMark;
             
-            IsPassed = MaxMark >= PassingScore;
+
+            IsPassed = RightAnswers >= PassingScore;
         }
         /// <summary>
         /// Проводит экзамен у одного человека (количество правильных ответов генерируется случайным образом)

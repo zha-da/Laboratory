@@ -9,6 +9,15 @@ namespace Laboratory.Exams
     public class FailPassExam : Exam
     {
         #region Fields
+        private bool fpFail = false;
+        /// <summary>
+        /// Показывает, что экзамен провален, и попыток сдать его больше нет
+        /// </summary>
+        public bool ExamFailed
+        {
+            get { return fpFail; }
+        }
+
         private int _grdScale = 1;
         /// <summary>
         /// Шкала оценивания
@@ -59,12 +68,14 @@ namespace Laboratory.Exams
         /// <summary>
         /// Создает экземпляр класса
         /// </summary>
+        /// <param name="date">Дата проведения зачета</param>
         /// <param name="discipline">Дисциплина</param>
         /// <param name="questionsQuantity">Количество вопросов</param>
         /// <param name="passingScore">Проходной балл</param>
         /// <param name="maxTakes">количество попыток</param>
-        public FailPassExam(string discipline, int questionsQuantity,
+        public FailPassExam(DateTime date, string discipline, int questionsQuantity,
             int passingScore, int maxTakes)
+            : base(date)
         {
             try
             {
@@ -96,6 +107,7 @@ namespace Laboratory.Exams
             {
                 if (take++ > MaxTakes)
                 {
+                    fpFail = true;
                     throw new ExpelledException("Попытки сдать зачет исчерпаны");
                 }
                 if (IsPassed)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Laboratory.Exams;
 using System.IO;
 using Laboratory.AdditionalClasses;
+using System.Globalization;
 
 namespace Laboratory
 {
@@ -45,11 +46,11 @@ namespace Laboratory
             try
             {
             icoe:
-                Console.WriteLine("Имя файла:");
-                string directory = Console.ReadLine();
+                //Console.WriteLine("Имя файла:");
+                //string directory = Console.ReadLine();
                 try
                 {
-                    using (StreamReader sr = new StreamReader(directory))
+                    using (StreamReader sr = new StreamReader("Exams.txt"))
                     {
                         List<Exam> vs = new List<Exam>(4);
                         while (!sr.EndOfStream)
@@ -58,50 +59,47 @@ namespace Laboratory
                             switch (sr.ReadLine())
                             {
                                 case "зачет":
+                                    newEx = new string[5];
+                                    for (int i = 0; i < 5; i++)
+                                    {
+                                        newEx[i] = sr.ReadLine();
+                                    }
+                                    DateTime date = DateTime.ParseExact(newEx[0], "dd MM yyyy", CultureInfo.CurrentCulture);
+                                    vs.Add(new FailPassExam(date, newEx[1], int.Parse(newEx[2]), int.Parse(newEx[3]), int.Parse(newEx[4])));
+                                    break;
+                                case "тест":
+                                    newEx = new string[6];
+                                    for (int i = 0; i < 6; i++)
+                                    {
+                                        newEx[i] = (sr.ReadLine());
+                                    }
+                                    DateTime date1 = DateTime.ParseExact(newEx[0], "dd MM yyyy", CultureInfo.CurrentCulture);
+                                    vs.Add(new Test(date1, newEx[1], newEx[2], int.Parse(newEx[3]), int.Parse(newEx[4]), int.Parse(newEx[5])));
+                                    break;
+                                case "контрольная":
                                     newEx = new string[4];
                                     for (int i = 0; i < 4; i++)
                                     {
                                         newEx[i] = sr.ReadLine();
                                     }
-                                    vs.Add(new FailPassExam(newEx[0], int.Parse(newEx[1]), int.Parse(newEx[2]), int.Parse(newEx[3])));
+                                    DateTime date2 = DateTime.ParseExact(newEx[0], "dd MM yyyy", CultureInfo.CurrentCulture);
+                                    vs.Add(new Control(date2, newEx[1], int.Parse(newEx[2]), int.Parse(newEx[3])));
                                     break;
-                                case "тест":
+                                case "экзамен":
                                     newEx = new string[5];
                                     for (int i = 0; i < 5; i++)
                                     {
                                         newEx[i] = (sr.ReadLine());
                                     }
-                                    vs.Add(new Test(newEx[0], newEx[1], int.Parse(newEx[2]), int.Parse(newEx[3]), int.Parse(newEx[4])));
-                                    break;
-                                case "контрольная":
-                                    newEx = new string[3];
-                                    for (int i = 0; i < 3; i++)
-                                    {
-                                        newEx[i] = sr.ReadLine();
-                                    }
-                                    vs.Add(new Control(newEx[0], int.Parse(newEx[1]), int.Parse(newEx[2])));
-                                    break;
-                                case "экзамен":
-                                    newEx = new string[4];
-                                    for (int i = 0; i < 4; i++)
-                                    {
-                                        newEx[i] = (sr.ReadLine());
-                                    }
-                                    vs.Add(new FinalExam(newEx[0], int.Parse(newEx[1]), int.Parse(newEx[2]), int.Parse(newEx[3])));
+                                    DateTime date3 = DateTime.ParseExact(newEx[0], "dd MM yyyy", CultureInfo.CurrentCulture);
+                                    vs.Add(new FinalExam(date3, newEx[1], int.Parse(newEx[2]), int.Parse(newEx[3]), int.Parse(newEx[4])));
                                     break;
                             }
                         }
 
-                        foreach (Exam ex in vs)
-                        {
-                            for (int i = 0; i < 3; i++)
-                            {
-                                ex.TakeExam();
-                                ex.DisplayInfo();
-                            }
-                        }
+                        Semester kb21 = new Semester(vs);
+                        kb21.StartSemester(vs);
                     }
-                    Console.ReadKey();
                 }
                 catch (FileNotFoundException)
                 {
@@ -134,30 +132,68 @@ namespace Laboratory
         }
         #endregion
 
-        #region v0
+        //#region v0
         //static void Main(string[] args)
         //{
         //    //FinalExam 
 
         //    try
         //    {
-        //        Exam math = new FinalExam("Математика", -1, -2, 0);
+        //        //string date = "31 10 2020";
+        //        //DateTime res = DateTime.ParseExact(date, "dd MM yyyy", CultureInfo.CurrentCulture);
+        //        //Console.WriteLine(res.ToString());
 
-        //        for (int i = 0; i < 5; i++)
-        //        {
-        //            math.TakeExam();
-        //            math.DisplayInfo();
-        //        }
+        //        List<Exam> exams = new List<Exam>(4);
 
-        //        Exam bio = new FailPassExam("Биология", -2, -2, 0);
+        //        Exam math = new FinalExam(new DateTime(2021, 1, 15), "Математика", -1, -2, 2);
+        //        exams.Add(math);
 
-        //        for (int i = 0; i < 4; i++)
-        //        {
-        //            bio.TakeExam();
-        //            bio.DisplayInfo();
-        //        }
+        //        Exam bio = new FailPassExam(new DateTime(2020, 12, 19), "Биология", -2, -2, 2);
+        //        exams.Add(bio);
 
-        //        Console.ReadKey();
+        //        Exam inf = new Control(new DateTime(2020, 11, 11), "Информатика", 15, 9);
+        //        exams.Add(inf);
+
+        //        Exam hist = new Test(new DateTime(2020, 11, 13), "История", "Правление Николая 2", 20, 15, 100);
+        //        exams.Add(hist);
+
+        //        Semester kb21 = new Semester(exams);
+
+        //        kb21.StartSemester(exams);
+
+        //        //Queue<Exam> session = new Queue<Exam>(exams);
+
+        //        //Queue<Exam> retake = new Queue<Exam>();
+
+        //        //exams.Sort();
+
+        //        //DisplayExams(exams);
+
+
+        //        //for (int i = 0; i < session.Count; i++)
+        //        //{
+        //        //    Exam current = session.Dequeue();
+        //        //    current.TakeExam();
+        //        //    if (!current.IsPassed)
+        //        //    {
+        //        //        retake.Enqueue(current);
+        //        //    }
+        //        //}
+
+
+        //        //Console.WriteLine();
+
+        //        //if (retake.Count == 0)
+        //        //{
+        //        //    Console.WriteLine("Поздравляем! Сессия окончена без долгов!");
+        //        //}
+        //        //else
+        //        //{
+        //        //    Console.WriteLine("Вы окончили сессию с долгами:");
+        //        //    DisplayExams(retake);
+        //        //}
+
+        //        //Console.ReadKey();
         //    }
         //    catch (Exception ex)
         //    {
@@ -172,6 +208,40 @@ namespace Laboratory
         //        Console.ReadKey();
         //    }
         //}
-        #endregion
+        //static void DisplayExams(Queue<Exam> exret)
+        //{
+        //    List<Exam> ex = new List<Exam>();
+
+        //    for (int i = 0; i < exret.Count; i++)
+        //    {
+        //        ex.Add(exret.Dequeue());
+        //    }
+
+        //    DisplayExams(ex);
+        //}
+        //static void DisplayExams(IEnumerable<Exam> exams)
+        //{
+        //    foreach (Exam exam in exams)
+        //    {
+        //        if (exam is FinalExam)
+        //        {
+        //            Console.Write("Экзамен ");
+        //        }
+        //        else if (exam is FailPassExam)
+        //        {
+        //            Console.Write("Зачет ");
+        //        }
+        //        else if (exam is Control)
+        //        {
+        //            Console.Write("Контрольная работа ");
+        //        }
+        //        else if (exam is Test)
+        //        {
+        //            Console.Write("Тест ");
+        //        }
+        //        Console.WriteLine($"по дисциплине {exam.Discipline}");
+        //    }
+        //}
+        //#endregion
     }
 }
