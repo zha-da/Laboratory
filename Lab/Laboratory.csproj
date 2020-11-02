@@ -58,6 +58,7 @@
     <Compile Include="Exam.cs" />
     <Compile Include="Control.cs" />
     <Compile Include="Exceptions\ExpelledException.cs" />
+    <Compile Include="Exceptions\SemesterEmptyException.cs" />
     <Compile Include="FailPassExam.cs" />
     <Compile Include="FinalExam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
