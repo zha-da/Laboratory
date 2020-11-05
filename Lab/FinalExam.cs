@@ -9,14 +9,10 @@ namespace Laboratory.Exams
     public class FinalExam : Control
     {
         #region Fields
-        private bool finFail = false;
         /// <summary>
         /// Показывает, что экзамен провален, и попыток сдать его больше нет
         /// </summary>
-        public bool ExamFailed
-        {
-            get { return finFail; }
-        }
+        public bool ExamFailed { get; private set; } = false;
 
         int _rightAns = 0;
         /// <summary>
@@ -29,7 +25,7 @@ namespace Laboratory.Exams
             {
                 if (value < 0 || value > 5)
                 {
-                    rightAns = -1;
+                    _rightAns = -1;
                     throw new ArgumentOutOfRangeException("Недопустимое значение (меньше 0 или больше 5). Перепроверьте данные");
                 }
                 _rightAns = value;
@@ -113,9 +109,9 @@ namespace Laboratory.Exams
         {
             try
             {
-                if (take++ > MaxTakes)
+                if (Take++ > MaxTakes)
                 {
-                    finFail = true;
+                    ExamFailed = true;
                     throw new ExpelledException("Попытки сдать экзамен исчерпаны");
                 }
                 if (IsPassed)
@@ -191,7 +187,7 @@ namespace Laboratory.Exams
         {
             try
             {
-                if (take > MaxTakes && !IsPassed)
+                if (Take > MaxTakes && !IsPassed)
                 {
                     throw new ExpelledException("Вы исчерпали все попытки сдать экзамен и теперь отчислены");
                 }
@@ -208,7 +204,7 @@ namespace Laboratory.Exams
                     $"Текущая оценка: {CurrentMark}\n" +
                     $"Максимальная оценка: {HighestMark}\n" +
                     $"Экзамен сдан: {IsPassed}\n" +
-                    $"Осталось попыток: {MaxTakes - take}\n");
+                    $"Осталось попыток: {MaxTakes - Take}\n");
             }
             catch (ExpelledException eex)
             {

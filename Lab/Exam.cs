@@ -9,19 +9,18 @@ namespace Laboratory.Exams
     public abstract class Exam : IComparable<Exam>
     {
         #region Fields
-        internal int take = 0;
-
-        internal DateTime ExamDate { get; set; } = new DateTime(2020, 10, 31);
-
-        internal string discip = "Не выбрано";
+        /// <summary>
+        /// Номер попытки
+        /// </summary>
+        public int Take { get; set; } = 0;
+        /// <summary>
+        /// Дата проведения экзамена
+        /// </summary>
+        public DateTime ExamDate { get; set; } = new DateTime(2020, 10, 31);
         /// <summary>
         /// Название дисциплины
         /// </summary>
-        public string Discipline
-        {
-            get { return discip; }
-            set { discip = value; }
-        }
+        public string Discipline { get; set; } = "Не выбрано";
 
         private int _grdScale = 5;
         /// <summary>
@@ -40,7 +39,7 @@ namespace Laboratory.Exams
             }
         }
 
-        internal int questQuan = 30;
+        private int questQuan = 30;
         /// <summary>
         /// Общее количество вопросов (не ниже 0)
         /// </summary>
@@ -57,7 +56,7 @@ namespace Laboratory.Exams
             }
         }
 
-        internal int rightAns = 0;
+        private int rightAns = 0;
         /// <summary>
         /// Количество вопросов, на которые получен правильный ответ
         /// </summary>
@@ -74,7 +73,7 @@ namespace Laboratory.Exams
                 rightAns = value;
             }
         }
-        internal int _currentMark;
+        private int _currentMark;
         /// <summary>
         /// Оценка за экзамен на текущий момент
         /// </summary>
@@ -90,7 +89,7 @@ namespace Laboratory.Exams
         /// <summary>
         /// Сдан ли экзамен
         /// </summary>
-        public bool IsPassed { get; set; }
+        public bool IsPassed { get; set; } = false;
         /// <summary>
         /// Проходной балл (по умолчанию 60% от общего количества вопросов с округлением до ближайшего целого числа)
         /// </summary>
@@ -172,11 +171,11 @@ namespace Laboratory.Exams
         /// <summary>
         /// Выводит сообщение о названии дисциплины
         /// </summary>
-        protected virtual void Print_Discipline() => Console.WriteLine($"Экзамен по дисциплине: {discip}");
+        protected virtual void Print_Discipline() => Console.WriteLine($"Экзамен по дисциплине: {Discipline}");
         /// <summary>
         /// Выводит сообщение о номере попытки
         /// </summary>
-        protected virtual void Print_Take() => Console.WriteLine($"Попытка номер {take}");
+        protected virtual void Print_Take() => Console.WriteLine($"Попытка номер {Take}");
         /// <summary>
         /// Выводит сообщение об общем количестве вопросов
         /// </summary>

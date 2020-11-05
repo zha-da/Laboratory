@@ -13,8 +13,16 @@ using Laboratory.Exams.Exceptions;
 
 namespace Laboratory.Exams
 {
+    /// <summary>
+    /// Класс семестра
+    /// </summary>
     public class Semester
     {
+        /// <summary>
+        /// Получает информацию об экзаменах из файла
+        /// </summary>
+        /// <param name="directory">Путь к файлу / имя файла</param>
+        /// <returns>Список предстоящих экзаменов</returns>
         public List<Exam> GetExamsFromFile(string directory)
         {
             try
@@ -92,6 +100,10 @@ namespace Laboratory.Exams
         }
 
         #region Constructors
+        /// <summary>
+        /// Создает экзамепляр класса
+        /// </summary>
+        /// <param name="directory">Путь к файлу / Имя файла</param>
         public Semester(string directory)
         {
             Exams = GetExamsFromFile(directory);
@@ -113,6 +125,10 @@ namespace Laboratory.Exams
                 }
             }
         }
+        /// <summary>
+        /// Создает экземпляр класса
+        /// </summary>
+        /// <param name="exams">Список экзаменов</param>
         public Semester(List<Exam> exams)
         {
             Exams = exams;
@@ -137,13 +153,30 @@ namespace Laboratory.Exams
         #endregion
 
         #region Props
+        /// <summary>
+        /// Список всех экзаменов
+        /// </summary>
         public List<Exam> Exams { get; set; }
+        /// <summary>
+        /// Список всех тестов
+        /// </summary>
         public List<Exam> Tests { get; set; }
+        /// <summary>
+        /// Список итоговых экзаменов
+        /// </summary>
         public List<Exam> Finals { get; set; }
+        /// <summary>
+        /// Очередь для тестов
+        /// </summary>
         public Queue<Exam> TestsQueue { get; private set; }
+        /// <summary>
+        /// Очередь для экзаменов
+        /// </summary>
         public Queue<Exam> FinalsQueue { get; private set; } 
         #endregion
-
+        /// <summary>
+        /// Начать семестр
+        /// </summary>
         public void StartSemester()
         {
             try
@@ -195,8 +228,7 @@ namespace Laboratory.Exams
                 Console.ReadKey();
             }
         }
-
-        public void TakeExams()
+        void TakeExams()
         {
             if (TestsQueue.Count != 0)
             {
@@ -217,7 +249,7 @@ namespace Laboratory.Exams
             }
             FinalsQueue = finals_retake;
         }
-        public void TakeTests()
+        void TakeTests()
         {
             Queue<Exam> test_retake = new Queue<Exam>();
             int b = TestsQueue.Count;
@@ -232,14 +264,13 @@ namespace Laboratory.Exams
             }
             TestsQueue = test_retake;
         }
-        public void DisplayExams(Queue<Exam> exret)
+        void DisplayExams(Queue<Exam> exret)
         {
             Exam[] ex = new Exam[exret.Count];
             exret.CopyTo(ex, 0);
-            int b = exret.Count;
             DisplayExams(ex, false);
         }
-        public void DisplayExams()
+        void DisplayExams()
         {
             if (FinalsQueue.Count == 0)
             {
@@ -257,7 +288,7 @@ namespace Laboratory.Exams
             }
             Console.ReadKey();
         }
-        public void DisplayTests()
+        void DisplayTests()
         {
             if (TestsQueue.Count == 0)
             {
@@ -275,7 +306,7 @@ namespace Laboratory.Exams
             }
             Console.ReadKey();
         }
-        public void DisplayExams(IEnumerable<Exam> exams, bool StNeed)
+        void DisplayExams(IEnumerable<Exam> exams, bool StNeed)
         {
             if (StNeed)
             {

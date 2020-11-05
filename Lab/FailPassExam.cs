@@ -9,14 +9,10 @@ namespace Laboratory.Exams
     public class FailPassExam : Exam
     {
         #region Fields
-        private bool fpFail = false;
         /// <summary>
         /// Показывает, что экзамен провален, и попыток сдать его больше нет
         /// </summary>
-        public bool ExamFailed
-        {
-            get { return fpFail; }
-        }
+        public bool ExamFailed { get; private set; } = false;
 
         private int _grdScale = 1;
         /// <summary>
@@ -105,9 +101,9 @@ namespace Laboratory.Exams
         {
             try
             {
-                if (take++ > MaxTakes)
+                if (Take++ > MaxTakes)
                 {
-                    fpFail = true;
+                    ExamFailed = true;
                     throw new ExpelledException("Попытки сдать зачет исчерпаны");
                 }
                 if (IsPassed)
@@ -151,7 +147,7 @@ namespace Laboratory.Exams
         {
             try
             {
-                if (take > MaxTakes && !IsPassed)
+                if (Take > MaxTakes && !IsPassed)
                 {
                     throw new ExpelledException("Вы исчерпали все попытки сдать зачет и теперь отчислены");
                 }
@@ -167,7 +163,7 @@ namespace Laboratory.Exams
                     $"Общее количество вопросов: {QuestionsQuantity}\n" +
                     $"Из них правильно: {RightAnswers}\n" +
                     $"Зачет сдан: {IsPassed}\n" +
-                    $"Осталось попыток: {MaxTakes - take}\n");
+                    $"Осталось попыток: {MaxTakes - Take}\n");
             }
             catch (ExpelledException eex)
             {

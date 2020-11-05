@@ -9,24 +9,16 @@ namespace Laboratory.Exams
     public class Test : Exam
     {
         #region Fields
-        private string _testTopic = "Не задано";
         /// <summary>
         /// Тема теста
         /// </summary>
-        public string TestTopic
-        {
-            get { return _testTopic; }
-            set { _testTopic = value; }
-        }
-        private int succTakes = 0;
+        public string TestTopic { get; set; } = "Не задано";
+
         /// <summary>
         /// Количество успешных попыток
         /// </summary>
-        public int SuccessfulTakes
-        {
-            get { return succTakes; }
-            protected set { succTakes = value; }
-        }
+        public int SuccessfulTakes { get; protected set; } = 0;
+
         private int maxMark;
         /// <summary>
         /// Максимальная полученная отметка
@@ -127,21 +119,21 @@ namespace Laboratory.Exams
         /// </summary>
         protected virtual void Print_SuccessfulTakes()
         {
-            Console.WriteLine($"Количество удачных попыток: {succTakes}");
+            Console.WriteLine($"Количество удачных попыток: {SuccessfulTakes}");
         }
         /// <summary>
         /// Выводит сообщение о названии дисциплины
         /// </summary>
         protected override void Print_Discipline()
         {
-            Console.WriteLine($"Тест по дисциплине: {discip}");
+            Console.WriteLine($"Тест по дисциплине: {Discipline}");
         }
         /// <summary>
         /// Выводит сообщение о теме теста
         /// </summary>
         protected virtual void Print_Topic()
         {
-            Console.WriteLine($"Тема теста: {_testTopic}");
+            Console.WriteLine($"Тема теста: {TestTopic}");
         }
         /// <summary>
         /// Выводит сообщение о том, пройден ли экзамен
@@ -161,7 +153,7 @@ namespace Laboratory.Exams
             {
                 Random rnd = new Random();
                 RightAnswers = rnd.Next(0, QuestionsQuantity);
-                take++;
+                Take++;
                 CalculateMark();
             }
             //catch (ArgumentOutOfRangeException aex)
@@ -185,7 +177,7 @@ namespace Laboratory.Exams
             IsPassed = CurrentMark >= PassingScore;
             if (IsPassed)
             {
-                succTakes++;
+                SuccessfulTakes++;
             }
             MaxMark = CurrentMark;
         }
