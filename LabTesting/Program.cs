@@ -42,11 +42,6 @@ namespace Laboratory
         #region v2
         static void Main(string[] args)
         {
-            //Console.WriteLine("Имя файла:");
-            //string directory = Console.ReadLine();
-
-            Semester kb21 = new Semester("Exams.txt");
-            kb21.StartSemester();
         }
         #endregion
 
