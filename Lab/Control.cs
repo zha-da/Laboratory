@@ -107,8 +107,6 @@ namespace Laboratory.Exams
             catch (UnsuccessfulAttemtException uex)
             {
                 Logger.NewLog(uex.Message + "\n");
-                Console.WriteLine(uex.Message);
-                Console.ReadKey();
             }
             catch (Exception ex)
             {
@@ -140,11 +138,6 @@ namespace Laboratory.Exams
                 RightAnswers = rnd.Next(0, QuestionsQuantity);
                 CalculateMark();
             }
-            //catch (ArgumentOutOfRangeException aex)
-            //{
-            //    Console.WriteLine(aex.Message);
-            //    Console.ReadKey();
-            //}
             catch (Exception ex)
             {
                 string message = $"Неизвестная ошибка в {ex.TargetSite.Name} {ex.TargetSite.DeclaringType.Name} {ex.TargetSite.DeclaringType.Namespace}\n";

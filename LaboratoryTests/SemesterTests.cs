@@ -14,7 +14,25 @@ namespace Laboratory.Exams.Tests
         [TestMethod()]
         public void GetFromFileTest()
         {
-            Assert.Fail();
+            List<Exam> read = Semester.GetFromFile("C:/Users/Pepe/Visual Studio Projects/Laba/LaboratoryMainApp/bin/Debug/exams.TXT");
+            Semester sem1 = new Semester(read);
+            read = new List<Exam>()
+            {
+                new Test(new DateTime(2020, 12, 20), "История", "Николай 2", 30, 18, 100),
+                new Test(new DateTime(2020, 12, 18), "География", "Страны мира", 20, 15, 100),
+                new FailPassExam(new DateTime(2020, 12, 26), "Алгебра", 10, 6 , 3)
+            };
+            Semester sem2 = new Semester(read);
+
+            foreach (var item in sem1.Exams)
+            {
+                Console.WriteLine(item.ToString());
+            }
+            foreach (var item in sem2.Exams)
+            {
+                Console.WriteLine(item.ToString());
+            }
+            Assert.AreEqual(sem1, sem2);
         }
 
         [TestMethod()]
@@ -25,30 +43,83 @@ namespace Laboratory.Exams.Tests
             {
                 new FinalExam(new DateTime(2020, 10, 31), "Математика", 2, 3, 3),
                 new Test(new DateTime(2020, 11, 14), "История", "Правление Николая 2", 20, 12, 100),
-                new Test(new DateTime(2020, 11, 15), "Биология", "Строение клетки", 20, 12, 100),
+                new FailPassExam(new DateTime(2020, 11, 15), "Биология", 20, 12, 3),
                 new Test(new DateTime(2020, 11, 16), "География", "Южная Америка", 20, 12, 100),
-                new Test(new DateTime(2020, 11, 17), "Математика", "Векторные пространства", 20, 12, 100)
+                new Control(new DateTime(2020, 11, 17), "Математика", 20, 12)
             });
-            foreach (var item in sem.Exams)
+            var res1 = new Semester(new List<Exam>
             {
-                Console.WriteLine(item.ToString());
-            }
+                sem.Exams[1],
+                sem.Exams[2],
+                sem.Exams[3],
+                sem.Exams[4]
+            });
+            var res2 = new Semester(new List<Exam>
+            {
+                sem.Exams[2],
+                sem.Exams[4]
+            });
+            var res3 = new Semester(new List<Exam>
+            {
+                sem.Exams[2]
+            });
+
+
+            sem.WriteExams();
+            Console.WriteLine("After~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            sem.DeleteAll(typeof(FinalExam));
+            sem.WriteExams();
+            Assert.AreEqual(sem, res1);
+
             Console.WriteLine("After~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             sem.DeleteAll(typeof(Test));
-            foreach (var item in sem.Exams)
-            {
-                Console.WriteLine(item.ToString());
-            }
-            //Assert.AreEqual<List<Exam>>(new List<Exam>
-            //{
-            //    new FinalExam(new DateTime(2020, 10, 31), "Математика", 2, 3, 3)
-            //}, sem.Exams);
+            sem.WriteExams();
+            Assert.AreEqual(sem, res2);
+
+            Console.WriteLine("After~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            sem.DeleteAll(typeof(Control));
+            sem.WriteExams();
+            Assert.AreEqual(sem, res3);
         }
 
+        //[TestMethod()]
+        //public void ReturnAllTest()
+        //{
+        //    Assert.Fail();
+        //}
+
         [TestMethod()]
-        public void ReturnAllTest()
+        public void ReturnSecondTest()
         {
-            Assert.Fail();
+            var sem = new Semester(new List<Exam>
+            {
+                new FinalExam(new DateTime(2020, 10, 31), "Геометрия", 2, 3, 3),
+                new Test(new DateTime(2020, 11, 14), "История", "Правление Николая 2", 20, 12, 100),
+                new FailPassExam(new DateTime(2020, 11, 15), "Биология", 20, 12, 3),
+                new Test(new DateTime(2020, 11, 16), "География", "Южная Америка", 20, 12, 100),
+                new Control(new DateTime(2020, 11, 17), "Алгебра", 20, 12)
+            });
+
+            sem.WriteExams();
+            Console.WriteLine("After~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Assert.AreEqual(sem.ReturnSecond(), sem.Exams[3]);
+            sem.WriteExams();
+
+            Console.WriteLine("NewTest~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+            sem = new Semester(new List<Exam>
+            {
+                new FinalExam(new DateTime(2020, 12, 26), "Геометрия", 2, 3, 3),
+                new Test(new DateTime(2020, 9, 14), "История", "Правление Николая 2", 20, 12, 100),
+                new FailPassExam(new DateTime(2020, 11, 15), "Биология", 20, 12, 3),
+                new Test(new DateTime(2020, 9, 25), "География", "Южная Америка", 20, 12, 100),
+                new Control(new DateTime(2020, 10, 3), "Алгебра", 20, 12)
+            });
+
+            sem.WriteExams();
+            Console.WriteLine("After~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Assert.AreEqual(sem.ReturnSecond(), sem.Exams[2]);
+            sem.WriteExams();
         }
     }
 }

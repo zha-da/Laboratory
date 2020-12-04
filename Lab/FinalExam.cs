@@ -138,23 +138,17 @@ namespace Laboratory.Exams
                 }
                 CalculateMark();
             }
-            catch (ExpelledException eex)
+            catch (ExpelledException)
             {
                 Logger.NewLog("Попытка сдать экзамен отчисленным учеником\n");
-                Console.WriteLine(eex.Message);
-                Console.ReadKey();
             }
             catch (ArgumentOutOfRangeException aex)
             {
                 Logger.NewLog(aex.Message + "\n");
-                Console.WriteLine(aex.Message);
-                Console.ReadKey();
             }
             catch (AlreadyPassedException apex)
             {
                 Logger.NewLog(apex.Message + "\n");
-                Console.WriteLine(apex.Message);
-                Console.ReadKey();
             }
             catch (Exception ex)
             {
@@ -208,14 +202,11 @@ namespace Laboratory.Exams
             }
             catch (ExpelledException eex)
             {
-                Console.WriteLine(eex.Message);
-                Console.ReadKey();
+                Logger.NewLog(eex.Message);
             }
             catch (UnsuccessfulAttemtException uex)
             {
                 Logger.NewLog(uex.Message + "\n");
-                Console.WriteLine(uex.Message);
-                Console.ReadKey();
             }
             catch (Exception ex)
             {

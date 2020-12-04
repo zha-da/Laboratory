@@ -24,7 +24,7 @@ namespace Laboratory.Exams
         /// </summary>
         /// <param name="directory">Путь к файлу / имя файла</param>
         /// <returns>Список предстоящих экзаменов</returns>
-        public List<Exam> GetFromFile(string directory)
+        public static List<Exam> GetFromFile(string directory)
         {
             try
             {
@@ -81,20 +81,20 @@ namespace Laboratory.Exams
             catch (FileNotFoundException)
             {
                 Logger.NewLog($"Файл с именем {directory} не найден\n");
-                Console.WriteLine("Файл с подобным именем не найден. Повторите попытку");
-                Console.ReadKey();
+                //Console.WriteLine("Файл с подобным именем не найден. Повторите попытку");
+                //Console.ReadKey();
             }
             catch (IOException)
             {
                 Logger.NewLog($"Ошибка открытия файла с именем {directory}\n");
-                Console.WriteLine("Ошибка открытия файла. Повторите попытку");
-                Console.ReadKey();
+                //Console.WriteLine("Ошибка открытия файла. Повторите попытку");
+                //Console.ReadKey();
             }
             catch (Exception ex)
             {
                 Logger.NewLog("Неизвестная ошибка: " + ex.Message + "\n");
-                Console.WriteLine($"Неизвестная ошибка: {ex.Message}\n");
-                Console.ReadKey();
+                //Console.WriteLine($"Неизвестная ошибка: {ex.Message}\n");
+                //Console.ReadKey();
             }
             return null;
         } 
@@ -126,14 +126,7 @@ namespace Laboratory.Exams
         public List<Exam> Exams { get; set; }
         #endregion
 
-        public void SortByTime()
-        {
-            Exams.Sort();
-        }
-        public void SortByAlphabet()
-        {
-            Exams.Sort(new ComparerByDiscipline());
-        }
+        #region Methods
         /// <summary>
         /// Убирает все экзамены определенного типа
         /// </summary>
@@ -142,13 +135,94 @@ namespace Laboratory.Exams
         {
             Exams.RemoveAll(x => x.GetType() == type);
         }
-        public void DeleteAll(Predicate<Exam> condition)
+        /// <summary>
+        /// Убирает все экзамены, подходящие условию
+        /// </summary>
+        /// <param name="condition">Условие</param>
+        public void RemoveAll(Predicate<Exam> condition)
         {
             Exams.RemoveAll(condition);
         }
-        public List<Exam> ReturnAll(Predicate<Exam> condition)
+        /// <summary>
+        /// Ищет все экзамены по условию
+        /// </summary>
+        /// <param name="condition">Условие</param>
+        /// <returns>Список экзаменов, подходящих условию</returns>
+        public List<Exam> FindAll(Predicate<Exam> condition)
         {
             return Exams.FindAll(condition);
         }
+        /// <summary>
+        /// Добавляет список экзаменов в семестр
+        /// </summary>
+        /// <param name="exams">Список экзаменов</param>
+        public void Add(List<Exam> exams)
+        {
+            Exams.AddRange(exams);
+        }
+        /// <summary>
+        /// Добавляет один экзамен в семестр
+        /// </summary>
+        /// <param name="exam">Экзамен</param>
+        public void Add(Exam exam)
+        {
+            Exams.Add(exam);
+        }
+        /// <summary>
+        /// Сравнивает 2 объекта класса семестр
+        /// </summary>
+        /// <param name="obj">Объект для сравнения</param>
+        /// <returns>Результат сравнения</returns>
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Semester))
+            {
+                return false;
+            }
+            Semester sem = obj as Semester;
+            if (Exams.Count != sem.Exams.Count)
+            {
+                return false;
+            }
+            for (int i = 0; i < Exams.Count; i++)
+            {
+                if (!Exams[i].Equals(sem.Exams[i])) return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// Возвращает хэш-код объекта
+        /// </summary>
+        /// <returns>Хэш-код</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        /// <summary>
+        /// Отображает список экзаменов в семестре
+        /// </summary>
+        public void WriteExams()
+        {
+            foreach (var item in Exams)
+            {
+                Console.WriteLine(item.ToString());
+            }
+        }
+        /// <summary>
+        /// Лабораторный метод
+        /// </summary>
+        /// <returns>Второй наименьший элемент</returns>
+        public Exam ReturnSecond()
+        {
+            if (Exams.Count < 2)
+            {
+                return null;
+            }
+            List<Exam> exams = new List<Exam>();
+            exams.AddRange(Exams);
+            exams.Sort();
+            return exams[exams.Count - 2];
+        }
+        #endregion
     }
 }

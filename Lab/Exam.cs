@@ -18,6 +18,13 @@ namespace Laboratory.Exams
         /// </summary>
         public DateTime ExamDate { get; set; } = new DateTime(2020, 10, 31);
         /// <summary>
+        /// Дата экзамена
+        /// </summary>
+        public string RetDate
+        {
+            get => $"{ExamDate.Day}.{ExamDate.Month}.{ExamDate.Year}";
+        }
+        /// <summary>
         /// Название дисциплины
         /// </summary>
         public string Discipline { get; set; } = "Не выбрано";
@@ -147,6 +154,19 @@ namespace Laboratory.Exams
 
         #region Methods
         /// <summary>
+        /// Тип экзамена
+        /// </summary>
+        public string RetType
+        {
+            get
+            {
+                if (this is Test) return "Тест";
+                else if (this is FinalExam) return "Итоговый экзамен";
+                else if (this is FailPassExam) return "Зачет";
+                else return "Контрольная работа";
+            }
+        }
+        /// <summary>
         /// Выводит информацию об экзамене
         /// </summary>
         public virtual void DisplayInfo()
@@ -212,6 +232,39 @@ namespace Laboratory.Exams
         int IComparable<Exam>.CompareTo(Exam other)
         {
             return ExamDate.CompareTo(other.ExamDate);
+        }
+        /// <summary>
+        /// Сравнивает 2 объекта класса экзамен
+        /// </summary>
+        /// <param name="obj">Объект для сравнения</param>
+        /// <returns>Равны ли объекты</returns>
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Exam))
+            {
+                return false;
+            }
+            Exam ex = obj as Exam;
+            return (Discipline == ex.Discipline
+                && ExamDate == ex.ExamDate
+                && RetType == ex.RetType
+                && QuestionsQuantity == ex.QuestionsQuantity);
+        }
+        /// <summary>
+        /// Приводит информацию об экзамене в строковом виде
+        /// </summary>
+        /// <returns>Строковое представление объекта класса</returns>
+        public override string ToString()
+        {
+            return $"{RetType};{Discipline};{ExamDate};{QuestionsQuantity}";
+        }
+        /// <summary>
+        /// Возвращает хэш-код объекта
+        /// </summary>
+        /// <returns>Хэш-код</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
         #endregion
 
