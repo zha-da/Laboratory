@@ -1,0 +1,174 @@
+﻿<Window x:Class="LaboratoryMainApp.Tabs_and_Windows.AddItemWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LaboratoryMainApp.Tabs_and_Windows"
+        mc:Ignorable="d"
+        Title="AddItemWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <!--<ColumnDefinition Width="auto"/>-->
+        </Grid.ColumnDefinitions>
+
+        <!--<StackPanel Grid.Column="0">
+            <Button x:Name="TestBtn">Test</Button>
+            <Button x:Name="FPBtn">FailPassExam</Button>
+            <Button x:Name="ControlBtn">Control</Button>
+            <Button x:Name="FinalBtn">Final Exam</Button>
+        </StackPanel>-->
+
+        <TabControl Grid.Column="0" TabStripPlacement="Left">
+            <TabItem Header="Test">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Название предмета" Margin="5"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBT1"
+                             AutomationProperties.IsRequiredForForm="True" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Тема теста" Margin="5"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBT2"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата теста" Margin="5"/>
+                    <DatePicker Grid.Row="2" Grid.Column="1" Name="DPT"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Количество вопросов" Margin="5"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBT3"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Проходной балл" Margin="5"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBT4"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Градация" Margin="5"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBT5"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <Button Grid.Row="6" Grid.Column="0" Content="Добавить тест" x:Name="AddTestBtn" Click="AddTestBtn_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="FailPass Exam">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Название предмета" Margin="5"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFPD"
+                             AutomationProperties.IsRequiredForForm="True" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата зачета" Margin="5"/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" Name="DPFP"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Количество вопросов" Margin="5"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFPQ"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Проходной балл" Margin="5"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFPP"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Общее количество попыток" Margin="5"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFPM"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <Button Grid.Row="5" Grid.Column="0" Content="Добавить зачет" x:Name="AddFPBtn" Click="AddFPBtn_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Control">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Название предмета" Margin="5"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBCD"
+                             AutomationProperties.IsRequiredForForm="True" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата контрольной работы" Margin="5"/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" Name="DPC"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Количество вопросов" Margin="5"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBCQ"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Проходной балл" Margin="5"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBCP"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <Button Grid.Row="4" Grid.Column="0" Content="Добавить контрольную" x:Name="AddControlBtn" Click="AddControlBtn_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Final Exam">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Название предмета" Margin="5"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFED"
+                             AutomationProperties.IsRequiredForForm="True" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата теста" Margin="5"/>
+                    <DatePicker Grid.Row="1" Grid.Column="1" Name="DPFE"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Количество вопросов" Margin="5"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFEQ"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Проходной балл" Margin="5"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFEP"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Общее количество попыток" Margin="5"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Width="70" Margin="10 2 0 2" Name="TBFEM"
+                             AutomationProperties.IsRequiredForForm="True"/>
+
+                    <Button Grid.Row="5" Grid.Column="0" Content="Добавить итоговый экзамен" x:Name="AddFinalBtn" Click="AddFinalBtn_Click"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

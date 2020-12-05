@@ -19,6 +19,7 @@ using Laboratory.Exams.Comparers;
 using Laboratory.AdditionalClasses;
 using Microsoft.Win32;
 using System.Collections;
+using LaboratoryMainApp.Tabs_and_Windows;
 
 namespace LaboratoryMainApp
 {
@@ -33,7 +34,7 @@ namespace LaboratoryMainApp
         }
 
         HashSet<string> openedFiles = new HashSet<string>(); //хранит имена уже открытых файлов
-        Semester semester = new Semester(new List<Exam>());
+        static internal Semester semester = new Semester(new List<Exam>());
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
@@ -136,6 +137,7 @@ namespace LaboratoryMainApp
         {
             //ExamsGrid.ItemsSource = null;
             //ExamsGrid.ItemsSource = semester.Exams;
+            ExamsGrid.Visibility = Visibility.Visible;
 
             ExamsGrid.Items.Clear();
             foreach (var item in semester.Exams)
@@ -198,9 +200,12 @@ namespace LaboratoryMainApp
             ResetGrid();
         }
 
-        private void ExamsGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        private void AddByHandButton_Click(object sender, RoutedEventArgs e)
         {
+            AddItemWindow win = new AddItemWindow();
+            win.ShowDialog();
 
+            ResetGrid();
         }
     }
 }

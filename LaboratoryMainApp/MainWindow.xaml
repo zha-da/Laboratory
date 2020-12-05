@@ -20,9 +20,14 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 10" >
             <MenuItem Header="Меню" Name="ExamsMenu" AllowDrop="True">
-                <MenuItem Header ="Загрузить" Name="LoadButton" Click="LoadButton_Click"/>
-                <MenuItem Header="Выгрузить" IsEnabled="False" Name="UnloadButton" Click="UnloadButton_Click"/>
-                <MenuItem Header="Добавить новые" IsEnabled="False" Name="AddNewButton" Click="AddNewButton_Click"/>
+                <MenuItem Header ="Загрузить" Name="LoadButton"
+                          Click="LoadButton_Click"/>
+                <MenuItem Header="Выгрузить" IsEnabled="False" Name="UnloadButton"
+                          Click="UnloadButton_Click"/>
+                <MenuItem Header="Добавить новые" IsEnabled="False" Name="AddNewButton"
+                          Click="AddNewButton_Click"/>
+                <MenuItem Header="Добавить вручную" IsEnabled="True" Name="AddByHandButton"
+                          Click="AddByHandButton_Click"/>
             </MenuItem>
             <MenuItem Header="Найти" Name="FindButton" IsEnabled="False">
                 <!--<MenuItem Header="По типу">
