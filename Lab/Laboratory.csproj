@@ -37,9 +37,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConsoleMenu">
-      <HintPath>..\..\lab6\lab6_17\ConsoleMenu\bin\Debug\ConsoleMenu.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

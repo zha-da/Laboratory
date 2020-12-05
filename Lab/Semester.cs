@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Laboratory.AdditionalClasses;
 using Laboratory.Exams;
 using Laboratory.Exams.Comparers;
-using ConsoleMenu;
 using System.IO;
 using System.Globalization;
 using Laboratory.Exams.Exceptions;
