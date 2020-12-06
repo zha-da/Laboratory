@@ -157,7 +157,14 @@ namespace Laboratory.Exams
         /// <param name="exams">Список экзаменов</param>
         public void Add(List<Exam> exams)
         {
-            Exams.AddRange(exams);
+            try
+            {
+                Exams.AddRange(exams);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Logger.NewLog(ex.Message);
+            }
         }
         /// <summary>
         /// Добавляет один экзамен в семестр
@@ -165,7 +172,14 @@ namespace Laboratory.Exams
         /// <param name="exam">Экзамен</param>
         public void Add(Exam exam)
         {
-            Exams.Add(exam);
+            try
+            {
+                Exams.Add(exam);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Logger.NewLog(ex.Message);
+            }
         }
         /// <summary>
         /// Сравнивает 2 объекта класса семестр
