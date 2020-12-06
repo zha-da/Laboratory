@@ -15,7 +15,7 @@ namespace Laboratory.Exams
     /// <summary>
     /// Класс семестра
     /// </summary>
-    public class Semester
+    public class Semester : IPlugable
     {
         #region getfromfile
         /// <summary>
@@ -116,6 +116,18 @@ namespace Laboratory.Exams
         {
             Exams = exams;
         }
+
+        public Semester()
+        {
+            Exams = new List<Exam>
+            {
+                new FinalExam(new DateTime(2020, 10, 31), "Математика", 2, 3, 3),
+                new Test(new DateTime(2020, 11, 14), "История", "Правление Николая 2", 21, 12, 100),
+                new FailPassExam(new DateTime(2020, 11, 15), "Биология", 20, 12, 3),
+                new Test(new DateTime(2020, 11, 16), "География", "Южная Америка", 30, 10, 100),
+                new Control(new DateTime(2020, 11, 17), "Математика", 31, 19)
+            };
+        }
         #endregion
 
         #region Props
@@ -124,7 +136,7 @@ namespace Laboratory.Exams
         /// </summary>
         public List<Exam> Exams { get; set; }
         #endregion
-
+        
         #region Methods
         /// <summary>
         /// Убирает все экзамены определенного типа
@@ -235,6 +247,26 @@ namespace Laboratory.Exams
             exams.AddRange(Exams);
             exams.Sort();
             return exams[exams.Count - 2];
+        }
+
+        public string[] Print()
+        {
+            string[] res = new string[Exams.Count];
+            for (int i = 0; i < Exams.Count; i++)
+            {
+                res[i] = Exams[i].ToString();
+            }
+            return res;
+        }
+
+        public void SortByString()
+        {
+            Exams.Sort();
+        }
+
+        public void SortByInt()
+        {
+            Exams.Sort(new ComparerByQuestions());
         }
         #endregion
     }

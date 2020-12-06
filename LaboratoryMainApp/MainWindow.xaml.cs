@@ -20,6 +20,7 @@ using Laboratory.AdditionalClasses;
 using Microsoft.Win32;
 using System.Collections;
 using LaboratoryMainApp.Tabs_and_Windows;
+using System.Reflection;
 
 namespace LaboratoryMainApp
 {
@@ -33,179 +34,102 @@ namespace LaboratoryMainApp
             InitializeComponent();
         }
 
-        HashSet<string> openedFiles = new HashSet<string>(); //хранит имена уже открытых файлов
-        static internal Semester semester = new Semester(new List<Exam>());
+        Assembly asm = null;
 
-        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        List<IPlugable> plugins = new List<IPlugable>();
+
+        bool AssemblyLoaded(string path, out List<Type> types_res)
         {
-            FindButton.IsEnabled = true;
-            RemoveButton.IsEnabled = true;
-            LoadButton.IsEnabled = false;
-            UnloadButton.IsEnabled = true;
-            AddNewButton.IsEnabled = true;
+            bool loaded = false;
 
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.ShowDialog();
-            ExamsGrid.Visibility = Visibility.Visible;
-            string filename = ofd.FileName;
-
-            openedFiles.Add(filename);
-            semester.Add(Semester.GetFromFile(filename));
-            foreach (var item in semester.Exams)
+            try
             {
-                ExamsGrid.Items.Add(item);
+                asm = Assembly.LoadFrom(path);
             }
-            //ExamsGrid.ItemsSource = semester.Exams;
-        }
-
-        private void UnloadButton_Click(object sender, RoutedEventArgs e)
-        {
-            ExamsGrid.Visibility = Visibility.Hidden;
-
-            ExamsGrid.Items.Clear();
-            semester.Exams.Clear();
-            openedFiles.Clear();
-
-            AddNewButton.IsEnabled = false;
-            UnloadButton.IsEnabled = false;
-            LoadButton.IsEnabled = true;
-            FindButton.IsEnabled = false;
-            RemoveButton.IsEnabled = false;
-        }
-
-        private void TakeExamButton_Click(object sender, RoutedEventArgs e)
-        {
-            MenuItem item = sender as MenuItem;
-            int index = int.Parse(item.Tag.ToString());
-            semester.Exams[index].TakeExam();
-        }
-
-        private void AddNewButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.ShowDialog();
-            string filename = ofd.FileName;
-            if (!openedFiles.Contains(filename))
+            catch (Exception ex)
             {
-                openedFiles.Add(filename);
-                var read = Semester.GetFromFile(filename);
-                semester.Add(read);
-                foreach (var item in read)
+                Logger.NewLog(ex.Message);
+                MessageBox.Show(ex.Message);
+                types_res = null;
+                return loaded;
+            }
+
+            Type[] types = asm.GetTypes();
+            types_res = new List<Type>();
+            for (int i = 0; i < types.Length; i++)
+            {
+                Type t = types[i].GetInterface("IPlugable");
+                if (t != null)
                 {
-                    ExamsGrid.Items.Add(item);
+                    loaded = true;
+                    types_res.Add(types[i]);
                 }
-                //ResetGrid();
             }
-            else
+            return loaded;
+        }
+
+        private void AddAsmBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Файлы сборок|*.dll";
+            ofd.ShowDialog();
+
+            try
             {
-                MessageBox.Show("Файл невозможно открыть повторно", "Ошибка");
+                List<Type> res;
+                if (!AssemblyLoaded(ofd.FileName, out res))
+                {
+                    MessageBox.Show("Ни один элемент сборки не реализует интерфейс IPlugable");
+                    return;
+                }
+                foreach (var type in res)
+                {
+                    object o = asm.CreateInstance(type.FullName);
+                    IPlugable plug = o as IPlugable;
+                    plugins.Add(plug);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.NewLog(ex.Message);
             }
         }
 
-        private void ShowDiscipB_Click(object sender, RoutedEventArgs e)
+        private void PrintBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (FindDiscipTB.Text != "")
+            foreach (var plug in plugins)
             {
-                List<Exam> find_res = semester.FindAll(x => x.Discipline.ToLower() == FindDiscipTB.Text.ToLower());
-                FindDiscipTB.Text = "";
-
-                ResetGrid(find_res);
-            }
-            else
-            {
-                MessageBox.Show("Необходимо ввести название предмета", "Ошибка");
+                foreach (var item in plug.Print())
+                {
+                    if (!AsmLoadResult.Items.Contains(item))
+                    {
+                        AsmLoadResult.Items.Add(item); 
+                    }
+                }
             }
         }
 
-        private void ResetB_Click(object sender, RoutedEventArgs e)
+        private void SortStrBtn_Click(object sender, RoutedEventArgs e)
         {
-            ResetGrid();
+            foreach (var plug in plugins)
+            {
+                plug.SortByString();
+            }
+            Refresh();
         }
 
-        private void ResetGrid(IEnumerable list)
+        private void SortIntBtn_Click(object sender, RoutedEventArgs e)
         {
-            //ExamsGrid.ItemsSource = null;
-            //ExamsGrid.ItemsSource = list;
-
-            ExamsGrid.Items.Clear();
-            foreach (var item in list)
+            foreach (var plug in plugins)
             {
-                ExamsGrid.Items.Add(item);
+                plug.SortByInt();
             }
+            Refresh();
         }
-        private void ResetGrid()
+        void Refresh()
         {
-            //ExamsGrid.ItemsSource = null;
-            //ExamsGrid.ItemsSource = semester.Exams;
-            ExamsGrid.Visibility = Visibility.Visible;
-
-            ExamsGrid.Items.Clear();
-            foreach (var item in semester.Exams)
-            {
-                ExamsGrid.Items.Add(item);
-            }
-        }
-
-        private void RemoveDiscipB_Click(object sender, RoutedEventArgs e)
-        {
-            if (RemoveDiscipTB.Text != "")
-            {
-                semester.RemoveAll(x => x.Discipline.ToLower() == RemoveDiscipTB.Text.ToLower());
-                RemoveDiscipTB.Text = "";
-
-                ResetGrid();
-            }
-            else
-            {
-                MessageBox.Show("Необходимо ввести название предмета", "Ошибка");
-            }
-        }
-
-        private void FindDateB_Click(object sender, RoutedEventArgs e)
-        {
-            int sel = FindDateCB.SelectedIndex;
-            List<Exam> find_res;
-            if (sel == 0)
-            {
-                find_res = semester.FindAll(x => x.ExamDate < FindDateDP.SelectedDate);
-            }
-            else if (sel == 1)
-            {
-                find_res = semester.FindAll(x => x.ExamDate > FindDateDP.SelectedDate);
-            }
-            else
-            {
-                find_res = semester.FindAll(x => x.ExamDate == FindDateDP.SelectedDate);
-            }
-            FindDateCB.SelectedIndex = -1;
-            ResetGrid(find_res);
-        }
-
-        private void RemoveDateB_Click(object sender, RoutedEventArgs e)
-        {
-            int sel = RemoveDateCB.SelectedIndex;
-            if (sel == 0)
-            {
-                semester.RemoveAll(x => x.ExamDate < RemoveDateDP.SelectedDate);
-            }
-            else if (sel == 1)
-            {
-                semester.RemoveAll(x => x.ExamDate > RemoveDateDP.SelectedDate);
-            }
-            else
-            {
-                semester.RemoveAll(x => x.ExamDate == RemoveDateDP.SelectedDate);
-            }
-            RemoveDateCB.SelectedIndex = -1;
-            ResetGrid();
-        }
-
-        private void AddByHandButton_Click(object sender, RoutedEventArgs e)
-        {
-            AddItemWindow win = new AddItemWindow();
-            win.ShowDialog();
-
-            ResetGrid();
+            AsmLoadResult.Items.Clear();
+            PrintBtn_Click(null, null);
         }
     }
 }

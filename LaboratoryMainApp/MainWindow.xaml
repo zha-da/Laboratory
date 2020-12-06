@@ -6,121 +6,44 @@
         xmlns:local="clr-namespace:LaboratoryMainApp"
         xmlns:source="clr-namespace:Laboratory.Exams.Comparers;assembly=Laboratory"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="500" FontSize="20" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="450" Width="730" MinWidth="300" MinHeight="200" FontSize="20" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="SideBtns">
+            <Setter Property="ItemsControl.Margin" Value="5"/>
+            <Setter Property="ItemsControl.FontSize" Value="17"/>
+            <Setter Property="ItemsControl.Background" Value="Beige"/>
+            <Setter Property="ItemsControl.HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="ItemsControl.BorderBrush" Value="#FFD6D6B2"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <!--<ColumnDefinition Width="auto"/>-->
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="2*"/>
             <!--<ColumnDefinition Width="auto"/>-->
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 10" >
-            <MenuItem Header="Меню" Name="ExamsMenu" AllowDrop="True">
-                <MenuItem Header ="Загрузить" Name="LoadButton"
-                          Click="LoadButton_Click"/>
-                <MenuItem Header="Выгрузить" IsEnabled="False" Name="UnloadButton"
-                          Click="UnloadButton_Click"/>
-                <MenuItem Header="Добавить новые" IsEnabled="False" Name="AddNewButton"
-                          Click="AddNewButton_Click"/>
-                <MenuItem Header="Добавить вручную" IsEnabled="True" Name="AddByHandButton"
-                          Click="AddByHandButton_Click"/>
-            </MenuItem>
-            <MenuItem Header="Найти" Name="FindButton" IsEnabled="False">
-                <!--<MenuItem Header="По типу">
-                    <StackPanel Orientation="Vertical">
-                        <CheckBox Content="Тесты"/>
-                        <CheckBox Content="Контрольные работы" IsChecked="False"/>
-                        <CheckBox Content="Зачеты" IsChecked="False"/>
-                        <CheckBox Content="Экзамены" IsChecked="False"/>
-                        <Button Content="Отобразить"/>
-                    </StackPanel>
-                </MenuItem>-->
-                <MenuItem Header="По дате">
-                    <StackPanel>
-                        <DatePicker Name="FindDateDP"/>
-                        <ComboBox x:Name="FindDateCB">
-                            <ComboBoxItem>
-                                Раньше этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Позже этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Только в эту дату
-                            </ComboBoxItem>
-                        </ComboBox>
-                        <MenuItem Header="Отобразить" Name="FindDateB" Click="FindDateB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-                <MenuItem Header="По предмету">
-                    <StackPanel>
-                        <TextBox x:Name="FindDiscipTB" MinWidth="60"/>
-                        <MenuItem x:Name="ShowDiscipB" Header="Отобразить" Click="ShowDiscipB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-                <MenuItem Header="Сбросить" Click="ResetB_Click" x:Name="ResetB"/>
-            </MenuItem>
-            <MenuItem Header="Удалить" Name="RemoveButton" IsEnabled="False">
-                <!--<MenuItem Header="По типу">
-                    <StackPanel Orientation="Vertical">
-                        <CheckBox Content="Тесты"/>
-                        <CheckBox Content="Контрольные работы" IsChecked="False"/>
-                        <CheckBox Content="Зачеты" IsChecked="False"/>
-                        <CheckBox Content="Экзамены" IsChecked="False"/>
-                        <MenuItem Header="Отобразить" Name="ShowTypeButton" Click="ShowTypeButton_Click"/>
-                    </StackPanel>
-                </MenuItem>-->
-                <MenuItem Header="По дате">
-                    <StackPanel>
-                        <DatePicker Name="RemoveDateDP"/>
-                        <ComboBox x:Name="RemoveDateCB">
-                            <ComboBoxItem>
-                                Раньше этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Позже этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Только в эту дату
-                            </ComboBoxItem>
-                        </ComboBox>
-                        <MenuItem Header="Удалить" Name="RemoveDateB" Click="RemoveDateB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-                <MenuItem Header="По предмету">
-                    <StackPanel>
-                        <TextBox x:Name="RemoveDiscipTB" MinWidth="60"/>
-                        <MenuItem x:Name="RemoveDiscipB" Header="Удалить" Click="RemoveDiscipB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-            </MenuItem>
-        </Menu>
-        <DataGrid Name="ExamsGrid" Grid.Row="1" Grid.Column="1" IsReadOnly="True"
-                  Visibility="Hidden" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=RetDate, Mode=OneWay}" 
-                                    Header="Дата" Width="auto"/>
-                <DataGridTextColumn x:Name="TypeColumn" Header="Тип" 
-                                    Binding="{Binding Path=RetType, Mode=OneWay}"/>
-                <DataGridTextColumn Binding="{Binding Path=Discipline, Mode=TwoWay}" 
-                                    Header="Дисциплина"/>
-                <DataGridCheckBoxColumn Binding="{Binding Path=IsPassed, Mode=TwoWay}" 
-                                        Header="Сдано"/>
-                <!--<DataGridTemplateColumn Header="Действия">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <MenuItem Name="TakeExamButton" 
-                                      Tag="{Binding SelectedIndex, ElementName=ExamsGrid}"
-                                      Header="Сдать" Click="TakeExamButton_Click"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
-            </DataGrid.Columns>
-        </DataGrid>
+        </Grid.RowDefinitions>-->
 
+        <StackPanel Grid.Column="1" Background="AliceBlue">
+            <Button x:Name="AddAsmBtn" Style="{StaticResource SideBtns}" Click="AddAsmBtn_Click">Загрузить сборку</Button>
+            <Button x:Name="PrintBtn" Style="{StaticResource SideBtns}" Click="PrintBtn_Click">Печать</Button>
+            <Button x:Name="SortStrBtn" Style="{StaticResource SideBtns}" Click="SortStrBtn_Click">Сортировка по строкам</Button>
+            <Button x:Name="SortIntBtn" Style="{StaticResource SideBtns}" Click="SortIntBtn_Click">Сортировка по числам</Button>
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="AsmLoadResult" Grid.Column="0" Background="#FFFFFFF4" Margin="5">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <GroupBox>
+                            <TextBlock Margin="10" TextWrapping="Wrap" Text="{Binding}"/>
+                        </GroupBox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Window>

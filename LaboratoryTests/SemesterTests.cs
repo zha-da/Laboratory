@@ -18,7 +18,7 @@ namespace Laboratory.Exams.Tests
             Semester sem1 = new Semester(read);
             read = new List<Exam>()
             {
-                new Test(new DateTime(2020, 12, 20), "История", "Николай 2", 30, 18, 100),
+                new Test(new DateTime(2020, 12, 20), "История", "Николай 2", 31, 18, 100),
                 new Test(new DateTime(2020, 12, 18), "География", "Страны мира", 20, 15, 100),
                 new FailPassExam(new DateTime(2020, 12, 26), "Алгебра", 10, 6 , 3)
             };
