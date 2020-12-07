@@ -106,7 +106,7 @@ namespace LaboratoryMainApp
         {
             if (FindDiscipTB.Text != "")
             {
-                List<Exam> find_res = semester.FindAll(x => x.Discipline.ToLower() == FindDiscipTB.Text.ToLower());
+                Semester find_res = semester.FindAll(x => x.Discipline.ToLower() == FindDiscipTB.Text.ToLower());
                 FindDiscipTB.Text = "";
 
                 ResetGrid(find_res);
@@ -164,7 +164,7 @@ namespace LaboratoryMainApp
         private void FindDateB_Click(object sender, RoutedEventArgs e)
         {
             int sel = FindDateCB.SelectedIndex;
-            List<Exam> find_res;
+            Semester find_res;
             if (sel == 0)
             {
                 find_res = semester.FindAll(x => x.ExamDate < FindDateDP.SelectedDate);

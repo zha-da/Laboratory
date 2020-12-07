@@ -9,13 +9,14 @@ using Laboratory.Exams.Comparers;
 using System.IO;
 using System.Globalization;
 using Laboratory.Exams.Exceptions;
+using System.Collections;
 
 namespace Laboratory.Exams
 {
     /// <summary>
     /// Класс семестра
     /// </summary>
-    public class Semester
+    public class Semester : IEnumerable<Exam>
     {
         #region getfromfile
         /// <summary>
@@ -116,6 +117,13 @@ namespace Laboratory.Exams
         {
             Exams = exams;
         }
+        /// <summary>
+        /// Создает пустой семестр
+        /// </summary>
+        public Semester()
+        {
+            Exams = new List<Exam>();
+        }
         #endregion
 
         #region Props
@@ -140,16 +148,31 @@ namespace Laboratory.Exams
         /// <param name="condition">Условие</param>
         public void RemoveAll(Predicate<Exam> condition)
         {
-            Exams.RemoveAll(condition);
+            for (int i = 0; i < Exams.Count; i++)
+            {
+                if (condition.Invoke(this[i]))
+                {
+                    Exams.Remove(this[i]);
+                    i--;
+                }
+            }
         }
         /// <summary>
         /// Ищет все экзамены по условию
         /// </summary>
         /// <param name="condition">Условие</param>
         /// <returns>Список экзаменов, подходящих условию</returns>
-        public List<Exam> FindAll(Predicate<Exam> condition)
+        public Semester FindAll(Predicate<Exam> condition)
         {
-            return Exams.FindAll(condition);
+            Semester res = new Semester();
+            foreach (var item in this)
+            {
+                if (condition.Invoke(item))
+                {
+                    res.Add(item);
+                }
+            }
+            return res;
         }
         /// <summary>
         /// Добавляет список экзаменов в семестр
@@ -235,6 +258,29 @@ namespace Laboratory.Exams
             exams.AddRange(Exams);
             exams.Sort();
             return exams[exams.Count - 2];
+        }
+        /// <summary>
+        /// Возвращает перечисление для класса Семестр
+        /// </summary>
+        /// <returns>Перечисление</returns>
+        public IEnumerator<Exam> GetEnumerator()
+        {
+            return ((IEnumerable<Exam>)Exams).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)Exams).GetEnumerator();
+        }
+        /// <summary>
+        /// Получает экзамен Семестра по заданному индексу
+        /// </summary>
+        /// <param name="index">Индекс</param>
+        /// <returns>Экзамен по индексу</returns>
+        public Exam this[int index]
+        {
+            get { return Exams[index]; }
+            set { Exams[index] = value; }
         }
         #endregion
     }
