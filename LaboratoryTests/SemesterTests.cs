@@ -105,40 +105,6 @@ namespace Laboratory.Exams.Tests
         //}
 
         [TestMethod()]
-        public void ReturnSecondTest()
-        {
-            var sem = new Semester(new List<Exam>
-            {
-                new FinalExam(new DateTime(2020, 10, 31), "Геометрия", 2, 3, 3),
-                new Test(new DateTime(2020, 11, 14), "История", "Правление Николая 2", 20, 12, 100),
-                new FailPassExam(new DateTime(2020, 11, 15), "Биология", 20, 12, 3),
-                new Test(new DateTime(2020, 11, 16), "География", "Южная Америка", 20, 12, 100),
-                new Control(new DateTime(2020, 11, 17), "Алгебра", 20, 12)
-            });
-
-            sem.WriteExams();
-            Console.WriteLine("After~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            Assert.AreEqual(sem.ReturnSecond(), sem.Exams[3]);
-            sem.WriteExams();
-
-            Console.WriteLine("NewTest~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-            sem = new Semester(new List<Exam>
-            {
-                new FinalExam(new DateTime(2020, 12, 26), "Геометрия", 2, 3, 3),
-                new Test(new DateTime(2020, 9, 14), "История", "Правление Николая 2", 20, 12, 100),
-                new FailPassExam(new DateTime(2020, 11, 15), "Биология", 20, 12, 3),
-                new Test(new DateTime(2020, 9, 25), "География", "Южная Америка", 20, 12, 100),
-                new Control(new DateTime(2020, 10, 3), "Алгебра", 20, 12)
-            });
-
-            sem.WriteExams();
-            Console.WriteLine("After~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            Assert.AreEqual(sem.ReturnSecond(), sem.Exams[2]);
-            sem.WriteExams();
-        }
-
-        [TestMethod()]
         public void RemoveAllTest()
         {
             var sem = new Semester(new List<Exam>

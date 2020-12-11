@@ -31,10 +31,13 @@ namespace LaboratoryMainApp
         public MainWindow()
         {
             InitializeComponent();
+
+
         }
 
         HashSet<string> openedFiles = new HashSet<string>(); //хранит имена уже открытых файлов
         static internal Semester semester = new Semester(new List<Exam>());
+        Predicate<Exam> filter;
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
@@ -106,7 +109,8 @@ namespace LaboratoryMainApp
         {
             if (FindDiscipTB.Text != "")
             {
-                Semester find_res = semester.FindAll(x => x.Discipline.ToLower() == FindDiscipTB.Text.ToLower());
+                filter += x => x.Discipline.ToLower() == FindDiscipTB.Text.ToLower();
+                Semester find_res = semester.FindBy(filter);
                 FindDiscipTB.Text = "";
 
                 ResetGrid(find_res);
@@ -119,6 +123,7 @@ namespace LaboratoryMainApp
 
         private void ResetB_Click(object sender, RoutedEventArgs e)
         {
+            filter = null;
             ResetGrid();
         }
 

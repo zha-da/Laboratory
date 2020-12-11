@@ -175,6 +175,40 @@ namespace Laboratory.Exams
             return res;
         }
         /// <summary>
+        /// Фильтрует список экзаменов по выбранным критериям
+        /// </summary>
+        /// <param name="filter">Параметры фильтрации</param>
+        /// <returns>Список экзаменов после фильтрации</returns>
+        public Semester FindBy(Predicate<Exam> filter)
+        {
+            return new Semester(new List<Exam>(Filter(filter)));
+        }
+        /// <summary>
+        /// Фильтрует список элементов
+        /// </summary>
+        /// <param name="filter">Фильтр</param>
+        /// <returns>Отфильтрованный список</returns>
+        private IEnumerable<Exam> Filter(Predicate<Exam> filter)
+        {
+            Delegate[] dels = filter.GetInvocationList();
+            foreach (var e in Exams)
+            {
+                bool isNeeded = true;
+                foreach (Predicate<Exam> del in dels)
+                {
+                    if (!del(e))
+                    {
+                        isNeeded = false;
+                        break;
+                    }
+                }
+                if (isNeeded)
+                {
+                    yield return e;
+                }
+            }
+        }
+        /// <summary>
         /// Добавляет список экзаменов в семестр
         /// </summary>
         /// <param name="exams">Список экзаменов</param>
