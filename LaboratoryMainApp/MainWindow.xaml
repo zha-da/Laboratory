@@ -30,6 +30,7 @@
 
         <StackPanel Grid.Column="1" Background="AliceBlue">
             <Button x:Name="AddAsmBtn" Style="{StaticResource SideBtns}" Click="AddAsmBtn_Click">Загрузить сборку</Button>
+            <Button x:Name="AddInfoBtn" Style="{StaticResource SideBtns}" Click="AddInfoBtn_Click">Загрузить информацию</Button>
             <Button x:Name="PrintBtn" Style="{StaticResource SideBtns}" Click="PrintBtn_Click">Печать</Button>
             <Button x:Name="SortStrBtn" Style="{StaticResource SideBtns}" Click="SortStrBtn_Click">Сортировка по строкам</Button>
             <Button x:Name="SortIntBtn" Style="{StaticResource SideBtns}" Click="SortIntBtn_Click">Сортировка по числам</Button>

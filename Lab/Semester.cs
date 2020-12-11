@@ -9,6 +9,7 @@ using Laboratory.Exams.Comparers;
 using System.IO;
 using System.Globalization;
 using Laboratory.Exams.Exceptions;
+using Microsoft.Win32;
 
 namespace Laboratory.Exams
 {
@@ -117,16 +118,12 @@ namespace Laboratory.Exams
             Exams = exams;
         }
 
+        /// <summary>
+        /// Создает пустой Семестр
+        /// </summary>
         public Semester()
         {
-            Exams = new List<Exam>
-            {
-                new FinalExam(new DateTime(2020, 10, 31), "Математика", 2, 3, 3),
-                new Test(new DateTime(2020, 11, 14), "История", "Правление Николая 2", 21, 12, 100),
-                new FailPassExam(new DateTime(2020, 11, 15), "Биология", 20, 12, 3),
-                new Test(new DateTime(2020, 11, 16), "География", "Южная Америка", 30, 10, 100),
-                new Control(new DateTime(2020, 11, 17), "Математика", 31, 19)
-            };
+            Exams = new List<Exam>();
         }
         #endregion
 
@@ -248,22 +245,74 @@ namespace Laboratory.Exams
             exams.Sort();
             return exams[exams.Count - 2];
         }
-
+        #region addinfo
+        /// <summary>
+        /// Загружает информацию из файла
+        /// </summary>
+        public void AddInfo()
+        {
+            Exams = new List<Exam>();
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Текстовые файлы|*.txt";
+            bool? res1 = ofd.ShowDialog();
+            if (res1 == true)
+            {
+                Exams = GetFromFile(ofd.FileName);
+            }
+        } 
+        #endregion
+        /// <summary>
+        /// Вывод информации о семестре
+        /// </summary>
+        /// <returns>Массив строк с информацией о каждом экзамене</returns>
         public string[] Print()
         {
-            string[] res = new string[Exams.Count];
-            for (int i = 0; i < Exams.Count; i++)
+            try
             {
-                res[i] = Exams[i].ToString();
-            }
-            return res;
-        }
+                //if (Exams.Count == 0)
+                //{
+                //    Exams = new List<Exam>();
+                //    OpenFileDialog ofd = new OpenFileDialog();
+                //    ofd.Filter = "Текстовые файлы|*.txt";
+                //    bool? res1 = ofd.ShowDialog();
+                //    if (res1 == true)
+                //    {
+                //        Exams = GetFromFile(ofd.FileName);  
+                //    }
+                //}
 
+                if (Exams.Count == 0)
+                {
+                    Exams = new List<Exam>();
+                }
+
+                string[] res = (from e in Exams select e.ToString()).ToArray();
+                return res;
+
+                //string[] res = new string[Exams.Count];
+                //for (int i = 0; i < Exams.Count; i++)
+                //{
+                //    res[i] = Exams[i].ToString();
+                //}
+                //return res;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                Logger.NewLog(ex.Message);
+            }
+            return null;
+        }
+        /// <summary>
+        /// Сортировка по названию предметов
+        /// </summary>
         public void SortByString()
         {
             Exams.Sort();
         }
-
+        /// <summary>
+        /// Сортировка по количеству вопросов
+        /// </summary>
         public void SortByInt()
         {
             Exams.Sort(new ComparerByQuestions());

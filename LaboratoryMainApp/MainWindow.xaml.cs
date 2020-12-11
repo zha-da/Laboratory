@@ -94,21 +94,19 @@ namespace LaboratoryMainApp
                 Logger.NewLog(ex.Message);
             }
         }
-
-        private void PrintBtn_Click(object sender, RoutedEventArgs e)
+        #region addinfo
+        private void AddInfoBtn_Click(object sender, RoutedEventArgs e)
         {
             foreach (var plug in plugins)
             {
-                foreach (var item in plug.Print())
-                {
-                    if (!AsmLoadResult.Items.Contains(item))
-                    {
-                        AsmLoadResult.Items.Add(item); 
-                    }
-                }
+                plug.AddInfo();
             }
+        } 
+        #endregion
+        private void PrintBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
         }
-
         private void SortStrBtn_Click(object sender, RoutedEventArgs e)
         {
             foreach (var plug in plugins)
@@ -129,7 +127,16 @@ namespace LaboratoryMainApp
         void Refresh()
         {
             AsmLoadResult.Items.Clear();
-            PrintBtn_Click(null, null);
+            foreach (var plug in plugins)
+            {
+                foreach (var item in plug.Print())
+                {
+                    if (!AsmLoadResult.Items.Contains(item))
+                    {
+                        AsmLoadResult.Items.Add(item);
+                    }
+                }
+            }
         }
     }
 }
