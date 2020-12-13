@@ -32,17 +32,34 @@ namespace LaboratoryMainApp
         {
             InitializeComponent();
 
+            string[] vs = new string[] { ">", "<", "=", "All" };
 
+            foreach (var op in vs)
+            {
+                RadioButton rb = new RadioButton { Content = op };
+                rb.Checked += (s, ev) => dateFilter = RbChosen(op);
+
+                DateWP.Children.Add(rb);
+            }
         }
 
         HashSet<string> openedFiles = new HashSet<string>(); //хранит имена уже открытых файлов
         static internal Semester semester = new Semester(new List<Exam>());
+
+        Predicate<Exam> dateFilter;
         Predicate<Exam> filter;
+        public Predicate<Exam> Filter
+        {
+            get => filter;
+            set
+            {
+                filter = value;
+            }
+        }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            FindButton.IsEnabled = true;
-            RemoveButton.IsEnabled = true;
+            FilterBtn.IsEnabled = true;
             LoadButton.IsEnabled = false;
             UnloadButton.IsEnabled = true;
             AddNewButton.IsEnabled = true;
@@ -58,7 +75,6 @@ namespace LaboratoryMainApp
             {
                 ExamsGrid.Items.Add(item);
             }
-            //ExamsGrid.ItemsSource = semester.Exams;
         }
 
         private void UnloadButton_Click(object sender, RoutedEventArgs e)
@@ -72,15 +88,8 @@ namespace LaboratoryMainApp
             AddNewButton.IsEnabled = false;
             UnloadButton.IsEnabled = false;
             LoadButton.IsEnabled = true;
-            FindButton.IsEnabled = false;
-            RemoveButton.IsEnabled = false;
-        }
-
-        private void TakeExamButton_Click(object sender, RoutedEventArgs e)
-        {
-            MenuItem item = sender as MenuItem;
-            int index = int.Parse(item.Tag.ToString());
-            semester.Exams[index].TakeExam();
+            FilterBtn.IsEnabled = false;
+            fbp = 0;
         }
 
         private void AddNewButton_Click(object sender, RoutedEventArgs e)
@@ -97,7 +106,6 @@ namespace LaboratoryMainApp
                 {
                     ExamsGrid.Items.Add(item);
                 }
-                //ResetGrid();
             }
             else
             {
@@ -105,21 +113,6 @@ namespace LaboratoryMainApp
             }
         }
 
-        private void ShowDiscipB_Click(object sender, RoutedEventArgs e)
-        {
-            if (FindDiscipTB.Text != "")
-            {
-                filter += x => x.Discipline.ToLower() == FindDiscipTB.Text.ToLower();
-                Semester find_res = semester.FindBy(filter);
-                FindDiscipTB.Text = "";
-
-                ResetGrid(find_res);
-            }
-            else
-            {
-                MessageBox.Show("Необходимо ввести название предмета", "Ошибка");
-            }
-        }
 
         private void ResetB_Click(object sender, RoutedEventArgs e)
         {
@@ -129,8 +122,6 @@ namespace LaboratoryMainApp
 
         private void ResetGrid(IEnumerable list)
         {
-            //ExamsGrid.ItemsSource = null;
-            //ExamsGrid.ItemsSource = list;
 
             ExamsGrid.Items.Clear();
             foreach (var item in list)
@@ -140,8 +131,7 @@ namespace LaboratoryMainApp
         }
         private void ResetGrid()
         {
-            //ExamsGrid.ItemsSource = null;
-            //ExamsGrid.ItemsSource = semester.Exams;
+
             ExamsGrid.Visibility = Visibility.Visible;
 
             ExamsGrid.Items.Clear();
@@ -151,65 +141,87 @@ namespace LaboratoryMainApp
             }
         }
 
-        private void RemoveDiscipB_Click(object sender, RoutedEventArgs e)
-        {
-            if (RemoveDiscipTB.Text != "")
-            {
-                semester.RemoveAll(x => x.Discipline.ToLower() == RemoveDiscipTB.Text.ToLower());
-                RemoveDiscipTB.Text = "";
-
-                ResetGrid();
-            }
-            else
-            {
-                MessageBox.Show("Необходимо ввести название предмета", "Ошибка");
-            }
-        }
-
-        private void FindDateB_Click(object sender, RoutedEventArgs e)
-        {
-            int sel = FindDateCB.SelectedIndex;
-            Semester find_res;
-            if (sel == 0)
-            {
-                find_res = semester.FindAll(x => x.ExamDate < FindDateDP.SelectedDate);
-            }
-            else if (sel == 1)
-            {
-                find_res = semester.FindAll(x => x.ExamDate > FindDateDP.SelectedDate);
-            }
-            else
-            {
-                find_res = semester.FindAll(x => x.ExamDate == FindDateDP.SelectedDate);
-            }
-            FindDateCB.SelectedIndex = -1;
-            ResetGrid(find_res);
-        }
-
-        private void RemoveDateB_Click(object sender, RoutedEventArgs e)
-        {
-            int sel = RemoveDateCB.SelectedIndex;
-            if (sel == 0)
-            {
-                semester.RemoveAll(x => x.ExamDate < RemoveDateDP.SelectedDate);
-            }
-            else if (sel == 1)
-            {
-                semester.RemoveAll(x => x.ExamDate > RemoveDateDP.SelectedDate);
-            }
-            else
-            {
-                semester.RemoveAll(x => x.ExamDate == RemoveDateDP.SelectedDate);
-            }
-            RemoveDateCB.SelectedIndex = -1;
-            ResetGrid();
-        }
 
         private void AddByHandButton_Click(object sender, RoutedEventArgs e)
         {
             AddItemWindow win = new AddItemWindow();
             win.ShowDialog();
 
+            ResetGrid();
+        }
+
+        int fbp = 0;
+
+        private void FilterBtn_Click(object sender, RoutedEventArgs e)
+        {
+            fbp++;
+            fbp = fbp % 2;
+
+            if (fbp == 0)
+            {
+                FiltersSP.Visibility = Visibility.Collapsed;
+                DisciplinecWP.Children.Clear();
+                return;
+            }
+
+            FiltersSP.Visibility = Visibility.Visible;
+
+            var discips = (from ex in semester select ex.Discipline).Distinct();
+
+            foreach (var ex in discips)
+            {
+                CheckBox cb = new CheckBox() { Content = ex };
+                Predicate<Exam> con = exam => exam.Discipline.ToLower() == ex.ToLower();
+                cb.Checked += (s, ev) => Filter += con;
+                cb.Unchecked += (s, ev) => Filter -= con;
+
+                DisciplinecWP.Children.Add(cb);
+            }
+        }
+        Predicate<Exam> RbChosen(string op)
+        {
+            DateTime sDate;
+            Predicate<Exam> res;
+            if (!ByDateDP.SelectedDate.HasValue)
+            {
+                return null;
+            }
+
+            sDate = (DateTime)ByDateDP.SelectedDate;
+            switch (op)
+            {
+                case ">":
+                    res = x => x.ExamDate > sDate;
+                    break;
+                case "<":
+                    res = x => x.ExamDate < sDate;
+                    break;
+                case "=":
+                    res = x => x.ExamDate == sDate;
+                    break;
+                default:
+                    res = null;
+                    break;
+            }
+            return res;
+        }
+
+        private void ApplyFiltersBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Semester res = semester.FindOr(filter);
+            res = res.FindAnd(dateFilter);
+            ResetGrid(res);
+        }
+
+        private void NullFiltersBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Filter = null;
+            dateFilter = null;
+            foreach (var item in DateWP.Children)
+            {
+                if (item is RadioButton)
+                    ((RadioButton)item).IsChecked = false;
+            }
             ResetGrid();
         }
     }

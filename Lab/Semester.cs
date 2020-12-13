@@ -175,12 +175,31 @@ namespace Laboratory.Exams
             return res;
         }
         /// <summary>
+        /// Фильтр для дат
+        /// </summary>
+        /// <param name="filter">Фильтр</param>
+        /// <returns>Список после фильтрации</returns>
+        public Semester FindAnd(Predicate<Exam> filter)
+        {
+            if (filter == null) return this;
+            Semester res = new Semester();
+            foreach (var e in Exams)
+            {
+                if (filter(e))
+                {
+                    res.Add(e);
+                }
+            }
+            return res;
+        }
+        /// <summary>
         /// Фильтрует список экзаменов по выбранным критериям
         /// </summary>
         /// <param name="filter">Параметры фильтрации</param>
         /// <returns>Список экзаменов после фильтрации</returns>
-        public Semester FindBy(Predicate<Exam> filter)
+        public Semester FindOr(Predicate<Exam> filter)
         {
+            if (filter == null) return new Semester(Exams);
             return new Semester(new List<Exam>(Filter(filter)));
         }
         /// <summary>
@@ -193,18 +212,13 @@ namespace Laboratory.Exams
             Delegate[] dels = filter.GetInvocationList();
             foreach (var e in Exams)
             {
-                bool isNeeded = true;
                 foreach (Predicate<Exam> del in dels)
                 {
-                    if (!del(e))
+                    if (del(e))
                     {
-                        isNeeded = false;
+                        yield return e;
                         break;
                     }
-                }
-                if (isNeeded)
-                {
-                    yield return e;
                 }
             }
         }

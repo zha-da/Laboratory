@@ -9,17 +9,33 @@
         Title="MainWindow" Height="350" Width="500" FontSize="20" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="auto"/>
-            <!--<ColumnDefinition Width="auto"/>-->
-            <!--<ColumnDefinition Width="auto"/>-->
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 10" >
-            <MenuItem Header="Меню" Name="ExamsMenu" AllowDrop="True">
+        
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" 
+                    Visibility="Collapsed" Name="FiltersSP" Background="BlanchedAlmond">
+            <TextBlock Text="Фильтры" Background="AliceBlue" HorizontalAlignment="Stretch"/>
+            <GroupBox Header="Названия предметов">
+                <WrapPanel Name="DisciplinecWP" Orientation="Vertical"/>
+            </GroupBox>
+            <GroupBox Header="Дата">
+                <WrapPanel Name="DateWP" Orientation="Vertical">
+                    <DatePicker Name="ByDateDP"/>
+                </WrapPanel>
+            </GroupBox>
+            <Button x:Name="ApplyFiltersBtn" Click="ApplyFiltersBtn_Click" 
+                    Background="AliceBlue" Margin="5">Применить фильтры</Button>
+            <Button x:Name="NullFiltersBtn" Click="NullFiltersBtn_Click" 
+                    Background="AliceBlue" Margin="5">Сбросить Фильтры</Button>
+        </StackPanel>
+        
+        <Menu Grid.Row="0" Grid.Column="0" Margin="0 0 0 10" >
+            <MenuItem Header="Данные" Name="ExamsMenu" AllowDrop="True">
                 <MenuItem Header ="Загрузить" Name="LoadButton"
                           Click="LoadButton_Click"/>
                 <MenuItem Header="Выгрузить" IsEnabled="False" Name="UnloadButton"
@@ -29,77 +45,10 @@
                 <MenuItem Header="Добавить вручную" IsEnabled="True" Name="AddByHandButton"
                           Click="AddByHandButton_Click"/>
             </MenuItem>
-            <MenuItem Header="Найти" Name="FindButton" IsEnabled="False">
-                <!--<MenuItem Header="По типу">
-                    <StackPanel Orientation="Vertical">
-                        <CheckBox Content="Тесты"/>
-                        <CheckBox Content="Контрольные работы" IsChecked="False"/>
-                        <CheckBox Content="Зачеты" IsChecked="False"/>
-                        <CheckBox Content="Экзамены" IsChecked="False"/>
-                        <Button Content="Отобразить"/>
-                    </StackPanel>
-                </MenuItem>-->
-                <MenuItem Header="По дате">
-                    <StackPanel>
-                        <DatePicker Name="FindDateDP"/>
-                        <ComboBox x:Name="FindDateCB">
-                            <ComboBoxItem>
-                                Раньше этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Позже этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Только в эту дату
-                            </ComboBoxItem>
-                        </ComboBox>
-                        <MenuItem Header="Отобразить" Name="FindDateB" Click="FindDateB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-                <MenuItem Header="По предмету">
-                    <StackPanel>
-                        <TextBox x:Name="FindDiscipTB" MinWidth="60"/>
-                        <MenuItem x:Name="ShowDiscipB" Header="Отобразить" Click="ShowDiscipB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-                <MenuItem Header="Сбросить" Click="ResetB_Click" x:Name="ResetB"/>
-            </MenuItem>
-            <MenuItem Header="Удалить" Name="RemoveButton" IsEnabled="False">
-                <!--<MenuItem Header="По типу">
-                    <StackPanel Orientation="Vertical">
-                        <CheckBox Content="Тесты"/>
-                        <CheckBox Content="Контрольные работы" IsChecked="False"/>
-                        <CheckBox Content="Зачеты" IsChecked="False"/>
-                        <CheckBox Content="Экзамены" IsChecked="False"/>
-                        <MenuItem Header="Отобразить" Name="ShowTypeButton" Click="ShowTypeButton_Click"/>
-                    </StackPanel>
-                </MenuItem>-->
-                <MenuItem Header="По дате">
-                    <StackPanel>
-                        <DatePicker Name="RemoveDateDP"/>
-                        <ComboBox x:Name="RemoveDateCB">
-                            <ComboBoxItem>
-                                Раньше этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Позже этой даты
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                Только в эту дату
-                            </ComboBoxItem>
-                        </ComboBox>
-                        <MenuItem Header="Удалить" Name="RemoveDateB" Click="RemoveDateB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-                <MenuItem Header="По предмету">
-                    <StackPanel>
-                        <TextBox x:Name="RemoveDiscipTB" MinWidth="60"/>
-                        <MenuItem x:Name="RemoveDiscipB" Header="Удалить" Click="RemoveDiscipB_Click"/>
-                    </StackPanel>
-                </MenuItem>
-            </MenuItem>
+            <MenuItem Header="Отфильтровать" Name="FilterBtn" IsEnabled="False" Click="FilterBtn_Click"/>
         </Menu>
-        <DataGrid Name="ExamsGrid" Grid.Row="1" Grid.Column="1" IsReadOnly="True"
+        
+        <DataGrid Name="ExamsGrid" Grid.Row="1" Grid.Column="0" IsReadOnly="True"
                   Visibility="Hidden" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=RetDate, Mode=OneWay}" 
@@ -110,15 +59,6 @@
                                     Header="Дисциплина"/>
                 <DataGridCheckBoxColumn Binding="{Binding Path=IsPassed, Mode=TwoWay}" 
                                         Header="Сдано"/>
-                <!--<DataGridTemplateColumn Header="Действия">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <MenuItem Name="TakeExamButton" 
-                                      Tag="{Binding SelectedIndex, ElementName=ExamsGrid}"
-                                      Header="Сдать" Click="TakeExamButton_Click"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
 
