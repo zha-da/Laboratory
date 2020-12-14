@@ -102,6 +102,14 @@ namespace Laboratory.Exams
 
         #region Constructors
         /// <summary>
+        /// Создает экземпляр класса Семестр
+        /// </summary>
+        /// <param name="exams">Список экзаменов</param>
+        public Semester(IEnumerable<Exam> exams)
+        {
+            Exams = new List<Exam>(exams);
+        }
+        /// <summary>
         /// Создает экзамепляр класса
         /// </summary>
         /// <param name="directory">Путь к файлу / Имя файла</param>
@@ -142,44 +150,7 @@ namespace Laboratory.Exams
         {
             Exams.RemoveAll(x => x.GetType() == type);
         }
-        /// <summary>
-        /// Убирает все экзамены, подходящие условию
-        /// </summary>
-        /// <param name="condition">Условие</param>
-        public void RemoveAll(Predicate<Exam> condition)
-        {
-            for (int i = 0; i < Exams.Count; i++)
-            {
-                if (condition.Invoke(this[i]))
-                {
-                    Exams.Remove(this[i]);
-                    i--;
-                }
-            }
-        }
-        /// <summary>
-        /// Ищет все экзамены по условию
-        /// </summary>
-        /// <param name="condition">Условие</param>
-        /// <returns>Список экзаменов, подходящих условию</returns>
-        public Semester FindAll(Predicate<Exam> condition)
-        {
-            Semester res = new Semester();
-            foreach (var item in this)
-            {
-                if (condition.Invoke(item))
-                {
-                    res.Add(item);
-                }
-            }
-            return res;
-        }
-        /// <summary>
-        /// Фильтр для дат
-        /// </summary>
-        /// <param name="filter">Фильтр</param>
-        /// <returns>Список после фильтрации</returns>
-        public Semester FindAnd(Predicate<Exam> filter)
+        private Semester FindAnd(Predicate<Exam> filter)
         {
             if (filter == null) return this;
             Semester res = new Semester();
@@ -192,21 +163,11 @@ namespace Laboratory.Exams
             }
             return res;
         }
-        /// <summary>
-        /// Фильтрует список экзаменов по выбранным критериям
-        /// </summary>
-        /// <param name="filter">Параметры фильтрации</param>
-        /// <returns>Список экзаменов после фильтрации</returns>
-        public Semester FindOr(Predicate<Exam> filter)
+        private Semester FindOr(Predicate<Exam> filter)
         {
             if (filter == null) return new Semester(Exams);
-            return new Semester(new List<Exam>(Filter(filter)));
+            return new Semester(Filter(filter));
         }
-        /// <summary>
-        /// Фильтрует список элементов
-        /// </summary>
-        /// <param name="filter">Фильтр</param>
-        /// <returns>Отфильтрованный список</returns>
         private IEnumerable<Exam> Filter(Predicate<Exam> filter)
         {
             Delegate[] dels = filter.GetInvocationList();
@@ -221,6 +182,18 @@ namespace Laboratory.Exams
                     }
                 }
             }
+        }
+        /// <summary>
+        /// Фильтрует список экзаменов по условиям
+        /// </summary>
+        /// <param name="or_filter">Условия типа ИЛИ</param>
+        /// <param name="and_filter">Условия типа И</param>
+        /// <returns>Отфильтрованный список экзаменов</returns>
+        public Semester Filter(Predicate<Exam> or_filter, Predicate<Exam> and_filter)
+        {
+            Semester res = FindOr(or_filter);
+            res = res.FindAnd(and_filter);
+            return res;
         }
         /// <summary>
         /// Добавляет список экзаменов в семестр
@@ -291,21 +264,6 @@ namespace Laboratory.Exams
             {
                 Console.WriteLine(item.ToString());
             }
-        }
-        /// <summary>
-        /// Лабораторный метод
-        /// </summary>
-        /// <returns>Второй наименьший элемент</returns>
-        public Exam ReturnSecond()
-        {
-            if (Exams.Count < 2)
-            {
-                return null;
-            }
-            List<Exam> exams = new List<Exam>();
-            exams.AddRange(Exams);
-            exams.Sort();
-            return exams[exams.Count - 2];
         }
         /// <summary>
         /// Возвращает перечисление для класса Семестр

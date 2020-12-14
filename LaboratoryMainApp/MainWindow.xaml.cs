@@ -44,7 +44,7 @@ namespace LaboratoryMainApp
         }
 
         HashSet<string> openedFiles = new HashSet<string>(); //хранит имена уже открытых файлов
-        static internal Semester semester = new Semester(new List<Exam>());
+        static internal Semester semester = new Semester();
 
         Predicate<Exam> dateFilter;
         Predicate<Exam> filter;
@@ -75,6 +75,8 @@ namespace LaboratoryMainApp
             {
                 ExamsGrid.Items.Add(item);
             }
+
+            if (FiltersSP.Visibility == Visibility.Visible) FilterBtn_Click(this, null);
         }
 
         private void UnloadButton_Click(object sender, RoutedEventArgs e)
@@ -90,6 +92,8 @@ namespace LaboratoryMainApp
             LoadButton.IsEnabled = true;
             FilterBtn.IsEnabled = false;
             fbp = 0;
+
+            DisciplinecWP.Children.Clear();
         }
 
         private void AddNewButton_Click(object sender, RoutedEventArgs e)
@@ -116,7 +120,7 @@ namespace LaboratoryMainApp
 
         private void ResetB_Click(object sender, RoutedEventArgs e)
         {
-            filter = null;
+            Filter = null;
             ResetGrid();
         }
 
@@ -144,10 +148,16 @@ namespace LaboratoryMainApp
 
         private void AddByHandButton_Click(object sender, RoutedEventArgs e)
         {
+            if (FiltersSP.Visibility == Visibility.Visible)
+            {
+                FilterBtn_Click(this, null);
+                NullFiltersBtn_Click(this, null);
+            }
             AddItemWindow win = new AddItemWindow();
             win.ShowDialog();
 
             ResetGrid();
+            //FilterBtn_Click(this, null);
         }
 
         int fbp = 0;
@@ -208,8 +218,7 @@ namespace LaboratoryMainApp
 
         private void ApplyFiltersBtn_Click(object sender, RoutedEventArgs e)
         {
-            Semester res = semester.FindOr(filter);
-            res = res.FindAnd(dateFilter);
+            Semester res = semester.Filter(Filter, dateFilter);
             ResetGrid(res);
         }
 
@@ -221,6 +230,11 @@ namespace LaboratoryMainApp
             {
                 if (item is RadioButton)
                     ((RadioButton)item).IsChecked = false;
+            }
+            foreach (var item in DisciplinecWP.Children)
+            {
+                if (item is CheckBox)
+                    ((CheckBox)item).IsChecked = false;
             }
             ResetGrid();
         }
