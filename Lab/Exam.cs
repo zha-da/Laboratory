@@ -231,7 +231,7 @@ namespace Laboratory.Exams
 
         int IComparable<Exam>.CompareTo(Exam other)
         {
-            return ExamDate.CompareTo(other.ExamDate);
+            return Discipline.CompareTo(other.Discipline);
         }
         /// <summary>
         /// Сравнивает 2 объекта класса экзамен
@@ -256,7 +256,7 @@ namespace Laboratory.Exams
         /// <returns>Строковое представление объекта класса</returns>
         public override string ToString()
         {
-            return $"{RetType};{Discipline};{ExamDate};{QuestionsQuantity}";
+            return $"{ExamDate} : {RetType} по дисципине {Discipline} с {QuestionsQuantity} вопрос{(QuestionsQuantity % 10 == 1 ? "ом" : "ами")}";
         }
         /// <summary>
         /// Возвращает хэш-код объекта

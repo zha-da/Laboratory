@@ -5,7 +5,7 @@ namespace Laboratory.Exams.Comparers
     /// <summary>
     /// Класс компаратора для экземпляров класса Тест и его наследников
     /// </summary>
-    public class ComparerByQuestions : IComparer<Test>
+    public class ComparerByQuestions : IComparer<Exam>
     {
         /// <summary>
         /// Сравнивает два теста
@@ -13,7 +13,7 @@ namespace Laboratory.Exams.Comparers
         /// <param name="x">Тест 1</param>
         /// <param name="y">Тест 2</param>
         /// <returns>Результат сравнения двух тестов по количеству вопросов</returns>
-        public int Compare(Test x, Test y)
+        public int Compare(Exam x, Exam y)
         {
             if (x.QuestionsQuantity > y.QuestionsQuantity)
                 return 1;

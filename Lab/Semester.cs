@@ -9,6 +9,7 @@ using Laboratory.Exams.Comparers;
 using System.IO;
 using System.Globalization;
 using Laboratory.Exams.Exceptions;
+using Microsoft.Win32;
 using System.Collections;
 
 namespace Laboratory.Exams
@@ -16,7 +17,7 @@ namespace Laboratory.Exams
     /// <summary>
     /// Класс семестра
     /// </summary>
-    public class Semester : IEnumerable<Exam>
+    public class Semester : IEnumerable<Exam>, IPlugable
     {
         #region getfromfile
         /// <summary>
@@ -140,7 +141,7 @@ namespace Laboratory.Exams
         /// </summary>
         public List<Exam> Exams { get; set; }
         #endregion
-
+        
         #region Methods
         /// <summary>
         /// Убирает все экзамены определенного типа
@@ -287,6 +288,78 @@ namespace Laboratory.Exams
         {
             get { return Exams[index]; }
             set { Exams[index] = value; }
+        }
+        #region addinfo
+        /// <summary>
+        /// Загружает информацию из файла
+        /// </summary>
+        public void AddInfo()
+        {
+            Exams = new List<Exam>();
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Текстовые файлы|*.txt";
+            bool? res1 = ofd.ShowDialog();
+            if (res1 == true)
+            {
+                Exams = GetFromFile(ofd.FileName);
+            }
+        } 
+        #endregion
+        /// <summary>
+        /// Вывод информации о семестре
+        /// </summary>
+        /// <returns>Массив строк с информацией о каждом экзамене</returns>
+        public string[] Print()
+        {
+            try
+            {
+                //if (Exams.Count == 0)
+                //{
+                //    Exams = new List<Exam>();
+                //    OpenFileDialog ofd = new OpenFileDialog();
+                //    ofd.Filter = "Текстовые файлы|*.txt";
+                //    bool? res1 = ofd.ShowDialog();
+                //    if (res1 == true)
+                //    {
+                //        Exams = GetFromFile(ofd.FileName);  
+                //    }
+                //}
+
+                if (Exams.Count == 0)
+                {
+                    Exams = new List<Exam>();
+                }
+
+                string[] res = (from e in Exams select e.ToString()).ToArray();
+                return res;
+
+                //string[] res = new string[Exams.Count];
+                //for (int i = 0; i < Exams.Count; i++)
+                //{
+                //    res[i] = Exams[i].ToString();
+                //}
+                //return res;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                Logger.NewLog(ex.Message);
+            }
+            return null;
+        }
+        /// <summary>
+        /// Сортировка по названию предметов
+        /// </summary>
+        public void SortByString()
+        {
+            Exams.Sort();
+        }
+        /// <summary>
+        /// Сортировка по количеству вопросов
+        /// </summary>
+        public void SortByInt()
+        {
+            Exams.Sort(new ComparerByQuestions());
         }
         #endregion
     }
