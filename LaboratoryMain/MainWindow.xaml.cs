@@ -120,9 +120,9 @@ namespace LaboratoryMain
             FileInfo fi = new FileInfo(path);
             try
             {
-                fi.Attributes = file.Attributes;
-                fi.LastWriteTime = file.ModificationTime;
-            }
+            fi.Attributes = file.Attributes;
+            fi.LastWriteTime = file.ModificationTime;
+        }
             catch (UnauthorizedAccessException)
             {
                 using (StreamWriter sw = new StreamWriter("log.txt"))
