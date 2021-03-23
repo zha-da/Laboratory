@@ -127,14 +127,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="json_button.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="xml_button.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="binary_button.jpg" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
