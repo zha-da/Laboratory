@@ -1,0 +1,35 @@
+﻿<Window x:Class="ChatClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChatClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Column="1" Grid.Row="1" Content="Подключиться" x:Name="bConnect" Click="bConnect_Click"/>
+        <TextBox Grid.Column="2" Grid.Row="1" Margin="5 0 5 0" Text="Аноним" x:Name="tbUsername"/>
+        <Button Grid.Column="3" Grid.Row="1" Margin="5 0 5 0" 
+                Content="Новая Заметка" x:Name="bCreate" Click="bCreate_Click" IsEnabled="False"/>
+        <ListBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Margin="0 5 5 5" x:Name="lbNotes"/>
+        <ScrollViewer Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" Margin="5" 
+                      VerticalScrollBarVisibility="Auto">
+            <TextBox x:Name="tbNote" IsEnabled="False" KeyDown="tbNote_KeyDown"/>
+        </ScrollViewer>
+    </Grid>
+</Window>
