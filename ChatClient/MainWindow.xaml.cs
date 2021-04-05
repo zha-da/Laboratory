@@ -24,12 +24,12 @@ namespace ChatClient
         public MainWindow()
         {
             InitializeComponent();
-            Closing += (s, e) => client.DisconnectFromService(tbUsername.Text);
+            //Closing += (s, e) => client.DisconnectFromService(tbUsername.Text);
             //Loaded += (s, e) => client = new ServiceNotesClient();
         }
 
         ServiceNotesClient client;
-        List<Note> notes;
+        List<Note> notes = new List<Note>();
         private void bConnect_Click(object sender, RoutedEventArgs e)
         {
             //NotesService.Service1Client client = new NotesService.Service1Client();
@@ -52,10 +52,10 @@ namespace ChatClient
                     return;
                 }
 
-                notes = new List<Note>(ns);
+                notes.AddRange(ns);
                 foreach (var n in notes)
                 {
-                    lbNotes.Items.Add(n.ToString());
+                    lbNotes.Items.Add($"{n.CreationTime.ToShortDateString()} {n.CreationTime.Hour}:{n.CreationTime.Minute} : {n.Text}");
                 }
             }
             else if (bConnect.Content.ToString().Equals("Отключиться"))
@@ -63,12 +63,17 @@ namespace ChatClient
                 tbUsername.IsEnabled = true;
                 bCreate.IsEnabled = false;
                 bConnect.Content = "Подключиться";
+                lbNotes.Items.Clear();
                 try
                 {
-                    client.DisconnectFromService(tbUsername.Text);
+                    client.DisconnectFromService(tbUsername.Text, notes.ToArray());
                 }
                 catch (System.ServiceModel.ProtocolException)
                 {
+                }
+                finally
+                {
+                    notes.Clear();
                 }
             }
         }
@@ -84,6 +89,7 @@ namespace ChatClient
             if (e.Key == Key.Enter)
             {
                 Note n = client.CreateNote(tbNote.Text);
+                notes.Add(n);
                 lbNotes.Items.Add($"{n.CreationTime.ToShortDateString()} {n.CreationTime.Hour}:{n.CreationTime.Minute} : {n.Text}");
                 tbNote.Text = "";
                 tbNote.IsEnabled = false;

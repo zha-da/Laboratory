@@ -18,6 +18,6 @@ namespace notes_service
         List<Note> ConnectToService(string username);
 
         [OperationContract(IsOneWay = false)]
-        void DisconnectFromService(string username);
+        void DisconnectFromService(string username, List<Note> notes);
     }
 }

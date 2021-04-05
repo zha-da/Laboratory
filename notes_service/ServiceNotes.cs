@@ -12,38 +12,63 @@ namespace notes_service
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "ServiceNotes" in both code and config file together.
     public class ServiceNotes : IServiceNotes
     {
-        List<Note> allnotes = new List<Note>();
-        static List<string> usernames = new List<string>();
+        //static List<string> usernames = new List<string>();
 
         public List<Note> ConnectToService(string username)
         {
-            if (!usernames.Contains(username))
+            try
             {
-                usernames.Add(username);
+                DataContractSerializer dcs = new DataContractSerializer(typeof(List<Note>));
+                using (FileStream fs = new FileStream($"C:/Users/Pepe/Visual Studio Projects/Laba/notes_service/bin/Debug/{username}.xml", FileMode.Open))
+                {
+                    return (List<Note>)dcs.ReadObject(fs);
+                }
+            }
+            catch (FileNotFoundException)
+            {
                 return null;
             }
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Note>));
-            using (FileStream fs = new FileStream($"C:/Users/Pepe/Visual Studio Projects/Laba/notes_service/bin/Debug/{username}.xml", FileMode.Open))
+            catch (SerializationException)
             {
-                allnotes = (List<Note>)serializer.Deserialize(fs);
-                return allnotes;
+                return null;
             }
         }
 
         public Note CreateNote(string text)
         {
             Note nn = new Note(text);
-            allnotes.Add(nn);
             return nn;
         }
 
-        public void DisconnectFromService(string username)
+        public void DisconnectFromService(string username, List<Note> notes)
         {
-            XmlSerializer xs = new XmlSerializer(typeof(List<Note>));
+            DataContractSerializer dcs = new DataContractSerializer(typeof(List<Note>));
             using (FileStream fs = new FileStream($"C:/Users/Pepe/Visual Studio Projects/Laba/notes_service/bin/Debug/{username}.xml", FileMode.OpenOrCreate))
             {
-                xs.Serialize(fs, allnotes);
+                dcs.WriteObject(fs, notes);
             }
+        }
+    }
+    [DataContract]
+    public class Note
+    {
+        [DataMember]
+        public string Text { get; set; }
+        [DataMember]
+        public DateTime CreationTime { get; set; }
+
+        public Note(string text)
+        {
+            Text = text;
+            CreationTime = DateTime.Now;
+        }
+        public Note()
+        {
+            CreationTime = DateTime.Now;
+        }
+        public override string ToString()
+        {
+            return $"{CreationTime.ToShortDateString()} {CreationTime.Hour}:{CreationTime.Minute} : {Text}";
         }
     }
 }

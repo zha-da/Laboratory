@@ -20,24 +20,5 @@ namespace notes_service
     //    {
     //        Notes = new List<Note>();
     //    }
-    //}
-    public class Note
-    {
-        public string Text { get; set; }
-        public DateTime CreationTime { get; set; }
 
-        public Note(string text)
-        {
-            Text = text;
-            CreationTime = DateTime.Now;
-        }
-        public Note()
-        {
-            CreationTime = DateTime.Now;
-        }
-        public override string ToString()
-        {
-            return $"{CreationTime.ToShortDateString()} {CreationTime.Hour}:{CreationTime.Minute} : {Text}";
-        }
-    }
 }

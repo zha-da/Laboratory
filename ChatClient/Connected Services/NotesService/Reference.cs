@@ -90,11 +90,11 @@ namespace ChatClient.NotesService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IServiceNotes/ConnectToService", ReplyAction="http://tempuri.org/IServiceNotes/ConnectToServiceResponse")]
         System.Threading.Tasks.Task<ChatClient.NotesService.Note[]> ConnectToServiceAsync(string username);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IServiceNotes/DisconnectFromService")]
-        void DisconnectFromService(string username);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IServiceNotes/DisconnectFromService", ReplyAction="http://tempuri.org/IServiceNotes/DisconnectFromServiceResponse")]
+        void DisconnectFromService(string username, ChatClient.NotesService.Note[] notes);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IServiceNotes/DisconnectFromService")]
-        System.Threading.Tasks.Task DisconnectFromServiceAsync(string username);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IServiceNotes/DisconnectFromService", ReplyAction="http://tempuri.org/IServiceNotes/DisconnectFromServiceResponse")]
+        System.Threading.Tasks.Task DisconnectFromServiceAsync(string username, ChatClient.NotesService.Note[] notes);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -140,12 +140,12 @@ namespace ChatClient.NotesService {
             return base.Channel.ConnectToServiceAsync(username);
         }
         
-        public void DisconnectFromService(string username) {
-            base.Channel.DisconnectFromService(username);
+        public void DisconnectFromService(string username, ChatClient.NotesService.Note[] notes) {
+            base.Channel.DisconnectFromService(username, notes);
         }
         
-        public System.Threading.Tasks.Task DisconnectFromServiceAsync(string username) {
-            return base.Channel.DisconnectFromServiceAsync(username);
+        public System.Threading.Tasks.Task DisconnectFromServiceAsync(string username, ChatClient.NotesService.Note[] notes) {
+            return base.Channel.DisconnectFromServiceAsync(username, notes);
         }
     }
 }
