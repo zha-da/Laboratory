@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaboratoryMain", "LaboratoryMain\LaboratoryMain.csproj", "{B039169A-7C63-4B82-BD7F-6A8A6949190D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceInvaders", "LaboratoryMain\SpaceInvaders.csproj", "{B039169A-7C63-4B82-BD7F-6A8A6949190D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Regex", "Regex\Regex.csproj", "{FAF6DDEB-B3CA-4308-96B1-1BAF571C27C3}"
 EndProject

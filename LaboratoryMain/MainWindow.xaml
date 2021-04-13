@@ -5,32 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LaboratoryMain"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinHeight="200" MinWidth="300" Closing="Window_Closing">
-    <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <!--<RowDefinition Height="Auto"/>-->
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
-            <!--<Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="4*"/>
-            </Grid.ColumnDefinitions>-->
-            <MenuItem x:Name="bchoose" Header="Выбрать файл" BorderThickness="1"
-                    Background="AliceBlue" Click="bchoose_Click"/>
-            <MenuItem x:Name="bfind" Header="Поиск слов" Click="bfind_Click"/>
-        </Menu>
-
-        <TextBox x:Name="tbword" Grid.Row="1" Background="AliceBlue"
-                 Margin="3" TextChanged="tbword_TextChanged" Visibility="Collapsed"/>
-
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <TextBox Margin="3" Background="AliceBlue" x:Name="rtbFile" TextChanged="rtbFile_TextChanged"/>
-        </ScrollViewer>
-
-        <TextBlock Grid.Row="3" Text="Количество строк : " x:Name="tbLines"/>
-    </Grid>
+        Title="Space Invaders" Height="500" Width="800" FocusManager.FocusedElement="{Binding ElementName=mainCanvas}" Icon="pack://application:,,,/images/player.png">
+    <Canvas x:Name="mainCanvas" Background="Black" Focusable="True" KeyDown="mainCanvas_KeyDown" KeyUp="mainCanvas_KeyUp">
+        <Label Foreground="White" x:Name="enemiesLeft" FontSize="16" FontWeight="ExtraBold">Enemies Left : </Label>
+        <Rectangle x:Name="player" Fill="White" Width="55" Height="65" Canvas.Left="568" Canvas.Top="394"/>
+    </Canvas>
 </Window>
