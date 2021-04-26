@@ -45,9 +45,9 @@ namespace LaboratoryMain.UserControls
                 case "Classic mode":
                     (ParentWindow as MainWindow).ApplyNewControl(new GameClassic(ParentWindow, this));
                     break;
-                //case "SpaceBar Destroyer":
-                //    (ParentWindow as MainWindow).ApplyNewControl(new GameSpacebarDestroyer());
-                //    break;
+                case "SpaceBar Destroyer":
+                    (ParentWindow as MainWindow).ApplyNewControl(new GameSpacebarDestroyer(ParentWindow, this));
+                    break;
                 case "Endless mode":
                     (ParentWindow as MainWindow).ApplyNewControl(new GameEndless(ParentWindow, this));
                     break;

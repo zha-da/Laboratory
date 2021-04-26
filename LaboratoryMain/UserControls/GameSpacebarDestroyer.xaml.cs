@@ -21,86 +21,64 @@ namespace LaboratoryMain.UserControls
     /// </summary>
     public partial class GameSpacebarDestroyer : UserControl
     {
-        #region Fields
-        bool goleft, goright = false;
+        DispatcherTimer updateTimer = new DispatcherTimer();
+        bool goright, goleft, gamepaused = false;
+        double cHeight, cWidth;
         List<Rectangle> disposeOf = new List<Rectangle>();
-        int enemyImg = 0;
-        int bulletTimer;
-        int bulletTimerLimit = 90;
+
+        Window ParentWindow;
+        UserControl UCParent;
+
         int totalEnemies;
-        DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        ImageBrush skinBrush = new ImageBrush();
-        int enemySpeed = 6;
-        #endregion
+        int enemyImg = 0;
+        int left = 0;
+        int totalEnemiesDestroyed = 0;
+        int buttonPress = 0;
+
+        public int enemySpeed = 15;
+        public int enemyLimit = 50;
+        public int playerSpeed = 7;
+
         public GameSpacebarDestroyer()
         {
             InitializeComponent();
-            Loaded += (s, e) => mainCanvas.Focus();
+        }
 
-            dispatcherTimer.Tick += Update;
-            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(20);
-            dispatcherTimer.Start();
+        public GameSpacebarDestroyer(Window parentWindow, UserControl uCParent)
+        {
+            InitializeComponent();
+            ParentWindow = parentWindow;
+            UCParent = uCParent;
+            ParentWindow.ResizeMode = ResizeMode.NoResize;
 
+            Loaded += (s, e) =>
+            {
+                cHeight = mainCanvas.ActualHeight;
+                cWidth = mainCanvas.ActualWidth;
+                StartGame();
+            };
+        }
+
+        private void StartGame()
+        {
+            ParentWindow.Focusable = false;
+            mainCanvas.Focus();
+            Canvas.SetLeft(player, cWidth / 2);
+            Canvas.SetTop(player, cHeight - 80);
+
+            ImageBrush skinBrush = new ImageBrush();
             skinBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/player.png"));
             player.Fill = skinBrush;
 
-            CreateEnemies(300);
+            updateTimer.Tick += Update;
+            updateTimer.Interval = TimeSpan.FromMilliseconds(10);
+            updateTimer.Start();
+
+            CreateEnemies(2 * enemyLimit);
         }
-
-        private void mainCanvas_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Left) goleft = true;
-            else if (e.Key == Key.Right) goright = true;
-        }
-
-        private void mainCanvas_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Left) goleft = false;
-
-            if (e.Key == Key.Right) goright = false;
-
-            if (e.Key == Key.Space)
-            {
-                disposeOf.Clear();
-
-                Rectangle newbullet = new Rectangle
-                {
-                    Tag = "bullet",
-                    Height = 20,
-                    Width = 5,
-                    Fill = Brushes.White,
-                    Stroke = Brushes.Red
-                };
-
-                Canvas.SetTop(newbullet, Canvas.GetTop(player) - newbullet.Height);
-                Canvas.SetLeft(newbullet, Canvas.GetLeft(player) + player.Width / 2);
-
-                mainCanvas.Children.Add(newbullet);
-            }
-        }
-
-        private void CreateEnemyBullets(double x, double y)
-        {
-            Rectangle newenemybullet = new Rectangle
-            {
-                Tag = "enemyBullet",
-                Height = 40,
-                Width = 15,
-                Fill = Brushes.Yellow,
-                Stroke = Brushes.Black,
-                StrokeThickness = 5
-            };
-
-            Canvas.SetTop(newenemybullet, y);
-            Canvas.SetLeft(newenemybullet, x);
-
-            mainCanvas.Children.Add(newenemybullet);
-        }
-
         private void CreateEnemies(int limit)
         {
-            int left = 0;
-            totalEnemies = limit;
+            totalEnemies += limit;
 
             for (int i = 0; i < limit; i++)
             {
@@ -125,65 +103,32 @@ namespace LaboratoryMain.UserControls
                 if (enemyImg > 8) enemyImg = 1;
 
                 enemySkin.ImageSource = new BitmapImage(new Uri($"pack://application:,,,/images/invader{enemyImg}.gif"));
-
-                //switch (enemyImg)
-                //{
-                //    case 1:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader1.gif"));
-                //        break;
-                //    case 2:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader2.gif"));
-                //        break;
-                //    case 3:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader3.gif"));
-                //        break;
-                //    case 4:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader4.gif"));
-                //        break;
-                //    case 5:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader5.gif"));
-                //        break;
-                //    case 6:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader6.gif"));
-                //        break;
-                //    case 7:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader7.gif"));
-                //        break;
-                //    case 8:
-                //        enemySkin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/invader8.gif"));
-                //        break;
-                //}
             }
         }
 
         private void Update(object sender, EventArgs e)
         {
-            #region mine
-            mainCanvas.Focus();
-            Rect plr = new Rect(Canvas.GetLeft(player), Canvas.GetLeft(player), player.Width, player.Height);
-            enemiesLeft.Content = "Enemies Left : " + totalEnemies;
+            if (gamepaused) return;
 
-            if (goleft && Canvas.GetLeft(player) > 0) Canvas.SetLeft(player, Canvas.GetLeft(player) - 10);
-            else if (goright && Canvas.GetLeft(player) + 80 < System.Windows.Application.Current.MainWindow.Width) Canvas.SetLeft(player, Canvas.GetLeft(player) + 10);
+            left += enemySpeed;
+            if (left > cWidth) left = -150;
 
-            bulletTimer -= 3;
+            Rect plr = new Rect(Canvas.GetLeft(player), Canvas.GetTop(player), player.Width, player.Height);                //создание прямоугольника с координатами игрока
+            enemiesLeft.Content = "Enemies Left : infinity";
 
-            if (bulletTimer < 0)
-            {
-                CreateEnemyBullets(Canvas.GetLeft(player) + 20, 10);
-                bulletTimer = bulletTimerLimit;
-            }
+            if (goleft && Canvas.GetLeft(player) > 15) Canvas.SetLeft(player, Canvas.GetLeft(player) - playerSpeed);                  //перемещение игрока
+            else if (goright && Canvas.GetLeft(player) + 80 < cWidth)
+                Canvas.SetLeft(player, Canvas.GetLeft(player) + playerSpeed);
 
-            if (totalEnemies < 10) enemySpeed = 10;
-
-            foreach (var x in mainCanvas.Children.OfType<Rectangle>())
+            var ch = mainCanvas.Children.OfType<Rectangle>().ToList();
+            foreach (var x in ch)
             {
                 if (x is Rectangle && (string)x.Tag == "bullet")
                 {
-                    Canvas.SetTop(x, Canvas.GetTop(x) - 20);
+                    Canvas.SetTop(x, Canvas.GetTop(x) - 15);
                     Rect bullet = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);
 
-                    if (Canvas.GetTop(x) < 10)
+                    if (Canvas.GetTop(x) < 10)                                                                              //удаление пули, дошедшей до верха окна
                     {
                         disposeOf.Add(x);
                     }
@@ -192,61 +137,122 @@ namespace LaboratoryMain.UserControls
                     {
                         if (y is Rectangle && (string)y.Tag == "enemy")
                         {
-                            Rect enemy = new Rect(Canvas.GetLeft(y), Canvas.GetTop(y), y.Width, y.Height);
+                            Rect enemy = new Rect(Canvas.GetLeft(y), Canvas.GetTop(y), y.Width, y.Height);                  //проверка на коллизию с врагом
 
                             if (bullet.IntersectsWith(enemy))
                             {
+                                totalEnemiesDestroyed++;
                                 disposeOf.Add(x); disposeOf.Add(y);
                                 totalEnemies -= 1;
                             }
                         }
                     }
                 }
-
                 if (x is Rectangle && (string)x.Tag == "enemy")
                 {
                     Canvas.SetLeft(x, Canvas.GetLeft(x) + enemySpeed);
 
-                    if (Canvas.GetLeft(x) > 820)
+                    if (Canvas.GetLeft(x) > cWidth)                                                                         //перемещение врага, дошедшего до края карты
                     {
                         Canvas.SetLeft(x, -80);
                         Canvas.SetTop(x, Canvas.GetTop(x) + (x.Height + 10));
                     }
 
-                    Rect enemy = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);
+                    Rect enemy = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);                          //проверка на коллизию с игроком
 
                     if (plr.IntersectsWith(enemy))
                     {
-                        dispatcherTimer.Stop();
-                        System.Windows.Forms.MessageBox.Show("you lost");
+                        goleft = goright = false;
+                        updateTimer.Stop();
+
+                        GameOverScreen.Visibility = Visibility.Visible;
+                        tbgo.Text = "You destroyed " + totalEnemiesDestroyed + " enemies and pressed space " + buttonPress + " times";
+                        ccgo.Focus();
+
+                        GameOverScreen.KeyUp += (s, ew) =>
+                        {
+                            if (ew.Key == Key.Escape)
+                            {
+                                (ParentWindow as MainWindow).ApplyNewControl(new MenuStart(ParentWindow));
+                            }
+                            else if (ew.Key == Key.Enter)
+                            {
+                                (ParentWindow as MainWindow).ApplyNewControl(new GameEndless(ParentWindow, UCParent));
+                            }
+                        };
                     }
                 }
-
-                if (x is Rectangle && (string)x.Tag == "enemyBullet")
+                foreach (Rectangle rectangle in disposeOf)
                 {
-                    Canvas.SetTop(x, Canvas.GetTop(x) + 10);
-                    if (Canvas.GetTop(x) > 480) disposeOf.Add(x);
-
-
-                    Rect ebullet = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);
-
-                    if (plr.IntersectsWith(ebullet))
-                    {
-                        dispatcherTimer.Stop();
-                        System.Windows.Forms.MessageBox.Show("you lost");
-                    }
+                    mainCanvas.Children.Remove(rectangle);
+                }
+                if (totalEnemies < ((enemyLimit * (cHeight /400)) + 50))
+                {
+                    CreateEnemies(enemyLimit * 2);
                 }
             }
-            foreach (Rectangle rectangle in disposeOf)
+        }
+
+        private void mainCanvas_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left) goleft = false;
+
+            if (e.Key == Key.Right) goright = false;
+
+            if (e.Key == Key.Space)
             {
-                mainCanvas.Children.Remove(rectangle);
+                buttonPress++;
+
+                disposeOf.Clear();
+
+                Rectangle newbullet = new Rectangle
+                {
+                    Tag = "bullet",
+                    Height = 20,
+                    Width = 5,
+                    Fill = Brushes.White,
+                    Stroke = Brushes.Red
+                };
+
+                Canvas.SetTop(newbullet, Canvas.GetTop(player) - newbullet.Height);
+                Canvas.SetLeft(newbullet, Canvas.GetLeft(player) + player.Width / 2);
+
+                mainCanvas.Children.Add(newbullet);
             }
-            if (totalEnemies < 1)
+        }
+
+        private void mainCanvas_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (WinScreen.Visibility == Visibility.Visible)
             {
-                dispatcherTimer.Stop();
-                System.Windows.Forms.MessageBox.Show("you won");
+                ccwin.Focus();
+                return;
             }
-            #endregion
+            if (GameOverScreen.Visibility == Visibility.Visible)
+            {
+                ccgo.Focus();
+                return;
+            }
+
+            if (e.Key == Key.Left) goleft = true;
+            else if (e.Key == Key.Right) goright = true;
+            else if (e.Key == Key.Escape)
+            {
+                if (gamepaused)
+                {
+                    gamepaused = false;
+                    PauseScreen.Visibility = Visibility.Hidden;
+                }
+                else if (updateTimer.IsEnabled)
+                {
+                    gamepaused = true;
+                    PauseScreen.Visibility = Visibility.Visible;
+                }
+            }
+        }
+        public void GetFocus()
+        {
+            mainCanvas.Focus();
         }
     }
 }

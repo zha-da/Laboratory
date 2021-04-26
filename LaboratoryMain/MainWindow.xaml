@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LaboratoryMain"
         xmlns:uc="clr-namespace:LaboratoryMain.UserControls"
         mc:Ignorable="d" GotFocus="mainControl_GotFocus" Focusable="False"
-        Title="Space Invaders" Height="500" Width="800" Icon="pack://application:,,,/images/player.png">
+        Title="Space Invaders" Height="500" Width="800" Icon="player.ico">
     <Grid x:Name="mainGrid" Focusable="False">
         <ContentControl x:Name="mainControl" Focusable="False"/>
         <Canvas Visibility="Hidden" x:Name="mainCanvas" Background="Black" Focusable="True" KeyDown="mainCanvas_KeyDown" KeyUp="mainCanvas_KeyUp" GotFocus="mainControl_GotFocus">

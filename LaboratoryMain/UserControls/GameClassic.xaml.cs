@@ -26,7 +26,8 @@ namespace LaboratoryMain.UserControls
         Action Leveler;
         DispatcherTimer updateTimer = new DispatcherTimer();
         DispatcherTimer bulletTimer = new DispatcherTimer();
-        bool goright, goleft, gamepaused, gameOn = false;
+        BackgroundWorker bgWorker = new BackgroundWorker();
+        bool goright, goleft, gamepaused = false;
         double cHeight, cWidth;
         List<Rectangle> disposeOf = new List<Rectangle>();
 
@@ -76,12 +77,15 @@ namespace LaboratoryMain.UserControls
             }
             disposeOf.Clear();
 
+            bgWorker.WorkerSupportsCancellation = true;
+            bgWorker.CancelAsync();
+
             updateTimer.Start();
 
             bulletTimer.Interval = TimeSpan.FromMilliseconds(bulletSpeed - (level - 1) * 50);
             bulletTimer.Start();
 
-            enemySpeed += (level - 1) * 2;
+            enemySpeed += (level - 1);
             playerSpeed += (level - 1);
             enemyLimit = level * 10 * (1 * ((int)cHeight / 400));
 
@@ -95,6 +99,21 @@ namespace LaboratoryMain.UserControls
             Canvas.SetLeft(player, cWidth / 2);
             Canvas.SetTop(player, cHeight - 80);
 
+            bgWorker.DoWork += (s, e) =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    tblvl.Text = "LEVEL " + (level + 1);
+                    LevelupScreen.Visibility = Visibility.Visible;
+                });
+                System.Threading.Thread.Sleep(3000);
+                Dispatcher.Invoke(() =>
+                {
+                    LevelupScreen.Visibility = Visibility.Hidden;
+                });
+            };
+            bgWorker.RunWorkerCompleted += (s, e) => { NewLevel(); };
+
             ImageBrush skinBrush = new ImageBrush();
             skinBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/player.png"));
             player.Fill = skinBrush;
@@ -104,9 +123,10 @@ namespace LaboratoryMain.UserControls
 
             bulletTimer.Tick += CreateBullet;
 
-            Leveler = new Action(NewLevel);
+            //Leveler = new Action(NewLevel);
 
-            Leveler.Invoke();
+            bgWorker.RunWorkerAsync();
+            //Leveler.Invoke();
         }
 
         private void CreateBullet(object sender, EventArgs e)
@@ -160,7 +180,7 @@ namespace LaboratoryMain.UserControls
         }
 
         private void Update(object sender, EventArgs e)
-        {
+         {
             if (gamepaused) return;
 
             totalTime += 10;
@@ -240,21 +260,33 @@ namespace LaboratoryMain.UserControls
                     goleft = goright = false;
                     updateTimer.Stop();
                     bulletTimer.Stop();
-                    WinScreen.Visibility = Visibility.Visible;
-                    ccwin.Focus();
-                    TotalTimeTb.Text = "Your total time is " + (totalTime / 1000).ToString() + 
-                        "." + (totalTime % 1000).ToString() + " ms";
-                    WinScreen.KeyUp += (s, ew) =>
+
+                    if (level < 5)
                     {
-                        if (ew.Key == Key.Enter)
+                        if (!bgWorker.IsBusy)
                         {
-                            Leveler.Invoke();
+                            bgWorker.RunWorkerAsync(); 
                         }
-                        else if (ew.Key == Key.Escape)
+                    }
+                    else
+                    {
+                        WinScreen.Visibility = Visibility.Visible;
+                        ccwin.Focus();
+                        TotalTimeTb.Text = "Your total time is " + (totalTime / 1000).ToString() +
+                            "." + (totalTime % 1000).ToString() + " ms";
+                        WinScreen.PreviewKeyUp += (s, ew) =>
                         {
-                            (ParentWindow as MainWindow).ApplyNewControl(new MenuStart(ParentWindow));
-                        }
-                    };
+                            if (ew.Key == Key.Enter)
+                            {
+                                (ParentWindow as MainWindow).ApplyNewControl(new GameClassic(ParentWindow, UCParent));
+                            }
+                            else if (ew.Key == Key.Escape)
+                            {
+                                (ParentWindow as MainWindow).ApplyNewControl(new MenuStart(ParentWindow));
+                            }
+                            ew.Handled = true;
+                        }; 
+                    }
                 }
             }
         }
@@ -267,7 +299,7 @@ namespace LaboratoryMain.UserControls
         }
 
         private void mainCanvas_KeyDown(object sender, KeyEventArgs e)
-         {
+        {
             if (WinScreen.Visibility == Visibility.Visible)
             {
                 ccwin.Focus();

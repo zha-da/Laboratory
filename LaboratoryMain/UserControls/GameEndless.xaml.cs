@@ -23,7 +23,7 @@ namespace LaboratoryMain.UserControls
     {
         DispatcherTimer updateTimer = new DispatcherTimer();
         DispatcherTimer bulletTimer = new DispatcherTimer();
-        bool goright, goleft, gamepaused, gameOn = false;
+        bool goright, goleft, gamepaused = false;
         double cHeight, cWidth;
         List<Rectangle> disposeOf = new List<Rectangle>();
 
@@ -32,8 +32,6 @@ namespace LaboratoryMain.UserControls
 
         int totalEnemies;
         int enemyImg = 0;
-        int totalTime = 0;
-        int level = 0;
         int left = 0;
         int totalEnemiesDestroyed = 0;
 
@@ -140,8 +138,6 @@ namespace LaboratoryMain.UserControls
             left += enemySpeed;
             if (left > cWidth) left = -150;
 
-            totalTime += 10;
-
             Rect plr = new Rect(Canvas.GetLeft(player), Canvas.GetTop(player), player.Width, player.Height);                //создание прямоугольника с координатами игрока
             enemiesLeft.Content = "Enemies Left : infinity";
 
@@ -214,7 +210,7 @@ namespace LaboratoryMain.UserControls
                 {
                     mainCanvas.Children.Remove(rectangle);
                 }
-                if (totalEnemies < enemyLimit)
+                if (totalEnemies < ((enemyLimit * (cHeight / 400)) + 50))
                 {
                     CreateEnemies(enemyLimit * 2);
                 }

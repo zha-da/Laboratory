@@ -64,6 +64,34 @@
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource ResourceKey=Pixel7}"/>
             <ContentControl Grid.Row="0" Grid.Column="0" x:Name="ccwin"/>
         </Grid>
-        <local:GamePause x:Name="PauseScreen"/>
+        <Grid Opacity="0.5" Background="Black" Visibility="Hidden" x:Name="PauseScreen">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="PAUSE" Foreground="#ffffff"
+                       FontSize="120" Style="{StaticResource ResourceKey=Pixel7}" HorizontalAlignment="Center"/>
+        </Grid>
+        <Grid Opacity="0.5" Background="Black" Visibility="Hidden" x:Name="LevelupScreen">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="1" Grid.Column="1" Foreground="#ffffff" x:Name="tblvl"
+                       FontSize="120" Style="{StaticResource ResourceKey=Pixel7}" HorizontalAlignment="Center"/>
+        </Grid>
+        <!--<local:GamePause x:Name="PauseScreen"/>-->
     </Grid>
 </UserControl>
