@@ -78,12 +78,33 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.2.0.0\lib\net40\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UserControls\GameClassic.xaml.cs">
+      <DependentUpon>GameClassic.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GameEndless.xaml.cs">
+      <DependentUpon>GameEndless.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GamePause.xaml.cs">
+      <DependentUpon>GamePause.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GameSpacebarDestroyer.xaml.cs">
+      <DependentUpon>GameSpacebarDestroyer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MenuRecords.xaml.cs">
+      <DependentUpon>MenuRecords.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MenuStart.xaml.cs">
+      <DependentUpon>MenuStart.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,6 +117,30 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\GameClassic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\GameEndless.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\GamePause.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\GameSpacebarDestroyer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MenuRecords.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MenuStart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -116,6 +161,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include=".editorconfig" />
+    <Resource Include="Fonts\pixel7.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -125,7 +171,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="images\invader1.gif" />
   </ItemGroup>
@@ -152,6 +197,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\player.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="picturetopeople.org-c593aca5aaee4addafcc39d20539cd18ab644476b47d7d8415.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\menubackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\spacebackground.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\spacebg2.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\spacebg1.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="LaboratoryMain.UserControls.GameSpacebarDestroyer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LaboratoryMain.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Canvas x:Name="mainCanvas" Background="Black" Focusable="True" KeyDown="mainCanvas_KeyDown" KeyUp="mainCanvas_KeyUp">
+        <Label Foreground="White" x:Name="enemiesLeft" FontSize="16" FontWeight="ExtraBold">Enemies Left :</Label>
+        <Rectangle x:Name="player" Fill="White" Width="55" Height="65" Canvas.Left="568" Canvas.Top="394"/>
+    </Canvas>
+</UserControl>

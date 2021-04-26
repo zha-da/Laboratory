@@ -12,24 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
-using System.Windows.Forms;
-using System.Xml.Serialization;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.Json;
-using System.Threading;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-
 using System.Windows.Threading;
 
-namespace LaboratoryMain
+namespace LaboratoryMain.UserControls
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GameSpacebarDestroyer.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GameSpacebarDestroyer : UserControl
     {
         #region Fields
         bool goleft, goright = false;
@@ -42,30 +32,28 @@ namespace LaboratoryMain
         ImageBrush skinBrush = new ImageBrush();
         int enemySpeed = 6;
         #endregion
-        public MainWindow()
+        public GameSpacebarDestroyer()
         {
             InitializeComponent();
+            Loaded += (s, e) => mainCanvas.Focus();
 
-            mainControl.Content = new UserControls.MenuStart(this);
-            //ApplyNewControl(new UserControls.MenuRecords(this));
+            dispatcherTimer.Tick += Update;
+            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(20);
+            dispatcherTimer.Start();
 
-            //dispatcherTimer.Tick += Update;
-            //dispatcherTimer.Interval = TimeSpan.FromMilliseconds(20);
-            //dispatcherTimer.Start();
+            skinBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/player.png"));
+            player.Fill = skinBrush;
 
-            //skinBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/player.png"));
-            //player.Fill = skinBrush;
-
-            //CreateEnemies(30);
+            CreateEnemies(300);
         }
 
-        private void mainCanvas_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void mainCanvas_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left) goleft = true;
             else if (e.Key == Key.Right) goright = true;
         }
 
-        private void mainCanvas_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void mainCanvas_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left) goleft = false;
 
@@ -171,7 +159,7 @@ namespace LaboratoryMain
         private void Update(object sender, EventArgs e)
         {
             #region mine
-
+            mainCanvas.Focus();
             Rect plr = new Rect(Canvas.GetLeft(player), Canvas.GetLeft(player), player.Width, player.Height);
             enemiesLeft.Content = "Enemies Left : " + totalEnemies;
 
@@ -230,7 +218,7 @@ namespace LaboratoryMain
                     if (plr.IntersectsWith(enemy))
                     {
                         dispatcherTimer.Stop();
-                        GameOverScreen.Visibility = Visibility.Visible;
+                        System.Windows.Forms.MessageBox.Show("you lost");
                     }
                 }
 
@@ -245,7 +233,7 @@ namespace LaboratoryMain
                     if (plr.IntersectsWith(ebullet))
                     {
                         dispatcherTimer.Stop();
-                        GameOverScreen.Visibility = Visibility.Visible;
+                        System.Windows.Forms.MessageBox.Show("you lost");
                     }
                 }
             }
@@ -256,20 +244,9 @@ namespace LaboratoryMain
             if (totalEnemies < 1)
             {
                 dispatcherTimer.Stop();
-                WinScreen.Visibility = Visibility.Visible;
+                System.Windows.Forms.MessageBox.Show("you won");
             }
             #endregion
         }
-
-        private void mainControl_GotFocus(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        public void ApplyNewControl(System.Windows.Controls.UserControl uc)
-        {
-            mainControl.Content = uc;
-        }
     }
 }
-

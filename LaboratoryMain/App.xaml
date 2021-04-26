@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:LaboratoryMain"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="Pixel7">
+            <Setter Property="TextElement.FontFamily" Value="/Fonts/#Advanced Pixel-7"/>
+        </Style>
     </Application.Resources>
 </Application>
