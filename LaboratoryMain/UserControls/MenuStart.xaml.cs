@@ -51,6 +51,9 @@ namespace LaboratoryMain.UserControls
                 case "Endless mode":
                     (ParentWindow as MainWindow).ApplyNewControl(new GameEndless(ParentWindow, this));
                     break;
+                case "How to play":
+                    (ParentWindow as MainWindow).ApplyNewControl(new MenuRules(ParentWindow, this));
+                    break;
                 default:
                     (ParentWindow as MainWindow).ApplyNewControl(new MenuRecords(ParentWindow, this));
                     break;

@@ -58,7 +58,6 @@ namespace LaboratoryMain.UserControls
                 StartGame();
             };
         }
-
         private void StartGame()
         {
             ParentWindow.Focusable = false;
@@ -167,16 +166,32 @@ namespace LaboratoryMain.UserControls
 
                         GameOverScreen.Visibility = Visibility.Visible;
                         tbgo.Text = "You destroyed " + totalEnemiesDestroyed + " enemies and pressed space " + buttonPress + " times";
-                        ccgo.Focus();
+                        tbname.Focus();
 
                         GameOverScreen.KeyUp += (s, ew) =>
                         {
                             if (ew.Key == Key.Escape)
                             {
+                                if (!string.IsNullOrEmpty(tbname.Text))
+                                {
+                                    List<RecordPair> records = RecordSaver.GetRecords("sbdestroyer");
+                                    RecordSaver.SaveRecords(records, "sbdestroyer", tbname.Text, totalEnemiesDestroyed);
+
+                                    records = RecordSaver.GetRecords("sbclicks");
+                                    RecordSaver.SaveRecords(records, "sbclicks", tbname.Text, buttonPress);
+                                }
                                 (ParentWindow as MainWindow).ApplyNewControl(new MenuStart(ParentWindow));
                             }
                             else if (ew.Key == Key.Enter)
                             {
+                                if (!string.IsNullOrEmpty(tbname.Text))
+                                {
+                                    List<RecordPair> records = RecordSaver.GetRecords("sbdestroyer");
+                                    RecordSaver.SaveRecords(records, "sbdestroyer", tbname.Text, totalEnemiesDestroyed);
+
+                                    records = RecordSaver.GetRecords("sbclicks");
+                                    RecordSaver.SaveRecords(records, "sbclicks", tbname.Text, buttonPress);
+                                }
                                 (ParentWindow as MainWindow).ApplyNewControl(new GameEndless(ParentWindow, UCParent));
                             }
                         };

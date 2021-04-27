@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 
 namespace LaboratoryMain.UserControls
 {
@@ -23,7 +25,6 @@ namespace LaboratoryMain.UserControls
     /// </summary>
     public partial class GameClassic : UserControl
     {
-        Action Leveler;
         DispatcherTimer updateTimer = new DispatcherTimer();
         DispatcherTimer bulletTimer = new DispatcherTimer();
         BackgroundWorker bgWorker = new BackgroundWorker();
@@ -123,10 +124,7 @@ namespace LaboratoryMain.UserControls
 
             bulletTimer.Tick += CreateBullet;
 
-            //Leveler = new Action(NewLevel);
-
             bgWorker.RunWorkerAsync();
-            //Leveler.Invoke();
         }
 
         private void CreateBullet(object sender, EventArgs e)
@@ -178,6 +176,8 @@ namespace LaboratoryMain.UserControls
                 enemySkin.ImageSource = new BitmapImage(new Uri($"pack://application:,,,/images/invader{enemyImg}.gif"));
             }
         }
+
+        
 
         private void Update(object sender, EventArgs e)
          {
@@ -268,24 +268,36 @@ namespace LaboratoryMain.UserControls
                             bgWorker.RunWorkerAsync(); 
                         }
                     }
-                    else
+                    else if (WinScreen.Visibility != Visibility.Visible)
                     {
+
                         WinScreen.Visibility = Visibility.Visible;
-                        ccwin.Focus();
+                        tbname.Focus();
                         TotalTimeTb.Text = "Your total time is " + (totalTime / 1000).ToString() +
                             "." + (totalTime % 1000).ToString() + " ms";
                         WinScreen.PreviewKeyUp += (s, ew) =>
                         {
                             if (ew.Key == Key.Enter)
                             {
+                                if (!string.IsNullOrEmpty(tbname.Text))
+                                {
+                                    List<RecordPair> records = RecordSaver.GetRecords("classic");
+                                    RecordSaver.SaveRecords(records, "classic", tbname.Text, totalTime);
+                                }
+
                                 (ParentWindow as MainWindow).ApplyNewControl(new GameClassic(ParentWindow, UCParent));
                             }
                             else if (ew.Key == Key.Escape)
                             {
+                                if (!string.IsNullOrEmpty(tbname.Text))
+                                {
+                                    List<RecordPair> records = RecordSaver.GetRecords("classic");
+                                    RecordSaver.SaveRecords(records, "classic", tbname.Text, totalTime);
+                                }
+
                                 (ParentWindow as MainWindow).ApplyNewControl(new MenuStart(ParentWindow));
                             }
-                            ew.Handled = true;
-                        }; 
+                        };
                     }
                 }
             }

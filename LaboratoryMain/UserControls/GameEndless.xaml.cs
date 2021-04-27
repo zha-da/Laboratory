@@ -192,15 +192,25 @@ namespace LaboratoryMain.UserControls
                         bulletTimer.Stop();
                         GameOverScreen.Visibility = Visibility.Visible;
                         tbgo.Text = "You destroyed " + totalEnemiesDestroyed + " enemies";
-                        ccgo.Focus();
+                        tbname.Focus();
                         GameOverScreen.KeyUp += (s, ew) =>
                         {
                             if (ew.Key == Key.Escape)
                             {
+                                if (!string.IsNullOrEmpty(tbname.Text))
+                                {
+                                    List<RecordPair> records = RecordSaver.GetRecords("endless");
+                                    RecordSaver.SaveRecords(records, "endless", tbname.Text, totalEnemiesDestroyed);
+                                }
                                 (ParentWindow as MainWindow).ApplyNewControl(new MenuStart(ParentWindow));
                             }
                             else if (ew.Key == Key.Enter)
                             {
+                                if (!string.IsNullOrEmpty(tbname.Text))
+                                {
+                                    List<RecordPair> records = RecordSaver.GetRecords("endless");
+                                    RecordSaver.SaveRecords(records, "endless", tbname.Text, totalEnemiesDestroyed);
+                                }
                                 (ParentWindow as MainWindow).ApplyNewControl(new GameEndless(ParentWindow, UCParent));
                             }
                         };
@@ -214,27 +224,6 @@ namespace LaboratoryMain.UserControls
                 {
                     CreateEnemies(enemyLimit * 2);
                 }
-                //if (totalEnemies < 1)                                                                                       //победа
-                //{
-                //    goleft = goright = false;
-                //    updateTimer.Stop();
-                //    bulletTimer.Stop();
-                //    WinScreen.Visibility = Visibility.Visible;
-                //    ccwin.Focus();
-                //    TotalTimeTb.Text = "Your total time is " + (totalTime / 1000).ToString() +
-                //        "." + (totalTime % 1000).ToString() + " ms";
-                //    WinScreen.KeyUp += (s, ew) =>
-                //    {
-                //        if (ew.Key == Key.Enter)
-                //        {
-                //            Leveler.Invoke();
-                //        }
-                //        else if (ew.Key == Key.Escape)
-                //        {
-                //            (ParentWindow as MainWindow).ApplyNewControl(new MenuStart(ParentWindow));
-                //        }
-                //    };
-                //}
             }
         }
 

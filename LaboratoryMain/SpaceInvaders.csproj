@@ -90,6 +90,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="RecordSaver.cs" />
     <Compile Include="UserControls\GameClassic.xaml.cs">
       <DependentUpon>GameClassic.xaml</DependentUpon>
     </Compile>
@@ -104,6 +105,9 @@
     </Compile>
     <Compile Include="UserControls\MenuRecords.xaml.cs">
       <DependentUpon>MenuRecords.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MenuRules.xaml.cs">
+      <DependentUpon>MenuRules.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\MenuStart.xaml.cs">
       <DependentUpon>MenuStart.xaml</DependentUpon>
@@ -137,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\MenuRecords.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MenuRules.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -218,6 +226,27 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="player.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\recordsClassic.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\recordsEnemiesEndless.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\recordsEnemiesSbDest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\recordsClicks.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\rulesMovement.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\rulesNavigation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\rulesShooting.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ArrayOfRecordPair xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RecordPair>
+    <Name>dan</Name>
+    <Value>22750</Value>
+  </RecordPair>
+</ArrayOfRecordPair>

@@ -53,6 +53,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
@@ -62,7 +63,9 @@
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource ResourceKey=Pixel7}"/>
             <TextBlock Grid.Row="3" Grid.Column="1" Text="Press enter to continue or escape to return to menu" 
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource ResourceKey=Pixel7}"/>
-            <ContentControl Grid.Row="0" Grid.Column="0" x:Name="ccwin"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Background="Black" BorderThickness="0" x:Name="tbname"
+                       Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource ResourceKey=Pixel7}"/>
+            <ContentControl x:Name="ccwin"/>
         </Grid>
         <Grid Opacity="0.5" Background="Black" Visibility="Hidden" x:Name="PauseScreen">
             <Grid.ColumnDefinitions>

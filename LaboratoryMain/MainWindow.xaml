@@ -9,45 +9,5 @@
         Title="Space Invaders" Height="500" Width="800" Icon="player.ico">
     <Grid x:Name="mainGrid" Focusable="False">
         <ContentControl x:Name="mainControl" Focusable="False"/>
-        <Canvas Visibility="Hidden" x:Name="mainCanvas" Background="Black" Focusable="True" KeyDown="mainCanvas_KeyDown" KeyUp="mainCanvas_KeyUp" GotFocus="mainControl_GotFocus">
-            <Label Foreground="White" x:Name="enemiesLeft" FontSize="16" FontWeight="ExtraBold">Enemies Left :</Label>
-            <Rectangle x:Name="player" Fill="White" Width="55" Height="65" Canvas.Left="568" Canvas.Top="394"/>
-        </Canvas>
-        <Grid x:Name="GameOverScreen" Visibility="Hidden" Opacity="0.9" Background="Black" GotFocus="mainControl_GotFocus">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="GAME OVER" Foreground="#ffffff"
-                       FontSize="120" Style="{StaticResource ResourceKey=Pixel7}" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="Press enter to continue or escape to return to menu" 
-                       Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource ResourceKey=Pixel7}"/>
-        </Grid>
-        <Grid x:Name="WinScreen" Visibility="Hidden" Opacity="0.9" Background="Black" GotFocus="mainControl_GotFocus">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="YOU WON" Foreground="#ffffff"
-                       FontSize="120" Style="{StaticResource ResourceKey=Pixel7}" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="Press enter to continue or escape to return to menu" 
-                       Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource ResourceKey=Pixel7}"/>
-        </Grid>
     </Grid>
 </Window>

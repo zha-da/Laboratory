@@ -52,6 +52,46 @@ namespace LaboratoryMain.UserControls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             this.cc.Focus();
+
+            Style s = Application.Current.Resources["Pixel7"] as Style;
+
+            ApplyRecords("classic");
+            ApplyRecords("endless");
+            ApplyRecords("sbdestroyer");
+            ApplyRecords("sbclicks");
+        }
+        void ApplyRecords(string tag)
+        {
+            List<RecordPair> records = RecordSaver.GetRecords(tag);
+            Style s = Application.Current.Resources["Pixel7"] as Style;
+            ListBox rs = lbClassic;
+            switch (tag)
+            {
+                case "classic":
+                    break;
+                case "endless":
+                    rs = lbEndless;
+                    break;
+                case "sbdestroyer":
+                    rs = lbSbD;
+                    break;
+                case "sbclicks":
+                    rs = lbClicks;
+                    break;
+            }
+
+            if (records == null) return;
+
+            foreach (var r in records)
+            {
+                rs.Items.Add(new TextBlock
+                {
+                    Text = $"{r.Name} - {r.Value}",
+                    Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255)),
+                    Style = s,
+                    FontSize = 20
+                });
+            }
         }
     }
 }

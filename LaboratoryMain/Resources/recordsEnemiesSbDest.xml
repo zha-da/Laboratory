@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ArrayOfRecordPair xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RecordPair>
+    <Name>dan</Name>
+    <Value>145</Value>
+  </RecordPair>
+  <RecordPair>
+    <Name>player</Name>
+    <Value>110</Value>
+  </RecordPair>
+  <RecordPair>
+    <Name>player</Name>
+    <Value>49</Value>
+  </RecordPair>
+  <RecordPair>
+    <Name> dan</Name>
+    <Value>31</Value>
+  </RecordPair>
+  <RecordPair>
+    <Name>dan</Name>
+    <Value>26</Value>
+  </RecordPair>
+</ArrayOfRecordPair>
