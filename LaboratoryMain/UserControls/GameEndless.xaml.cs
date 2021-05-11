@@ -35,10 +35,10 @@ namespace LaboratoryMain.UserControls
         int left = 0;
         int totalEnemiesDestroyed = 0;
 
-        public int enemySpeed = 12;
-        public int enemyLimit = 50;
-        public int playerSpeed = 7;
-        public int bulletSpeed = 100;
+        internal int enemySpeed = 12;
+        internal int enemyLimit = 50;
+        internal int playerSpeed = 7;
+        internal int bulletSpeed = 100;
 
         public GameEndless()
         {
@@ -51,6 +51,8 @@ namespace LaboratoryMain.UserControls
             ParentWindow = parentWindow;
             UCParent = uCParent;
             ParentWindow.ResizeMode = ResizeMode.NoResize;
+
+            PauseScreen.ParentWindow = ParentWindow;
 
             Loaded += (s, e) =>
             {

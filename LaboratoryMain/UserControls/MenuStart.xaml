@@ -21,35 +21,44 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Column="1" Grid.Row="1" Margin="5" Click="menuButton_Click" Background="DarkGreen">
+        <Button Grid.Column="1" Grid.Row="1" Click="menuButton_Click" 
+                Style="{StaticResource MenuButton}" Template="{DynamicResource CustomButton}">
             <TextBlock Text="Classic mode"
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" 
                        Style="{StaticResource ResourceKey=Pixel7}"/>
         </Button>
-        <Button Grid.Column="1" Grid.Row="2" Margin="5" Click="menuButton_Click" Background="DarkOrange">
+        <Button Grid.Column="1" Grid.Row="2" Click="menuButton_Click" 
+                Style="{StaticResource MenuButton}" Template="{DynamicResource CustomButton}">
             <TextBlock Text="Endless mode" Padding="5 0 5 0"
                        Foreground="#ffffff" FontSize="30"
                        Style="{StaticResource ResourceKey=Pixel7}"/>
         </Button>
-        <Button Grid.Column="1" Grid.Row="3" Margin="5" Click="menuButton_Click" Background="DarkRed">
+        <Button Grid.Column="1" Grid.Row="3" Click="menuButton_Click" 
+                Style="{StaticResource MenuButton}" Template="{DynamicResource CustomButton}">
             <TextBlock Text="SpaceBar Destroyer"  Padding="5 0 5 0"
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" 
                        Style="{StaticResource ResourceKey=Pixel7}"/>
         </Button>
-        <Button Grid.Column="2" Grid.Row="1" Margin="5" Click="menuButton_Click" Background="DarkBlue">
+        <Button Grid.Column="1" Grid.Row="4" Click="menuButton_Click" 
+                Style="{StaticResource MenuButton}" Template="{DynamicResource CustomButton}">
             <TextBlock Text="Records" Padding="5 0 5 0"
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" 
                        Style="{StaticResource ResourceKey=Pixel7}"/>
         </Button>
-        <Button Grid.Column="2" Grid.Row="2" Margin="5" Click="menuButton_Click" Background="DarkBlue">
+        <Button Grid.Column="1" Grid.Row="5" Click="menuButton_Click" 
+                Style="{StaticResource MenuButton}" Template="{DynamicResource CustomButton}">
             <TextBlock Text="How to play" Padding="5 0 5 0" 
-                       Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" 
+                       Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center"
                        Style="{StaticResource ResourceKey=Pixel7}"/>
         </Button>
-        <Button Grid.Column="2" Grid.Row="3" Margin="5" Click="menuButton_Click" Background="DarkBlue">
+        <Button Grid.Column="1" Grid.Row="6" Click="menuButton_Click" 
+                Style="{StaticResource MenuButton}" Template="{DynamicResource CustomButton}">
             <TextBlock Text="Exit" 
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" 
                        Style="{StaticResource ResourceKey=Pixel7}"/>

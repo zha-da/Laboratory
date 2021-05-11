@@ -23,7 +23,7 @@ namespace LaboratoryMain.UserControls
     /// <summary>
     /// Interaction logic for GameClassic.xaml
     /// </summary>
-    public partial class GameClassic : UserControl
+    public partial class GameClassic : UserControl, INotifyPropertyChanged
     {
         DispatcherTimer updateTimer = new DispatcherTimer();
         DispatcherTimer bulletTimer = new DispatcherTimer();
@@ -34,7 +34,16 @@ namespace LaboratoryMain.UserControls
 
         Window ParentWindow;
         UserControl UCParent;
-        
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyRaised(string propertyname)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
+            }
+        }
+
         int totalEnemies;
         int enemyImg = 0;
         int totalTime = 0;
@@ -44,6 +53,7 @@ namespace LaboratoryMain.UserControls
         public int enemyLimit = 10;
         public int playerSpeed = 3;
         public int bulletSpeed = 300;
+
         public GameClassic()
         {
             InitializeComponent();
@@ -55,6 +65,8 @@ namespace LaboratoryMain.UserControls
             ParentWindow = parentWindow;
             UCParent = uCParent;
             ParentWindow.ResizeMode = ResizeMode.NoResize;
+
+            PauseScreen.ParentWindow = ParentWindow;
 
             Loaded += (s, e) =>
             {

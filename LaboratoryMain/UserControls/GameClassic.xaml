@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LaboratoryMain.UserControls"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -67,7 +68,7 @@
                        Foreground="#ffffff" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource ResourceKey=Pixel7}"/>
             <ContentControl x:Name="ccwin"/>
         </Grid>
-        <Grid Opacity="0.5" Background="Black" Visibility="Hidden" x:Name="PauseScreen">
+        <!--<Grid Opacity="0.5" Background="Black" Visibility="Hidden" x:Name="PauseScreen">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="auto"/>
@@ -80,7 +81,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="PAUSE" Foreground="#ffffff"
                        FontSize="120" Style="{StaticResource ResourceKey=Pixel7}" HorizontalAlignment="Center"/>
-        </Grid>
+        </Grid>-->
         <Grid Opacity="0.5" Background="Black" Visibility="Hidden" x:Name="LevelupScreen">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -95,6 +96,6 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Foreground="#ffffff" x:Name="tblvl"
                        FontSize="120" Style="{StaticResource ResourceKey=Pixel7}" HorizontalAlignment="Center"/>
         </Grid>
-        <!--<local:GamePause x:Name="PauseScreen"/>-->
+        <local:GamePause x:Name="PauseScreen"/>
     </Grid>
 </UserControl>

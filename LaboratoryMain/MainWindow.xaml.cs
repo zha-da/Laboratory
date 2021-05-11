@@ -43,7 +43,7 @@ namespace LaboratoryMain
 
         }
 
-        public void ApplyNewControl(System.Windows.Controls.UserControl uc)
+        internal void ApplyNewControl(System.Windows.Controls.UserControl uc)
         {
             mainControl.Content = uc;
         }

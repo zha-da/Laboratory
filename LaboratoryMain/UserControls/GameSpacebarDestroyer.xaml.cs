@@ -51,6 +51,8 @@ namespace LaboratoryMain.UserControls
             UCParent = uCParent;
             ParentWindow.ResizeMode = ResizeMode.NoResize;
 
+            PauseScreen.ParentWindow = ParentWindow;
+
             Loaded += (s, e) =>
             {
                 cHeight = mainCanvas.ActualHeight;

@@ -20,7 +20,7 @@ namespace LaboratoryMain.UserControls
     /// </summary>
     public partial class GamePause : UserControl
     {
-        UserControl UCParent;
+        public Window ParentWindow { get; set; }
         public GamePause()
         {
             InitializeComponent();
@@ -28,11 +28,18 @@ namespace LaboratoryMain.UserControls
             //Visibility = Visibility.Visible;
         }
 
-        public GamePause(UserControl uCParent)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
-            UCParent = uCParent;
+            (ParentWindow as MainWindow)?.ApplyNewControl(new MenuStart(ParentWindow));
         }
 
+        public void SetVisible()
+        {
+            Visibility = Visibility.Visible;
+        }
+        public void SetHidden()
+        {
+            Visibility = Visibility.Hidden;
+        }
     }
 }
